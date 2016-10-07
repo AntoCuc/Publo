@@ -23,14 +23,9 @@
  */
 package org.publo.model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,25 +44,39 @@ public final class Model extends Observable {
             = Logger.getLogger(Model.class.getName());
     private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
     public static final String LINE_SEP = System.getProperty("line.separator");
+    private static final File DEFAULT_FILE = new File("unnamed.md");
 
-    private String markdown = "";
+    private File openFile;
+    private String markdown;
 
-    public void newFile() {
-        markdown = "";
-        setChanged();
-        notifyObservers(markdown);
+    public Model() {
+        newFile();
     }
 
-    public void openFile(InputStream inputStream) {
-        markdown = new BufferedReader(new InputStreamReader(inputStream))
-                .lines().collect(Collectors.joining(LINE_SEP));
-        setChanged();
-        notifyObservers(markdown);
+    public final void newFile() {
+        open(DEFAULT_FILE);
     }
 
-    public void saveFile(OutputStream outputStream) {
+    public void open(File file) {
+        if (file.equals(DEFAULT_FILE)) {
+            openFile = file;
+            markdown = "";
+        } else {
+            try {
+                this.markdown = Files.readAllLines(file.toPath())
+                        .stream().collect(Collectors.joining(LINE_SEP));
+                openFile = file;
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+        setChanged();
+    }
+
+    public void save(File file) {
         try {
-            outputStream.write(markdown.getBytes());
+            openFile = file;
+            Files.write(file.toPath(), markdown.getBytes());
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
@@ -77,11 +86,18 @@ public final class Model extends Observable {
         return PROCESSOR.markdownToHtml(markdown);
     }
 
-    public void updateSource(String text) {
-        this.markdown = text;
+    public void update(String markdown) {
+        if (!markdown.equals(markdown)) {
+            this.markdown = markdown;
+            setChanged();
+        }
     }
 
-    public String getSource() {
+    public String getMarkdown() {
         return markdown;
+    }
+
+    public File getOpenFile() {
+        return openFile;
     }
 }

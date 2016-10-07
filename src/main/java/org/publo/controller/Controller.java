@@ -66,34 +66,29 @@ public final class Controller {
             @Override
             public void mousePressed(MouseEvent e) {
                 model.newFile();
+                model.notifyObservers();
             }
         });
 
         view.getOpenItem().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                try {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.showOpenDialog(view);
-                    File selectedFile = fileChooser.getSelectedFile();
-                    model.openFile(new FileInputStream(selectedFile));
-                } catch (FileNotFoundException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.showOpenDialog(view);
+                File selectedFile = fileChooser.getSelectedFile();
+                model.open(selectedFile);
+                model.notifyObservers();
             }
         });
 
         view.getSaveMenuItem().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                try {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.showSaveDialog(view);
-                    File selectedFile = fileChooser.getSelectedFile();
-                    model.saveFile(new FileOutputStream(selectedFile));
-                } catch (FileNotFoundException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setSelectedFile(model.getOpenFile());
+                fileChooser.showSaveDialog(view);
+                File selectedFile = fileChooser.getSelectedFile();
+                model.save(selectedFile);
             }
         });
 
@@ -120,7 +115,7 @@ public final class Controller {
 
         view.getTextArea().addCaretListener((CaretEvent e) -> {
             JTextArea textArea = (JTextArea) e.getSource();
-            model.updateSource(textArea.getText());
+            model.update(textArea.getText());
         });
 
         view.getTabbedPanel().addChangeListener((ChangeEvent e) -> {
@@ -135,6 +130,7 @@ public final class Controller {
 
         EventQueue.invokeLater(() -> {
             view.setVisible(true);
+            model.notifyObservers();
         });
     }
 

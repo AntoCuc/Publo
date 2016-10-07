@@ -216,6 +216,8 @@ public final class View extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        textArea.setText(arg.toString());
+        textArea.setText(model.getMarkdown());
+        String fileName = model.getOpenFile().getName();
+        setTitle(fileName);
     }
 }
