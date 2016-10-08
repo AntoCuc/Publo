@@ -9,12 +9,10 @@ We bet a fancy coffee that I would be able to write and release a basic markdown
 
 Publo's features are fairly limited at this stage. It allows to perform basic file operations and html preview.
 
-Screenshots
------------
+Screenshot
+----------
 
-![Publo source view](pablo-src.png)
-
-![Publo preview](pablo-pre.png)
+![Publo source view](publo.png)
 
 Download Publo
 --------------
