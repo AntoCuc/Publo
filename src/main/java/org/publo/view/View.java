@@ -210,10 +210,6 @@ public final class View extends JFrame {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void showAbout() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public JEditorPane getEditorPanel() {
         return editorPanel;
     }

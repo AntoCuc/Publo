@@ -32,6 +32,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.event.CaretEvent;
 import org.publo.model.Model;
+import org.publo.view.AboutDialog;
 import org.publo.view.View;
 
 /**
@@ -105,7 +106,8 @@ public final class Controller {
         view.getAboutMenuItem().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                view.showAbout();
+                AboutDialog aboutDialog = new AboutDialog(view, false);
+                aboutDialog.setVisible(true);
             }
         });
 
