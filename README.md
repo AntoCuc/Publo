@@ -12,7 +12,9 @@ Publo's features are fairly limited at this stage. It allows to perform basic fi
 Screenshot
 ----------
 
-![Publo source view](publo.png)
+![Publo source view](https://raw.githubusercontent.com/AntoCuc/Publo/master/publo-src.png)
+
+![Publo preview](https://raw.githubusercontent.com/AntoCuc/Publo/master/publo-pre.png)
 
 Download Publo
 --------------
