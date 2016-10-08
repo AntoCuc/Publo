@@ -49,6 +49,7 @@ public final class Model {
     private File openFile;
     private String markdown;
     private String markup;
+    private boolean changed;
 
     public Model() {
         newFile();
@@ -60,46 +61,53 @@ public final class Model {
 
     public void open(File file) {
         if (file.equals(DEFAULT_FILE)) {
-            openFile = file;
-            markdown = "";
+            this.openFile = file;
+            this.markdown = "";
         } else {
             try {
                 this.markdown = Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP));
-                openFile = file;
+                this.openFile = file;
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
+        this.changed = true;
     }
 
     public void save(File file) {
         try {
-            openFile = file;
-            Files.write(file.toPath(), markdown.getBytes());
+            this.openFile = file;
+            Files.write(file.toPath(), this.markdown.getBytes());
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+        this.changed = false;
     }
 
     public void update(String markdown) {
+        this.changed = !this.markdown.equals(markdown);
         this.markdown = markdown;
         this.markup = PROCESSOR.markdownToHtml(markdown);
     }
 
     public String getMarkdown() {
-        return markdown;
+        return this.markdown;
     }
 
     public String getMarkup() {
-        return markup;
+        return this.markup;
     }
 
     public File getOpenFile() {
-        return openFile;
+        return this.openFile;
     }
     
     public String getFileName() {
-        return openFile.getName();
+        return this.openFile.getName();
+    }
+
+    public boolean isChanged() {
+        return this.changed;
     }
 }

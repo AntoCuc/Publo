@@ -210,6 +210,7 @@ public final class View extends JFrame {
     
     public void updateTitle() {
         String fileName = model.getOpenFile().getName();
-        setTitle(fileName);
+        String suffix = (model.isChanged()) ? "*" : "";
+        setTitle(fileName + suffix);
     }
 }
