@@ -23,6 +23,7 @@
  */
 package org.publo.view;
 
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -38,6 +39,9 @@ import org.publo.model.Model;
  * @since 0.1
  */
 public final class View extends JFrame {
+    
+    private static final DefaultBoundedRangeModel EDITOR_RANGE_MODEL
+            = new DefaultBoundedRangeModel();
     
     private final Model model;
 
@@ -65,10 +69,12 @@ public final class View extends JFrame {
     private void initComponents() {
 
         javax.swing.JPanel sourcePanel = new javax.swing.JPanel();
-        javax.swing.JScrollPane textAreaScrollPanel = new javax.swing.JScrollPane();
+        textAreaScrollPanel = new javax.swing.JScrollPane();
+        textAreaScrollPanel.getVerticalScrollBar().setModel(EDITOR_RANGE_MODEL);
         textArea = new javax.swing.JTextArea();
         previewPanel = new javax.swing.JPanel();
-        javax.swing.JScrollPane editorScrollPanel = new javax.swing.JScrollPane();
+        editorScrollPanel = new javax.swing.JScrollPane();
+        editorScrollPanel.getVerticalScrollBar().setModel(EDITOR_RANGE_MODEL);
         editorPanel = new javax.swing.JEditorPane();
         javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
@@ -87,6 +93,9 @@ public final class View extends JFrame {
 
         sourcePanel.setLayout(new java.awt.BorderLayout());
 
+        textAreaScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        textAreaScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
         textArea.setColumns(20);
         textArea.setLineWrap(true);
         textArea.setRows(5);
@@ -99,6 +108,9 @@ public final class View extends JFrame {
 
         previewPanel.setPreferredSize(new java.awt.Dimension(800, 600));
         previewPanel.setLayout(new java.awt.BorderLayout());
+
+        editorScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        editorScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         editorPanel.setContentType("text/html"); // NOI18N
         editorPanel.setText("<html>\r   <head>\r \r   </head>\r   <body>\r     <h1>\r      No Content \r     </h1>\r   </body>\r </html>\r ");
@@ -151,6 +163,7 @@ public final class View extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JEditorPane editorPanel;
+    private javax.swing.JScrollPane editorScrollPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenuItem helpContentsMenuItem;
     private javax.swing.JMenuItem newMenuItem;
@@ -158,6 +171,7 @@ public final class View extends JFrame {
     private javax.swing.JPanel previewPanel;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JTextArea textArea;
+    private javax.swing.JScrollPane textAreaScrollPanel;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getAboutMenuItem() {
