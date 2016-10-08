@@ -38,16 +38,17 @@ import org.pegdown.PegDownProcessor;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class Model extends Observable {
+public final class Model {
 
     private static final Logger LOGGER
             = Logger.getLogger(Model.class.getName());
     private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
     public static final String LINE_SEP = System.getProperty("line.separator");
-    private static final File DEFAULT_FILE = new File("unnamed.md");
+    public static final File DEFAULT_FILE = new File("unnamed.md");
 
     private File openFile;
     private String markdown;
+    private String markup;
 
     public Model() {
         newFile();
@@ -70,7 +71,6 @@ public final class Model extends Observable {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
-        setChanged();
     }
 
     public void save(File file) {
@@ -82,22 +82,24 @@ public final class Model extends Observable {
         }
     }
 
-    public String parse() {
-        return PROCESSOR.markdownToHtml(markdown);
-    }
-
     public void update(String markdown) {
-        if (!markdown.equals(markdown)) {
-            this.markdown = markdown;
-            setChanged();
-        }
+        this.markdown = markdown;
+        this.markup = PROCESSOR.markdownToHtml(markdown);
     }
 
     public String getMarkdown() {
         return markdown;
     }
 
+    public String getMarkup() {
+        return markup;
+    }
+
     public File getOpenFile() {
         return openFile;
+    }
+    
+    public String getFileName() {
+        return openFile.getName();
     }
 }

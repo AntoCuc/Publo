@@ -23,13 +23,10 @@
  */
 package org.publo.view;
 
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import org.publo.model.Model;
@@ -40,7 +37,7 @@ import org.publo.model.Model;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class View extends JFrame implements Observer {
+public final class View extends JFrame {
     
     private final Model model;
 
@@ -67,7 +64,6 @@ public final class View extends JFrame implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabbedPanel = new javax.swing.JTabbedPane();
         javax.swing.JPanel sourcePanel = new javax.swing.JPanel();
         javax.swing.JScrollPane textAreaScrollPanel = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
@@ -87,6 +83,7 @@ public final class View extends JFrame implements Observer {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridLayout());
 
         sourcePanel.setLayout(new java.awt.BorderLayout());
 
@@ -98,7 +95,7 @@ public final class View extends JFrame implements Observer {
 
         sourcePanel.add(textAreaScrollPanel, java.awt.BorderLayout.CENTER);
 
-        tabbedPanel.addTab("Source", sourcePanel);
+        getContentPane().add(sourcePanel);
 
         previewPanel.setPreferredSize(new java.awt.Dimension(800, 600));
         previewPanel.setLayout(new java.awt.BorderLayout());
@@ -111,9 +108,7 @@ public final class View extends JFrame implements Observer {
 
         previewPanel.add(editorScrollPanel, java.awt.BorderLayout.CENTER);
 
-        tabbedPanel.addTab("Preview", previewPanel);
-
-        getContentPane().add(tabbedPanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(previewPanel);
 
         fileMenu.setText("File");
 
@@ -162,7 +157,6 @@ public final class View extends JFrame implements Observer {
     private javax.swing.JMenuItem openItem;
     private javax.swing.JPanel previewPanel;
     private javax.swing.JMenuItem saveMenuItem;
-    private javax.swing.JTabbedPane tabbedPanel;
     private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 
@@ -206,17 +200,15 @@ public final class View extends JFrame implements Observer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public JTabbedPane getTabbedPanel() {
-        return tabbedPanel;
-    }
-
     public JEditorPane getEditorPanel() {
         return editorPanel;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        textArea.setText(model.getMarkdown());
+    public void updatePreview() {
+        editorPanel.setText(model.getMarkup());
+    }
+    
+    public void updateTitle() {
         String fileName = model.getOpenFile().getName();
         setTitle(fileName);
     }

@@ -27,16 +27,10 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.event.CaretEvent;
-import javax.swing.event.ChangeEvent;
 import org.publo.model.Model;
 import org.publo.view.View;
 
@@ -60,13 +54,12 @@ public final class Controller {
     }
 
     public void initialise() {
-        model.addObserver(view);
-        
         view.getNewMenuItem().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 model.newFile();
-                model.notifyObservers();
+                view.updatePreview();
+                view.updateTitle();
             }
         });
 
@@ -77,7 +70,9 @@ public final class Controller {
                 fileChooser.showOpenDialog(view);
                 File selectedFile = fileChooser.getSelectedFile();
                 model.open(selectedFile);
-                model.notifyObservers();
+                view.getTextArea().setText(model.getMarkdown());
+                view.updatePreview();
+                view.updateTitle();
             }
         });
 
@@ -89,6 +84,7 @@ public final class Controller {
                 fileChooser.showSaveDialog(view);
                 File selectedFile = fileChooser.getSelectedFile();
                 model.save(selectedFile);
+                view.updateTitle();
             }
         });
 
@@ -116,21 +112,15 @@ public final class Controller {
         view.getTextArea().addCaretListener((CaretEvent e) -> {
             JTextArea textArea = (JTextArea) e.getSource();
             model.update(textArea.getText());
-        });
-
-        view.getTabbedPanel().addChangeListener((ChangeEvent e) -> {
-            JTabbedPane sourcePanel = (JTabbedPane) e.getSource();
-            int selectedIndex = sourcePanel.getSelectedIndex();
-            String selectedTabTitle = sourcePanel.getTitleAt(selectedIndex);
-            if ("Preview".equals(selectedTabTitle)) {
-                String parsedContent = model.parse();
-                view.getEditorPanel().setText(parsedContent);
-            }
+            view.updatePreview();
+            view.updateTitle();
         });
 
         EventQueue.invokeLater(() -> {
+            model.newFile();
+            view.updatePreview();
+            view.updateTitle();
             view.setVisible(true);
-            model.notifyObservers();
         });
     }
 
