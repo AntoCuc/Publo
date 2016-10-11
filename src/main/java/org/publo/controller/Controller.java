@@ -23,10 +23,15 @@
  */
 package org.publo.controller;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
@@ -45,6 +50,9 @@ public final class Controller {
 
     private static final Logger LOGGER
             = Logger.getLogger(Controller.class.getName());
+
+    private static final String HELP_SYSTEM_LINK
+            = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     private final Model model;
     private final View view;
@@ -98,8 +106,18 @@ public final class Controller {
 
         view.getHelpContentsMenuItem().addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                view.showHelpContents();
+            public void mousePressed(MouseEvent event) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        URI uri = new URI(HELP_SYSTEM_LINK);
+                        desktop.browse(uri);
+                    } catch (URISyntaxException | IOException e) {
+                        LOGGER.log(Level.SEVERE, "Failed to reach website.", e);
+                    }
+                } else {
+                    LOGGER.log(Level.SEVERE, "Browser not supported.");
+                }
             }
         });
 
