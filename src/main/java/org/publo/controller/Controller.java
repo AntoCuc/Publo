@@ -76,24 +76,33 @@ public final class Controller {
             @Override
             public void mousePressed(MouseEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.showOpenDialog(view);
-                File selectedFile = fileChooser.getSelectedFile();
-                model.open(selectedFile);
-                view.getTextArea().setText(model.getMarkdown());
-                view.updatePreview();
-                view.updateTitle();
+                int output = fileChooser.showOpenDialog(view);
+                if (JFileChooser.APPROVE_OPTION == output) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    model.open(selectedFile);
+                    view.getTextArea().setText(model.getMarkdown());
+                    view.updatePreview();
+                    view.updateTitle();
+                }
             }
         });
 
         view.getSaveMenuItem().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setSelectedFile(model.getOpenFile());
-                fileChooser.showSaveDialog(view);
-                File selectedFile = fileChooser.getSelectedFile();
-                model.save(selectedFile);
+                if (model.getOpenFile() != null) {
+                    model.save();
+                } else {
+                    storeFilePromptingName();
+                }
                 view.updateTitle();
+            }
+        });
+
+        view.getSaveAsMenuItem().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                storeFilePromptingName();
             }
         });
 
@@ -136,12 +145,30 @@ public final class Controller {
             view.updateTitle();
         });
 
+        /**
+         * Initialises the GUI, opens a new model default file and updates the
+         * view.
+         */
         EventQueue.invokeLater(() -> {
             model.newFile();
             view.updatePreview();
             view.updateTitle();
             view.setVisible(true);
         });
+    }
+
+    /**
+     * Prompts for a file name, stores the file and updates the title in the
+     * view.
+     */
+    private void storeFilePromptingName() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(model.getOpenFile());
+        if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(view)) {
+            File selectedFile = fileChooser.getSelectedFile();
+            model.saveAs(selectedFile);
+            view.updateTitle();
+        }
     }
 
 }

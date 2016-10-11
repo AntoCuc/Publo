@@ -59,7 +59,7 @@ public final class Model {
     }
 
     public void open(File file) {
-        if (file.equals(DEFAULT_FILE)) {
+        if (DEFAULT_FILE.equals(file)) {
             this.openFile = file;
             this.markdown = "";
         } else {
@@ -74,7 +74,14 @@ public final class Model {
         this.changed = true;
     }
 
-    public void save(File file) {
+    /**
+     * Saves as the current opened file.
+     */
+    public void save() {
+        saveAs(openFile);
+    }
+    
+    public void saveAs(File file) {
         try {
             this.openFile = file;
             Files.write(file.toPath(), this.markdown.getBytes());

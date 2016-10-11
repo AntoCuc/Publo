@@ -82,6 +82,7 @@ public final class View extends JFrame {
         openItem = new javax.swing.JMenuItem();
         javax.swing.JPopupMenu.Separator itemOpsSeparator = new javax.swing.JPopupMenu.Separator();
         saveMenuItem = new javax.swing.JMenuItem();
+        saveAsMenuItem = new javax.swing.JMenuItem();
         javax.swing.JPopupMenu.Separator appOpsSeparator = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -89,7 +90,7 @@ public final class View extends JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         sourcePanel.setLayout(new java.awt.BorderLayout());
 
@@ -110,7 +111,7 @@ public final class View extends JFrame {
         previewPanel.setLayout(new java.awt.BorderLayout());
 
         editorScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        editorScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        editorScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         editorPanel.setContentType("text/html"); // NOI18N
         editorPanel.setText("<html>\r   <head>\r \r   </head>\r   <body>\r     <h1>\r      No Content \r     </h1>\r   </body>\r </html>\r ");
@@ -136,6 +137,9 @@ public final class View extends JFrame {
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setText("Save");
         fileMenu.add(saveMenuItem);
+
+        saveAsMenuItem.setText("Save as...");
+        fileMenu.add(saveAsMenuItem);
         fileMenu.add(appOpsSeparator);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
@@ -169,6 +173,7 @@ public final class View extends JFrame {
     private javax.swing.JMenuItem newMenuItem;
     private javax.swing.JMenuItem openItem;
     private javax.swing.JPanel previewPanel;
+    private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JTextArea textArea;
     private javax.swing.JScrollPane textAreaScrollPanel;
@@ -200,6 +205,10 @@ public final class View extends JFrame {
 
     public JMenuItem getSaveMenuItem() {
         return saveMenuItem;
+    }
+
+    public JMenuItem getSaveAsMenuItem() {
+        return saveAsMenuItem;
     }
 
     public JTextArea getTextArea() {
