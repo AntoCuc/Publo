@@ -25,6 +25,7 @@ package org.publo.controller;
 
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -154,6 +155,7 @@ public final class Controller {
             view.updatePreview();
             view.updateTitle();
             view.setVisible(true);
+            view.setExtendedState(Frame.MAXIMIZED_BOTH);
         });
     }
 

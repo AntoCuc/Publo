@@ -91,6 +91,7 @@ public final class View extends JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         sourcePanel.setLayout(new java.awt.BorderLayout());
