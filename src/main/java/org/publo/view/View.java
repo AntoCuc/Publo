@@ -40,6 +40,7 @@ import org.publo.model.Model;
  */
 public final class View extends JFrame {
     
+    private static final String TITLE_PREFIX = "Publo - ";
     private static final DefaultBoundedRangeModel EDITOR_RANGE_MODEL
             = new DefaultBoundedRangeModel();
     
@@ -230,6 +231,6 @@ public final class View extends JFrame {
     public void updateTitle() {
         String fileName = model.getOpenFile().getName();
         String suffix = (model.isChanged()) ? "*" : "";
-        setTitle(fileName + suffix);
+        setTitle(TITLE_PREFIX + fileName + suffix);
     }
 }
