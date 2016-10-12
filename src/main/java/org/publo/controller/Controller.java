@@ -135,6 +135,7 @@ public final class Controller {
             @Override
             public void mousePressed(MouseEvent e) {
                 AboutDialog aboutDialog = new AboutDialog(view, false);
+                aboutDialog.setLocationRelativeTo(view);
                 aboutDialog.setVisible(true);
             }
         });
