@@ -44,6 +44,8 @@ public final class Model {
     private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
     public static final String LINE_SEP = System.getProperty("line.separator");
     public static final File DEFAULT_FILE = new File("unnamed.md");
+    private static final String MARKUP_HEAD = "<html><head></head><body>";
+    private static final String MARKUP_TAIL = "</body></html>";
 
     private File openFile;
     private String markdown;
@@ -94,7 +96,10 @@ public final class Model {
     public void update(String markdown) {
         this.changed = !this.markdown.equals(markdown);
         this.markdown = markdown;
-        this.markup = PROCESSOR.markdownToHtml(markdown);
+        StringBuilder markupBuilder = new StringBuilder(MARKUP_HEAD);
+        markupBuilder.append(PROCESSOR.markdownToHtml(markdown));
+        markupBuilder.append(MARKUP_TAIL);
+        this.markup = markupBuilder.toString();
     }
 
     public String getMarkdown() {
