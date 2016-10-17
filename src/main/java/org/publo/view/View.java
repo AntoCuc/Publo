@@ -24,7 +24,7 @@
 package org.publo.view;
 
 import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.JEditorPane;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -43,7 +43,8 @@ public final class View extends JFrame {
     private static final String TITLE_PREFIX = "Publo - ";
     private static final DefaultBoundedRangeModel EDITOR_RANGE_MODEL
             = new DefaultBoundedRangeModel();
-    
+
+    private final BrowserApplet applet = new BrowserApplet();
     private final Model model;
 
     /**
@@ -58,6 +59,9 @@ public final class View extends JFrame {
             System.out.println("Error setting native LAF: " + e);
         }
         initComponents();
+        previewPanel.add(applet);
+        applet.init();
+        applet.start();
     }
 
     /**
@@ -74,9 +78,6 @@ public final class View extends JFrame {
         textAreaScrollPanel.getVerticalScrollBar().setModel(EDITOR_RANGE_MODEL);
         textArea = new javax.swing.JTextArea();
         previewPanel = new javax.swing.JPanel();
-        editorScrollPanel = new javax.swing.JScrollPane();
-        editorScrollPanel.getVerticalScrollBar().setModel(EDITOR_RANGE_MODEL);
-        editorPanel = new javax.swing.JEditorPane();
         javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newMenuItem = new javax.swing.JMenuItem();
@@ -111,18 +112,6 @@ public final class View extends JFrame {
 
         previewPanel.setPreferredSize(new java.awt.Dimension(800, 600));
         previewPanel.setLayout(new java.awt.BorderLayout());
-
-        editorScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        editorScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        editorPanel.setContentType("text/html"); // NOI18N
-        editorPanel.setText("<html>\r   <head>\r \r   </head>\r   <body>\r     <h1>\r      No Content \r     </h1>\r   </body>\r </html>\r ");
-        editorPanel.setToolTipText("");
-        editorPanel.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        editorScrollPanel.setViewportView(editorPanel);
-
-        previewPanel.add(editorScrollPanel, java.awt.BorderLayout.CENTER);
-
         getContentPane().add(previewPanel);
 
         fileMenu.setText("File");
@@ -168,8 +157,6 @@ public final class View extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JEditorPane editorPanel;
-    private javax.swing.JScrollPane editorScrollPanel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenuItem helpContentsMenuItem;
     private javax.swing.JMenuItem newMenuItem;
@@ -221,12 +208,8 @@ public final class View extends JFrame {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public JEditorPane getEditorPanel() {
-        return editorPanel;
-    }
-
     public void updatePreview() {
-        editorPanel.setText(model.getMarkup());
+        applet.load(model.getMarkup());
     }
     
     public void updateTitle() {

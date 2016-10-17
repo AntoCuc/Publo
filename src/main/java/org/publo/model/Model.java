@@ -30,6 +30,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.pegdown.PegDownProcessor;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 /**
  * Business logic container.
@@ -44,8 +48,6 @@ public final class Model {
     private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
     public static final String LINE_SEP = System.getProperty("line.separator");
     public static final File DEFAULT_FILE = new File("unnamed.md");
-    private static final String MARKUP_HEAD = "<html><head></head><body>";
-    private static final String MARKUP_TAIL = "</body></html>";
 
     private File openFile;
     private String markdown;
@@ -82,7 +84,7 @@ public final class Model {
     public void save() {
         saveAs(openFile);
     }
-    
+
     public void saveAs(File file) {
         try {
             this.openFile = file;
@@ -96,10 +98,15 @@ public final class Model {
     public void update(String markdown) {
         this.changed = !this.markdown.equals(markdown);
         this.markdown = markdown;
-        StringBuilder markupBuilder = new StringBuilder(MARKUP_HEAD);
-        markupBuilder.append(PROCESSOR.markdownToHtml(markdown));
-        markupBuilder.append(MARKUP_TAIL);
-        this.markup = markupBuilder.toString();
+        final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        resolver.setPrefix("/templates/");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setSuffix(".html");
+        final TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(resolver);
+        final Context context = new Context();
+        context.setVariable("main", PROCESSOR.markdownToHtml(markdown));
+        this.markup = templateEngine.process("default", context);
     }
 
     public String getMarkdown() {
@@ -113,7 +120,7 @@ public final class Model {
     public File getOpenFile() {
         return this.openFile;
     }
-    
+
     public String getFileName() {
         return this.openFile.getName();
     }
