@@ -23,27 +23,53 @@
  */
 package org.publo;
 
-import org.publo.controller.Controller;
-import org.publo.view.View;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import org.publo.controller.EditorController;
+import org.publo.controller.MenubarController;
 import org.publo.model.Model;
 
 /**
- * Application Launcher.
+ * JavaFX Application Launcher.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class Launcher {
+public class Launcher extends Application {
 
-    /**
-     * Launches Publo.
-     * @param args 
-     */
-    public static void main(String[] args) {
+    private static final String PREFIX_TITLE = "Publo";
+
+    @Override
+    public void start(final Stage primaryStage) throws Exception {
+        primaryStage.setTitle(PREFIX_TITLE);
+        
         final Model model = new Model();
-        final View view = new View(model);
-        final Controller controller = new Controller(model, view);
-        controller.initialise();
-                
+        
+        final BorderPane rootPane = new BorderPane();
+
+        final FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/fxml/menubar.fxml"));
+        rootPane.setTop(menuLoader.load());
+        final MenubarController menuController = menuLoader.getController();
+        menuController.initModel(model);
+
+        final FXMLLoader editor = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"));
+        rootPane.setCenter(editor.load());
+        final EditorController editorController = editor.getController();
+        editorController.initModel(model);
+        
+        model.addObserver(editorController);
+
+        final Scene scene = new Scene(rootPane);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
+        primaryStage.show();
     }
+
+    public static void main(String[] args) {
+        Launcher.launch(args);
+    }
+
 }

@@ -26,6 +26,7 @@ package org.publo.model;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class Model {
+public final class Model extends Observable {
 
     private static final Logger LOGGER
             = Logger.getLogger(Model.class.getName());
@@ -52,7 +53,6 @@ public final class Model {
     private File openFile;
     private String markdown;
     private String markup;
-    private boolean changed;
 
     public Model() {
         newFile();
@@ -75,28 +75,30 @@ public final class Model {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
-        this.changed = true;
+        update(this.markdown);
+        setChanged();
+        notifyObservers();
     }
 
     /**
      * Saves as the current opened file.
      */
     public void save() {
-        saveAs(openFile);
+        if (hasChanged()) {
+            saveAs(openFile);
+        }
     }
 
-    public void saveAs(File file) {
+    public final void saveAs(File file) {
         try {
             this.openFile = file;
             Files.write(file.toPath(), this.markdown.getBytes());
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
-        this.changed = false;
     }
 
-    public void update(String markdown) {
-        this.changed = !this.markdown.equals(markdown);
+    public final void update(String markdown) {
         this.markdown = markdown;
         final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix("/templates/");
@@ -107,25 +109,14 @@ public final class Model {
         final Context context = new Context();
         context.setVariable("main", PROCESSOR.markdownToHtml(markdown));
         this.markup = templateEngine.process("default", context);
+        this.setChanged();
     }
 
-    public String getMarkdown() {
+    public final String getMarkdown() {
         return this.markdown;
     }
 
-    public String getMarkup() {
+    public final String getMarkup() {
         return this.markup;
-    }
-
-    public File getOpenFile() {
-        return this.openFile;
-    }
-
-    public String getFileName() {
-        return this.openFile.getName();
-    }
-
-    public boolean isChanged() {
-        return this.changed;
     }
 }
