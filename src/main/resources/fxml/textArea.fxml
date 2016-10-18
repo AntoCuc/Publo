@@ -10,7 +10,7 @@
 
 <GridPane xmlns:fx="http://javafx.com/fxml/1" 
           id="GridPane" 
-          fx:controller="org.publo.controller.EditorController">
+          fx:controller="org.publo.controller.TextAreaController">
     <columnConstraints>
         <ColumnConstraints percentWidth="50"/> 
     </columnConstraints>    

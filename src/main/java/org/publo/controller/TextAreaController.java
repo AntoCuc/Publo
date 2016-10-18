@@ -39,7 +39,7 @@ import org.publo.model.Model;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class EditorController implements Initializable, Observer {
+public class TextAreaController implements Initializable, Observer {
 
     private Model model;
     

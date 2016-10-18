@@ -28,7 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.publo.controller.EditorController;
+import org.publo.controller.TextAreaController;
 import org.publo.controller.MenubarController;
 import org.publo.model.Model;
 
@@ -55,9 +55,9 @@ public class Launcher extends Application {
         final MenubarController menuController = menuLoader.getController();
         menuController.initModel(model);
 
-        final FXMLLoader editor = new FXMLLoader(getClass().getResource("/fxml/editor.fxml"));
+        final FXMLLoader editor = new FXMLLoader(getClass().getResource("/fxml/textArea.fxml"));
         rootPane.setCenter(editor.load());
-        final EditorController editorController = editor.getController();
+        final TextAreaController editorController = editor.getController();
         editorController.initModel(model);
         
         model.addObserver(editorController);
