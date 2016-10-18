@@ -35,13 +35,11 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.pegdown.PegDownProcessor;
+import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.TextAreaController;
 import org.publo.controller.MenubarController;
+import org.publo.controller.utils.TemplateRenderer;
 import org.publo.controller.WebViewController;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 /**
  * JavaFX Application Launcher.
@@ -79,16 +77,9 @@ public class Launcher extends Application {
         final WebViewController webViewController = webView.getController();
 
         markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-            resolver.setPrefix("/templates/");
-            resolver.setTemplateMode(TemplateMode.HTML);
-            resolver.setSuffix(".html");
-            final TemplateEngine templateEngine = new TemplateEngine();
-            templateEngine.setTemplateResolver(resolver);
-            final Context context = new Context();
-            context.setVariable("main", PROCESSOR.markdownToHtml(newValue));
-            String markup = templateEngine.process("default", context);
-            webViewController.updateWebView(markup);
+            final String contentMarkup = MarkdownParser.parse(newValue);
+            final String pageMarkup = TemplateRenderer.render(contentMarkup);
+            webViewController.updateWebView(pageMarkup);
         });
 
         final URL menuBarFxml = getClass().getResource("/fxml/menubar.fxml");
