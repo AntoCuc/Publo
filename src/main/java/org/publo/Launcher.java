@@ -49,12 +49,11 @@ import org.publo.controller.WebViewController;
  */
 public class Launcher extends Application {
 
-    private static final String PREFIX_TITLE = "Publo";
-    private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
+    private static final String APP_NAME = "Publo";
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        primaryStage.setTitle(PREFIX_TITLE);
+        primaryStage.setTitle(APP_NAME);
 
         final StringProperty markdown = new SimpleStringProperty();
 
