@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -7,20 +6,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.WebView?>
 <?import javafx.scene.layout.BorderPane ?>
-
-<GridPane xmlns:fx="http://javafx.com/fxml/1" 
-          id="GridPane" 
-          fx:controller="org.publo.controller.TextAreaController">
-    <columnConstraints>
-        <ColumnConstraints percentWidth="50"/> 
-    </columnConstraints>    
-    <TextArea fx:id="textArea" 
-              wrapText="true"  
-              onKeyReleased="#updateModel" 
-              GridPane.columnIndex="0" 
-              GridPane.rowIndex="0" />
-    <WebView 
-        fx:id="webView" 
-        GridPane.columnIndex="1" 
-        GridPane.rowIndex="0" />
-</GridPane>
+<BorderPane xmlns="http://javafx.com/javafx/8" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="org.publo.controller.TextAreaController">
+    <center>
+        <TextArea fx:id="textArea" 
+                  wrapText="true"  
+                  onKeyReleased="#updateMarkdown"/>
+    </center>
+</BorderPane>

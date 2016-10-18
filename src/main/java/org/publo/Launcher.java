@@ -23,14 +23,25 @@
  */
 package org.publo;
 
+import java.net.URL;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.pegdown.PegDownProcessor;
 import org.publo.controller.TextAreaController;
 import org.publo.controller.MenubarController;
-import org.publo.model.Model;
+import org.publo.controller.WebViewController;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 /**
  * JavaFX Application Launcher.
@@ -41,26 +52,51 @@ import org.publo.model.Model;
 public class Launcher extends Application {
 
     private static final String PREFIX_TITLE = "Publo";
+    private final static PegDownProcessor PROCESSOR = new PegDownProcessor();
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setTitle(PREFIX_TITLE);
-        
-        final Model model = new Model();
-        
+
+        final StringProperty markdown = new SimpleStringProperty();
+
         final BorderPane rootPane = new BorderPane();
+        final GridPane gridPane = new GridPane();
+        final ColumnConstraints colConst = new ColumnConstraints();
+        colConst.setPercentWidth(50);
+        gridPane.getColumnConstraints().add(colConst);
+        rootPane.setCenter(gridPane);
 
-        final FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/fxml/menubar.fxml"));
-        rootPane.setTop(menuLoader.load());
-        final MenubarController menuController = menuLoader.getController();
-        menuController.initModel(model);
+        final URL textAreaFxml = getClass().getResource("/fxml/textArea.fxml");
+        final FXMLLoader textArea = new FXMLLoader(textAreaFxml);
+        gridPane.add(textArea.load(), 0, 0);
+        final TextAreaController textAreaController = textArea.getController();
+        textAreaController.initMarkDown(markdown);
 
-        final FXMLLoader editor = new FXMLLoader(getClass().getResource("/fxml/textArea.fxml"));
-        rootPane.setCenter(editor.load());
-        final TextAreaController editorController = editor.getController();
-        editorController.initModel(model);
-        
-        model.addObserver(editorController);
+        final URL webViewFxml = getClass().getResource("/fxml/webView.fxml");
+        final FXMLLoader webView = new FXMLLoader(webViewFxml);
+        gridPane.add(webView.load(), 1, 0);
+        final WebViewController webViewController = webView.getController();
+
+        markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+            resolver.setPrefix("/templates/");
+            resolver.setTemplateMode(TemplateMode.HTML);
+            resolver.setSuffix(".html");
+            final TemplateEngine templateEngine = new TemplateEngine();
+            templateEngine.setTemplateResolver(resolver);
+            final Context context = new Context();
+            context.setVariable("main", PROCESSOR.markdownToHtml(newValue));
+            String markup = templateEngine.process("default", context);
+            webViewController.updateWebView(markup);
+        });
+
+        final URL menuBarFxml = getClass().getResource("/fxml/menubar.fxml");
+        final FXMLLoader menuBarLoader = new FXMLLoader(menuBarFxml);
+        rootPane.setTop(menuBarLoader.load());
+        final MenubarController menuBarController = menuBarLoader.getController();
+        menuBarController.initMarkdown(markdown);
+        menuBarController.initTextArea(textAreaController);
 
         final Scene scene = new Scene(rootPane);
         primaryStage.setScene(scene);

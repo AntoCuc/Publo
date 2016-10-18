@@ -25,10 +25,10 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 /**
  * Event flow coordinating controller.
@@ -36,31 +36,18 @@ import javafx.scene.control.TextArea;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class TextAreaController implements Initializable {
-    
-    private StringProperty markdown;
+public class WebViewController implements Initializable {
     
     @FXML
-    private TextArea textArea;
+    private WebView webView;
+    
+    public void updateWebView(String markup) {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.loadContent(markup);
+    }
 
-    /**
-     * Initialises the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {  
-    }
+    public void initialize(URL url, ResourceBundle rb) {
+    }    
     
-    public void initMarkDown(StringProperty md) {
-        markdown = md;
-    }
-
-    public void updateMarkdown() {
-        markdown.setValue(textArea.getText());
-    }
-    
-    public void updateTextArea() {
-        textArea.setText(markdown.getValue());
-    }
 }
