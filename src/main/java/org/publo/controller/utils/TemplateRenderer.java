@@ -36,6 +36,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  */
 public final class TemplateRenderer {
 
+    private static final String TEMPLATES_DIR = "/templates/";
+    private static final String TEMPLATE_SUFFIX = ".html";
+
     /**
      * Renders the content in the default template.
      *
@@ -44,9 +47,9 @@ public final class TemplateRenderer {
      */
     public static String render(String content) {
         final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setPrefix("/templates/");
+        resolver.setPrefix(TEMPLATES_DIR);
         resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setSuffix(".html");
+        resolver.setSuffix(TEMPLATE_SUFFIX);
         final TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(resolver);
         final Context context = new Context();
