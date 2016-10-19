@@ -17,6 +17,9 @@
             <columnConstraints>
                 <ColumnConstraints percentWidth="50" />
             </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100"/> 
+            </rowConstraints>
             <fx:include fx:id="textAreaPane" 
                         source="textArea.fxml" 
                         GridPane.columnIndex="0" 
