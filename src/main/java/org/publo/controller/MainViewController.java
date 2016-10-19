@@ -50,7 +50,9 @@ public class MainViewController implements Initializable {
     @FXML
     private WebViewController webViewPaneController;
 
-    final StringProperty markdown = new SimpleStringProperty("aa");
+    final StringProperty markdown = new SimpleStringProperty();
+    
+    final StringProperty template = new SimpleStringProperty("Default");
 
     /**
      * Initialises the controller class.
@@ -63,10 +65,16 @@ public class MainViewController implements Initializable {
         textAreaPaneController.initMarkDown(markdown);
         markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             final String contentMarkup = MarkdownParser.parse(newValue);
-            final String pageMarkup = TemplateRenderer.render(contentMarkup);
+            final String pageMarkup = TemplateRenderer.render(template.getValue(), contentMarkup);
+            webViewPaneController.updateWebView(pageMarkup);
+        });
+        template.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            final String contentMarkup = MarkdownParser.parse(markdown.getValue());
+            final String pageMarkup = TemplateRenderer.render(template.getValue(), contentMarkup);
             webViewPaneController.updateWebView(pageMarkup);
         });
         menubarPaneController.initMarkdown(markdown);
+        menubarPaneController.initTemplate(template);
         menubarPaneController.initTextAreaController(textAreaPaneController);
     }
 }

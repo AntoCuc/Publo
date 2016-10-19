@@ -35,9 +35,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.stage.FileChooser;
 
 /**
@@ -57,6 +59,7 @@ public class MenubarController implements Initializable {
     private static final String LINE_SEP = System.getProperty("line.separator");
 
     private StringProperty markdown;
+    private StringProperty template;
     private TextAreaController textAreaController;
 
     @FXML
@@ -116,9 +119,19 @@ public class MenubarController implements Initializable {
             LOGGER.log(Level.SEVERE, "Browser not supported.");
         }
     }
+    
+    @FXML
+    public void setTemplate(ActionEvent event) {
+        RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
+        template.setValue(radioMenuItem.getText());
+    }
 
     public void initMarkdown(StringProperty markdown) {
         this.markdown = markdown;
+    }
+    
+    void initTemplate(StringProperty template) {
+        this.template = template;
     }
 
     public void initTextAreaController(TextAreaController textAreaController) {

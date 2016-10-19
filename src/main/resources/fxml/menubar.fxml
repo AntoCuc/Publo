@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.input.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -12,22 +13,20 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView ?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" 
-           xmlns:fx="http://javafx.com/fxml/1" 
-           fx:controller="org.publo.controller.MenubarController">
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.publo.controller.MenubarController">
     <children>
         <MenuBar fx:id="menuBar">
             <menus>
                 <Menu text="File">
                     <items>
-                        <MenuItem onAction="#open" text="Open"  >
+                        <MenuItem onAction="#open" text="Open">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                             </accelerator>
                             <graphic>
                                 <ImageView>
                                     <image>
-                                        <Image url="media/folder.png"/>
+                                        <Image url="media/folder.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -39,7 +38,7 @@
                             <graphic>
                                 <ImageView>
                                     <image>
-                                        <Image url="media/disk.png"/>
+                                        <Image url="media/disk.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -52,7 +51,7 @@
                             <graphic>
                                 <ImageView>
                                     <image>
-                                        <Image url="media/door_in.png"/>
+                                        <Image url="media/door_in.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -62,6 +61,19 @@
                         <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Template">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" selected="true" text="Default">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="templateToggleGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" text="Dark" toggleGroup="$templateToggleGroup" />
+               </items>
+            </Menu>
                 <Menu text="Help">
                     <items>
                         <MenuItem onAction="#about" text="About">
@@ -71,7 +83,7 @@
                             <graphic>
                                 <ImageView>
                                     <image>
-                                        <Image url="media/information.png"/>
+                                        <Image url="media/information.png" />
                                     </image>
                                 </ImageView>
                             </graphic>

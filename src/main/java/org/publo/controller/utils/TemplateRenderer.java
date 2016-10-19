@@ -42,10 +42,11 @@ public final class TemplateRenderer {
     /**
      * Renders the content in the default template.
      *
+     * @param template
      * @param content of the main
      * @return the markup
      */
-    public static String render(String content) {
+    public static String render(String template, String content) {
         final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix(TEMPLATES_DIR);
         resolver.setTemplateMode(TemplateMode.HTML);
@@ -54,7 +55,7 @@ public final class TemplateRenderer {
         templateEngine.setTemplateResolver(resolver);
         final Context context = new Context();
         context.setVariable("main", content);
-        return templateEngine.process("default", context);
+        return templateEngine.process(template, context);
     }
 
 }
