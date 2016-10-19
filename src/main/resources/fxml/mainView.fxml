@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.publo.controller.MainViewController">
+    <top>
+        <fx:include fx:id="menubarPane" source="menubar.fxml"/>
+    </top>
+    <center>
+        <GridPane BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50" />
+            </columnConstraints>
+            <fx:include fx:id="textAreaPane" 
+                        source="textArea.fxml" 
+                        GridPane.columnIndex="0" 
+                        GridPane.rowIndex="0"/>
+            <fx:include fx:id="webViewPane" 
+                        source="webView.fxml" 
+                        GridPane.columnIndex="1" 
+                        GridPane.rowIndex="0"/>
+        </GridPane>
+    </center>
+</BorderPane>

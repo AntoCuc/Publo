@@ -25,21 +25,9 @@ package org.publo;
 
 import java.net.URL;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import org.pegdown.PegDownProcessor;
-import org.publo.controller.utils.MarkdownParser;
-import org.publo.controller.TextAreaController;
-import org.publo.controller.MenubarController;
-import org.publo.controller.utils.TemplateRenderer;
-import org.publo.controller.WebViewController;
 
 /**
  * JavaFX Application Launcher.
@@ -54,41 +42,9 @@ public class Launcher extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setTitle(APP_NAME);
-
-        final StringProperty markdown = new SimpleStringProperty();
-
-        final BorderPane rootPane = new BorderPane();
-        final GridPane gridPane = new GridPane();
-        final ColumnConstraints colConst = new ColumnConstraints();
-        colConst.setPercentWidth(50);
-        gridPane.getColumnConstraints().add(colConst);
-        rootPane.setCenter(gridPane);
-
-        final URL textAreaFxml = getClass().getResource("/fxml/textArea.fxml");
-        final FXMLLoader textArea = new FXMLLoader(textAreaFxml);
-        gridPane.add(textArea.load(), 0, 0);
-        final TextAreaController textAreaController = textArea.getController();
-        textAreaController.initMarkDown(markdown);
-
-        final URL webViewFxml = getClass().getResource("/fxml/webView.fxml");
-        final FXMLLoader webView = new FXMLLoader(webViewFxml);
-        gridPane.add(webView.load(), 1, 0);
-        final WebViewController webViewController = webView.getController();
-
-        markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final String contentMarkup = MarkdownParser.parse(newValue);
-            final String pageMarkup = TemplateRenderer.render(contentMarkup);
-            webViewController.updateWebView(pageMarkup);
-        });
-
-        final URL menuBarFxml = getClass().getResource("/fxml/menubar.fxml");
-        final FXMLLoader menuBarLoader = new FXMLLoader(menuBarFxml);
-        rootPane.setTop(menuBarLoader.load());
-        final MenubarController menuBarController = menuBarLoader.getController();
-        menuBarController.initMarkdown(markdown);
-        menuBarController.initTextArea(textAreaController);
-
-        final Scene scene = new Scene(rootPane);
+        final URL mainViewFxml = getClass().getResource("/fxml/mainView.fxml");
+        final FXMLLoader mainView = new FXMLLoader(mainViewFxml);
+        final Scene scene = new Scene(mainView.load());
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();

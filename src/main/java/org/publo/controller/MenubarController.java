@@ -121,7 +121,7 @@ public class MenubarController implements Initializable {
         this.markdown = markdown;
     }
 
-    public void initTextArea(TextAreaController textAreaController) {
+    public void initTextAreaController(TextAreaController textAreaController) {
         this.textAreaController = textAreaController;
     }
 }
