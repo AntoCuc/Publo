@@ -30,6 +30,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
 
@@ -67,6 +68,10 @@ public class MainViewController implements Initializable {
             final String contentMarkup = MarkdownParser.parse(newValue);
             final String pageMarkup = TemplateRenderer.render(template.getValue(), contentMarkup);
             webViewPaneController.updateWebView(pageMarkup);
+            final TextArea textArea = textAreaPaneController.getTextArea();
+            if(!newValue.equals(textArea.getText())) {
+                textArea.setText(newValue);
+            }
         });
         template.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             final String contentMarkup = MarkdownParser.parse(markdown.getValue());
@@ -75,6 +80,5 @@ public class MainViewController implements Initializable {
         });
         menubarPaneController.initMarkdown(markdown);
         menubarPaneController.initTemplate(template);
-        menubarPaneController.initTextAreaController(textAreaPaneController);
     }
 }

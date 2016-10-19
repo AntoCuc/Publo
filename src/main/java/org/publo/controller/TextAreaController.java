@@ -43,6 +43,10 @@ public class TextAreaController implements Initializable {
     @FXML
     private TextArea textArea;
 
+    public TextArea getTextArea() {
+        return textArea;
+    }
+
     /**
      * Initialises the controller class.
      * @param url

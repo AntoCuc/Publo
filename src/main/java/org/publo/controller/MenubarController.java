@@ -55,12 +55,11 @@ public class MenubarController implements Initializable {
 
     private static final String ABOUT_LINK
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
-    
+
     private static final String LINE_SEP = System.getProperty("line.separator");
 
     private StringProperty markdown;
     private StringProperty template;
-    private TextAreaController textAreaController;
 
     @FXML
     private MenuBar menuBar;
@@ -80,7 +79,6 @@ public class MenubarController implements Initializable {
             try {
                 markdown.setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
-                textAreaController.updateTextArea();
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
@@ -119,7 +117,7 @@ public class MenubarController implements Initializable {
             LOGGER.log(Level.SEVERE, "Browser not supported.");
         }
     }
-    
+
     @FXML
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
@@ -129,12 +127,9 @@ public class MenubarController implements Initializable {
     public void initMarkdown(StringProperty markdown) {
         this.markdown = markdown;
     }
-    
+
     void initTemplate(StringProperty template) {
         this.template = template;
     }
 
-    public void initTextAreaController(TextAreaController textAreaController) {
-        this.textAreaController = textAreaController;
-    }
 }
