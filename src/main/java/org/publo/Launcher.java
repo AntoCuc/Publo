@@ -23,10 +23,12 @@
  */
 package org.publo;
 
+import java.io.InputStream;
 import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -42,6 +44,8 @@ public class Launcher extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setTitle(APP_NAME);
+        InputStream imgStream = Launcher.class.getResourceAsStream("/media/page_white.png");
+        primaryStage.getIcons().add(new Image(imgStream));
         final URL mainViewFxml = getClass().getResource("/fxml/mainView.fxml");
         final FXMLLoader mainView = new FXMLLoader(mainViewFxml);
         final Scene scene = new Scene(mainView.load());
