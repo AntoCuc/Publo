@@ -36,7 +36,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  */
 public final class TemplateRenderer {
 
-    private static final String TEMPLATES_DIR = "/templates/";
+    private static final String TEMPLATES_DIR = "templates/";
     private static final String TEMPLATE_SUFFIX = ".html";
 
     /**
