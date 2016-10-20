@@ -25,6 +25,8 @@ package org.publo.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.publo.controller.utils.MarkdownParser;
+import org.publo.controller.utils.TemplateRenderer;
 
 /**
  * Publo core model. Holds state concerning the markdown being produced and the
@@ -51,6 +53,11 @@ public class Page {
 
     public StringProperty getTemplate() {
         return template;
+    }
+
+    public String renderMarkup() {
+        final String contentMarkup = MarkdownParser.parse(markdown.getValue());
+        return TemplateRenderer.render(template.getValue(), contentMarkup);
     }
 
 }

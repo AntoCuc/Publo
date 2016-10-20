@@ -25,14 +25,10 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import org.publo.controller.utils.MarkdownParser;
-import org.publo.controller.utils.TemplateRenderer;
 import org.publo.model.Page;
 
 /**
@@ -61,24 +57,19 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         final Page page = new Page();
-        StringProperty markdown = page.getMarkdown();
-        StringProperty template = page.getTemplate();
-        textAreaPaneController.initMarkDown(markdown);
-        markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final String contentMarkup = MarkdownParser.parse(newValue);
-            final String pageMarkup = TemplateRenderer.render(template.getValue(), contentMarkup);
-            webViewPaneController.updateWebView(pageMarkup);
+        textAreaPaneController.initMarkDown(page.getMarkdown());
+        page.getMarkdown().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            final String markup = page.renderMarkup()
+            webViewPaneController.updateWebView(markup);
             final TextArea textArea = textAreaPaneController.getTextArea();
-            if(!newValue.equals(textArea.getText())) {
+            if (!newValue.equals(textArea.getText())) {
                 textArea.setText(newValue);
             }
         });
-        template.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final String contentMarkup = MarkdownParser.parse(markdown.getValue());
-            final String pageMarkup = TemplateRenderer.render(template.getValue(), contentMarkup);
+        page.getTemplate().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            final String pageMarkup = page.renderMarkup();
             webViewPaneController.updateWebView(pageMarkup);
         });
-        menubarPaneController.initMarkdown(markdown);
-        menubarPaneController.initTemplate(template);
+        menubarPaneController.initPage(page);
     }
 }

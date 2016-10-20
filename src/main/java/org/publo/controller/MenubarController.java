@@ -34,13 +34,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.stage.FileChooser;
+import org.publo.model.Page;
 
 /**
  * Event flow coordinating controller.
@@ -57,9 +57,8 @@ public class MenubarController implements Initializable {
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     private static final String LINE_SEP = System.getProperty("line.separator");
-
-    private StringProperty markdown;
-    private StringProperty template;
+    
+    private Page page;
 
     @FXML
     private MenuBar menuBar;
@@ -77,7 +76,7 @@ public class MenubarController implements Initializable {
         File file = chooser.showOpenDialog(menuBar.getScene().getWindow());
         if (file != null) {
             try {
-                markdown.setValue(Files.readAllLines(file.toPath())
+                page.getMarkdown().setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
@@ -91,7 +90,7 @@ public class MenubarController implements Initializable {
         File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
             try {
-                Files.write(file.toPath(), this.markdown.getValue().getBytes());
+                Files.write(file.toPath(), page.getMarkdown().getValue().getBytes());
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
@@ -121,15 +120,11 @@ public class MenubarController implements Initializable {
     @FXML
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
-        template.setValue(radioMenuItem.getText());
+        page.getTemplate().setValue(radioMenuItem.getText());
     }
 
-    public void initMarkdown(StringProperty markdown) {
-        this.markdown = markdown;
-    }
-
-    void initTemplate(StringProperty template) {
-        this.template = template;
+    void initPage(Page page) {
+        this.page = page;
     }
 
 }
