@@ -24,12 +24,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.6.4</version>
+            <version>1.7.21</version>
         </dependency>
     </dependencies>
     <build>
@@ -65,7 +65,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.7.11</version>
+                <version>1.7.12</version>
                 <executions>
                     <execution>
                         <id>l4j-clui</id>
@@ -105,7 +105,7 @@
             <plugin>
                 <groupId>sh.tak.appbundler</groupId>
                 <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>1.2.0</version>
                 <configuration>
                     <mainClass>org.publo.Launcher</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>
