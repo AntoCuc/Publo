@@ -31,6 +31,15 @@ Download Publo
 
 Downloads of Publo are going to be available on GitHub releases.
 
+## Software Builds ##
+
+## Updates ##
+
+[![Dependency Status](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c)
+
+If no features are developed a monthly review of dependencies and plugins is 
+performed.
+
 Issues
 ------
 
