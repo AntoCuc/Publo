@@ -27,15 +27,22 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Event flow coordinating controller.
+ * Publo core model. Holds state concerning the markdown being produced and the
+ * template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
 public class Page {
 
+    /**
+     * The markdown text being edited in the TextArea
+     */
     final StringProperty markdown = new SimpleStringProperty();
 
+    /**
+     * The template file name to be applied on rendering.
+     */
     final StringProperty template = new SimpleStringProperty("Default");
 
     public StringProperty getMarkdown() {
