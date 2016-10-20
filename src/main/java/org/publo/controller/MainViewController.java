@@ -33,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
+import org.publo.model.Page;
 
 /**
  * Event flow coordinating controller.
@@ -51,10 +52,6 @@ public class MainViewController implements Initializable {
     @FXML
     private WebViewController webViewPaneController;
 
-    final StringProperty markdown = new SimpleStringProperty();
-    
-    final StringProperty template = new SimpleStringProperty("Default");
-
     /**
      * Initialises the controller class.
      *
@@ -63,6 +60,9 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        final Page page = new Page();
+        StringProperty markdown = page.getMarkdown();
+        StringProperty template = page.getTemplate();
         textAreaPaneController.initMarkDown(markdown);
         markdown.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             final String contentMarkup = MarkdownParser.parse(newValue);
