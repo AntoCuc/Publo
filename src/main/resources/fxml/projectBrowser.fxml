@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane id="BorderPane"
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="org.publo.controller.ProjectBrowserController">
+    <center>
+        <TreeView fx:id="treeView"/>
+    </center>
+</BorderPane>

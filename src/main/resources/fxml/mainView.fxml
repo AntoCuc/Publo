@@ -12,6 +12,9 @@
     <top>
         <fx:include fx:id="menubarPane" source="menubar.fxml"/>
     </top>
+    <left>
+        <fx:include fx:id="projectPane" source="projectBrowser.fxml"/>
+    </left>
     <center>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>

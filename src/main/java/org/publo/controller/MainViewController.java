@@ -47,6 +47,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private WebViewController webViewPaneController;
+    
+    @FXML
+    private ProjectBrowserController projectPaneController;
 
     /**
      * Initialises the controller class.
@@ -71,5 +74,6 @@ public class MainViewController implements Initializable {
             webViewPaneController.updateWebView(pageMarkup);
         });
         menubarPaneController.initPage(page);
+        projectPaneController.initProjectBrowser();
     }
 }
