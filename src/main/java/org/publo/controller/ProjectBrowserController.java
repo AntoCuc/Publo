@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,8 +38,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import jdk.nashorn.internal.objects.NativeDebug;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.model.Page;
 
@@ -60,9 +63,16 @@ public class ProjectBrowserController implements Initializable {
 
     private static final String PROJ_DIR_NAME = "publo-projects";
 
-    private static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
+    private static final Path PROJECTS_PATH = Paths.get(USER_DIR);
 
     private static final TreeItem DEFAULT_TREE_ITEM = new TreeItem("...");
+
+    private static final Image DIR_IMG
+            = new Image(ProjectBrowserController.class.getResourceAsStream("/media/folder.png"));
+    private static final Node DIR_NODE = new ImageView(DIR_IMG);
+    private static final Image FILE_IMG
+            = new Image(ProjectBrowserController.class.getResourceAsStream("/media/page_white.png"));
+    private static final Node FILE_NODE = new ImageView(FILE_IMG);
 
     @FXML
     private TreeView<String> treeView;
@@ -91,8 +101,8 @@ public class ProjectBrowserController implements Initializable {
      * @throws IOException
      */
     void initProjectBrowser(Page page) {
-        final PathTreeItem rootTreeItem =
-                new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
+        final PathTreeItem rootTreeItem
+                = new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
         initialise(rootTreeItem);
         final FileSelectedListener listener = new FileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty().addListener(listener);
@@ -126,10 +136,13 @@ public class ProjectBrowserController implements Initializable {
                 final PathTreeItem fileTreeItem = new PathTreeItem(label, path);
                 directoryNode.getChildren().add(fileTreeItem);
                 if (Files.isDirectory(path)) {
+                    fileTreeItem.setGraphic(DIR_NODE);
                     fileTreeItem.getChildren().add(DEFAULT_TREE_ITEM);
                     final DirectoryExpandedListener listener
                             = new DirectoryExpandedListener();
                     fileTreeItem.expandedProperty().addListener(listener);
+                } else {
+                    fileTreeItem.setGraphic(FILE_NODE);
                 }
             });
         } catch (IOException ex) {
