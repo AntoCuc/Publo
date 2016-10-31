@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,12 +52,17 @@ import org.publo.model.Page;
  */
 public class ProjectBrowserController implements Initializable {
 
-    private static final String LINE_SEP = System.getProperty("line.separator");
     private static final Logger LOGGER
             = Logger.getLogger(ProjectBrowserController.class.getName());
+
+    private static final String LINE_SEP = System.getProperty("line.separator");
     private static final String USER_DIR = System.getProperty("user.home");
-    private static final TreeItem INIT_TREE_ITEM
-            = new TreeItem("Initialising...");
+
+    private static final String PROJ_DIR_NAME = "publo-projects";
+
+    private static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
+
+    private static final TreeItem DEFAULT_TREE_ITEM = new TreeItem("...");
 
     @FXML
     private TreeView<String> treeView;
@@ -69,6 +75,13 @@ public class ProjectBrowserController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
+            try {
+                Files.createDirectories(PROJECTS_PATH);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -78,13 +91,13 @@ public class ProjectBrowserController implements Initializable {
      * @throws IOException
      */
     void initProjectBrowser(Page page) {
-        Path homeDir = Paths.get(USER_DIR);
-        final String rootLabel = homeDir.getFileName().toString();
-        final PathTreeItem rootTreeItem = new PathTreeItem(rootLabel, homeDir);
+        final PathTreeItem rootTreeItem =
+                new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
         initialise(rootTreeItem);
         final FileSelectedListener listener = new FileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty().addListener(listener);
         treeView.setRoot(rootTreeItem);
+        treeView.setShowRoot(false);
     }
 
     /**
@@ -113,7 +126,7 @@ public class ProjectBrowserController implements Initializable {
                 final PathTreeItem fileTreeItem = new PathTreeItem(label, path);
                 directoryNode.getChildren().add(fileTreeItem);
                 if (Files.isDirectory(path)) {
-                    fileTreeItem.getChildren().add(INIT_TREE_ITEM);
+                    fileTreeItem.getChildren().add(DEFAULT_TREE_ITEM);
                     final DirectoryExpandedListener listener
                             = new DirectoryExpandedListener();
                     fileTreeItem.expandedProperty().addListener(listener);
@@ -148,7 +161,5 @@ public class ProjectBrowserController implements Initializable {
                 }
             }
         }
-
     }
-
 }
