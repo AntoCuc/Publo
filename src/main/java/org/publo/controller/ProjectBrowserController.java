@@ -26,11 +26,13 @@ package org.publo.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,6 +41,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.publo.controller.utils.PathTreeItem;
+import org.publo.model.Page;
 
 /**
  * Event flow coordinating controller.
@@ -48,6 +51,7 @@ import org.publo.controller.utils.PathTreeItem;
  */
 public class ProjectBrowserController implements Initializable {
 
+    private static final String LINE_SEP = System.getProperty("line.separator");
     private static final Logger LOGGER
             = Logger.getLogger(ProjectBrowserController.class.getName());
     private static final String USER_DIR = System.getProperty("user.home");
@@ -73,11 +77,13 @@ public class ProjectBrowserController implements Initializable {
      *
      * @throws IOException
      */
-    void initProjectBrowser() {
+    void initProjectBrowser(Page page) {
         Path homeDir = Paths.get(USER_DIR);
         final String rootLabel = homeDir.getFileName().toString();
         final PathTreeItem rootTreeItem = new PathTreeItem(rootLabel, homeDir);
         initialise(rootTreeItem);
+        final FileSelectedListener listener = new FileSelectedListener(page);
+        treeView.getSelectionModel().selectedItemProperty().addListener(listener);
         treeView.setRoot(rootTreeItem);
     }
 
@@ -86,7 +92,7 @@ public class ProjectBrowserController implements Initializable {
      * expansion of such nodes it will clear the "holding" value and populate
      * the sub-tree.
      */
-    private class ExpandListener implements ChangeListener<Boolean> {
+    private class DirectoryExpandedListener implements ChangeListener<Boolean> {
 
         @Override
         public void changed(
@@ -108,13 +114,41 @@ public class ProjectBrowserController implements Initializable {
                 directoryNode.getChildren().add(fileTreeItem);
                 if (Files.isDirectory(path)) {
                     fileTreeItem.getChildren().add(INIT_TREE_ITEM);
-                    final ExpandListener listener = new ExpandListener();
+                    final DirectoryExpandedListener listener
+                            = new DirectoryExpandedListener();
                     fileTreeItem.expandedProperty().addListener(listener);
                 }
             });
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+    }
+
+    private class FileSelectedListener implements ChangeListener<TreeItem> {
+
+        private final Page page;
+
+        private FileSelectedListener(Page page) {
+            this.page = page;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends TreeItem> observable,
+                TreeItem oldValue,
+                TreeItem newValue) {
+            PathTreeItem selectedTreeItem = (PathTreeItem) newValue;
+            Path selectedPath = selectedTreeItem.getPath();
+            if (Files.isRegularFile(selectedPath, LinkOption.NOFOLLOW_LINKS)) {
+                LOGGER.info("File selected.");
+                try {
+                    page.getMarkdown().setValue(Files.readAllLines(selectedPath)
+                            .stream().collect(Collectors.joining(LINE_SEP)));
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
     }
 
 }
