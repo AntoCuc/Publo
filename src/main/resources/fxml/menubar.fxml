@@ -19,6 +19,19 @@
             <menus>
                 <Menu text="File">
                     <items>
+                        <MenuItem onAction="#newProject" text="New Project">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                            </accelerator>
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="media/folder_add.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem />
                         <MenuItem onAction="#open" text="Open">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

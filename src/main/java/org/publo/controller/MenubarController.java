@@ -30,6 +30,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
+import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
 import org.publo.model.Page;
 
 /**
@@ -57,7 +60,7 @@ public class MenubarController implements Initializable {
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     private static final String LINE_SEP = System.getProperty("line.separator");
-    
+
     private Page page;
 
     @FXML
@@ -68,6 +71,18 @@ public class MenubarController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    @FXML
+    public void newProject() throws IOException {
+        final TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Project name");
+        dialog.setTitle("New project...");
+        final Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            String projectName = result.get();
+            Files.createDirectory(PROJECTS_PATH.resolve(projectName));
+        }
     }
 
     @FXML

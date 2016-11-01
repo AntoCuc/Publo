@@ -43,7 +43,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import jdk.nashorn.internal.objects.NativeDebug;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.model.Page;
 
@@ -63,7 +62,7 @@ public class ProjectBrowserController implements Initializable {
 
     private static final String PROJ_DIR_NAME = "publo-projects";
 
-    private static final Path PROJECTS_PATH = Paths.get(USER_DIR);
+    static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
 
     private static final TreeItem DEFAULT_TREE_ITEM = new TreeItem("...");
 
@@ -95,10 +94,11 @@ public class ProjectBrowserController implements Initializable {
     }
 
     /**
-     * Initialises the project browser TreeItems using the user directory as a
+     * Initialise the project browser TreeItems using the user directory as a
      * tree root.
      *
-     * @throws IOException
+     * Attach a listener to the selection model so to open files as they are
+     * highlighted.
      */
     void initProjectBrowser(Page page) {
         final PathTreeItem rootTreeItem
@@ -129,6 +129,17 @@ public class ProjectBrowserController implements Initializable {
         }
     }
 
+    /**
+     * Initialise the filesystem-representing directory node. Use File or
+     * directory name as a label.
+     *
+     * For directories provide an icon, add a default nested treeitem and set up
+     * a directory expand listener.
+     *
+     * For files provide an icon.
+     *
+     * @param directoryNode
+     */
     private void initialise(PathTreeItem directoryNode) {
         try {
             Files.list(directoryNode.getPath()).forEach(path -> {
