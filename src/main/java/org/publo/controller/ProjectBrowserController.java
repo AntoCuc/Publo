@@ -68,10 +68,8 @@ public class ProjectBrowserController implements Initializable {
 
     private static final Image DIR_IMG
             = new Image(ProjectBrowserController.class.getResourceAsStream("/media/folder.png"));
-    private static final Node DIR_NODE = new ImageView(DIR_IMG);
     private static final Image FILE_IMG
             = new Image(ProjectBrowserController.class.getResourceAsStream("/media/page_white.png"));
-    private static final Node FILE_NODE = new ImageView(FILE_IMG);
 
     @FXML
     private TreeView<String> treeView;
@@ -147,13 +145,13 @@ public class ProjectBrowserController implements Initializable {
                 final PathTreeItem fileTreeItem = new PathTreeItem(label, path);
                 directoryNode.getChildren().add(fileTreeItem);
                 if (Files.isDirectory(path)) {
-                    fileTreeItem.setGraphic(DIR_NODE);
+                    fileTreeItem.setGraphic(new ImageView(DIR_IMG));
                     fileTreeItem.getChildren().add(DEFAULT_TREE_ITEM);
                     final DirectoryExpandedListener listener
                             = new DirectoryExpandedListener();
                     fileTreeItem.expandedProperty().addListener(listener);
                 } else {
-                    fileTreeItem.setGraphic(FILE_NODE);
+                    fileTreeItem.setGraphic(new ImageView(FILE_IMG));
                 }
             });
         } catch (IOException ex) {
