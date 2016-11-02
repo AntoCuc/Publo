@@ -51,6 +51,7 @@ public class FileSystemWatcher extends Thread {
     public FileSystemWatcher(final Callable<Path> callable) throws IOException {
         this.callable = callable;
         this.watchService = FileSystems.getDefault().newWatchService();
+        setDaemon(true);
     }
 
     public void register(final Path path, final Kind<?>... events)
