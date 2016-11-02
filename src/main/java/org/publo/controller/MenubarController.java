@@ -61,6 +61,9 @@ public class MenubarController implements Initializable {
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     private static final String LINE_SEP = System.getProperty("line.separator");
+    
+    private static final FileChooser.ExtensionFilter MD_FILTER = 
+            new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
 
     private Page page;
 
@@ -89,6 +92,7 @@ public class MenubarController implements Initializable {
     @FXML
     public void open() {
         FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(MD_FILTER);
         File file = chooser.showOpenDialog(menuBar.getScene().getWindow());
         if (file != null) {
             try {
@@ -106,6 +110,7 @@ public class MenubarController implements Initializable {
         Path filePath;
         if (page.getFilePath() == null) {
             FileChooser chooser = new FileChooser();
+            chooser.getExtensionFilters().add(MD_FILTER);
             File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
             if (file == null) {
                 return;
