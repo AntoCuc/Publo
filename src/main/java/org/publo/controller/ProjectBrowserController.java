@@ -99,8 +99,8 @@ public class ProjectBrowserController implements Initializable {
                 return null;
             });
             watcher.register(PROJECTS_PATH, ENTRY_CREATE, ENTRY_MODIFY);
+            watcher.setDaemon(true);
             watcher.start();
-            //watcherThread.join();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
