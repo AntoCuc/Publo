@@ -173,13 +173,12 @@ public class ProjectBrowserController implements Initializable {
         }
     }
 
-    /*public void initialise(Path relDirectoryPath) {
-        String label = relDirectoryPath.getFileName().toString();
-        Path absPath = PROJECTS_PATH.resolve(relDirectoryPath);
-        PathTreeItem treeItem = new PathTreeItem(label, absPath);
-        initialise(treeItem);
-    }*/
-
+    /**
+     * Listener concerning the selection of markdown files representing
+     * TreeItems.
+     *
+     * On selection of a file it is loaded in the editor.
+     */
     private class FileSelectedListener implements ChangeListener<TreeItem> {
 
         private final Page page;
@@ -195,7 +194,6 @@ public class ProjectBrowserController implements Initializable {
             PathTreeItem selectedTreeItem = (PathTreeItem) newValue;
             Path selectedPath = selectedTreeItem.getPath();
             if (Files.isRegularFile(selectedPath, LinkOption.NOFOLLOW_LINKS)) {
-                LOGGER.info("File selected.");
                 try {
                     page.getMarkdown().setValue(Files.readAllLines(selectedPath)
                             .stream().collect(Collectors.joining(LINE_SEP)));
