@@ -29,8 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,12 +38,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.controller.utils.FileSystemWatcher;
 import org.publo.model.Page;
 
 /**
@@ -65,8 +63,6 @@ public class ProjectBrowserController implements Initializable {
     private static final String PROJ_DIR_NAME = "publo-projects";
 
     static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
-
-    private static final PathTreeItem TREE_ROOT = new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
 
     private static final TreeItem DEFAULT_TREE_ITEM = new TreeItem("...");
 
@@ -93,17 +89,6 @@ public class ProjectBrowserController implements Initializable {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
-        try {
-            FileSystemWatcher watcher = new FileSystemWatcher(() -> {
-                initialise(TREE_ROOT);
-                return null;
-            });
-            watcher.register(PROJECTS_PATH, ENTRY_CREATE, ENTRY_MODIFY);
-            watcher.start();
-            //watcherThread.join();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -114,10 +99,12 @@ public class ProjectBrowserController implements Initializable {
      * highlighted.
      */
     void initProjectBrowser(Page page) {
-        initialise(TREE_ROOT);
+        final PathTreeItem rootTreeItem
+                = new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
+        initialise(rootTreeItem);
         final FileSelectedListener listener = new FileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty().addListener(listener);
-        treeView.setRoot(TREE_ROOT);
+        treeView.setRoot(rootTreeItem);
         treeView.setShowRoot(false);
     }
 
@@ -141,18 +128,17 @@ public class ProjectBrowserController implements Initializable {
     }
 
     /**
-     * Initialise the file system-representing directory node. Use File or
+     * Initialise the filesystem-representing directory node. Use File or
      * directory name as a label.
      *
-     * For directories provide an icon, add a default nested tree item and set
-     * up a directory expand listener.
+     * For directories provide an icon, add a default nested treeitem and set up
+     * a directory expand listener.
      *
      * For files provide an icon.
      *
      * @param directoryNode
      */
     private void initialise(PathTreeItem directoryNode) {
-        directoryNode.getChildren().clear();
         try {
             Files.list(directoryNode.getPath()).forEach(path -> {
                 final String label = path.getFileName().toString();
@@ -172,13 +158,6 @@ public class ProjectBrowserController implements Initializable {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-
-    /*public void initialise(Path relDirectoryPath) {
-        String label = relDirectoryPath.getFileName().toString();
-        Path absPath = PROJECTS_PATH.resolve(relDirectoryPath);
-        PathTreeItem treeItem = new PathTreeItem(label, absPath);
-        initialise(treeItem);
-    }*/
 
     private class FileSelectedListener implements ChangeListener<TreeItem> {
 
