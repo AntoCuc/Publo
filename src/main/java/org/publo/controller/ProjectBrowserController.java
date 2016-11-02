@@ -197,6 +197,7 @@ public class ProjectBrowserController implements Initializable {
                 try {
                     page.getMarkdown().setValue(Files.readAllLines(selectedPath)
                             .stream().collect(Collectors.joining(LINE_SEP)));
+                    page.setFilePath(selectedPath);
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }

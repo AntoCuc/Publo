@@ -23,6 +23,7 @@
  */
 package org.publo.model;
 
+import java.nio.file.Path;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.publo.controller.utils.MarkdownParser;
@@ -47,12 +48,25 @@ public class Page {
      */
     final StringProperty template = new SimpleStringProperty("Default");
 
+    /**
+     * The page's file path.
+     */
+    private Path filePath;
+
     public StringProperty getMarkdown() {
         return markdown;
     }
 
     public StringProperty getTemplate() {
         return template;
+    }
+
+    public void setFilePath(Path filePath) {
+        this.filePath = filePath;
+    }
+
+    public Path getFilePath() {
+        return filePath;
     }
 
     public String renderMarkup() {

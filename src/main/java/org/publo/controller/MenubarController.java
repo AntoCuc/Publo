@@ -30,6 +30,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -93,6 +94,7 @@ public class MenubarController implements Initializable {
             try {
                 page.getMarkdown().setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
+                page.setFilePath(file.toPath());
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
@@ -101,14 +103,21 @@ public class MenubarController implements Initializable {
 
     @FXML
     public void save() {
-        FileChooser chooser = new FileChooser();
-        File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
-        if (file != null) {
-            try {
-                Files.write(file.toPath(), page.getMarkdown().getValue().getBytes());
-            } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
+        Path filePath;
+        if (page.getFilePath() == null) {
+            FileChooser chooser = new FileChooser();
+            File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
+            if (file == null) {
+                return;
             }
+            filePath = file.toPath();
+        } else {
+            filePath = page.getFilePath();
+        }
+        try {
+            Files.write(filePath, page.getMarkdown().getValue().getBytes());
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
 
