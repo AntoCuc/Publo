@@ -54,6 +54,10 @@ public class FileSystemWatcher extends Thread {
 
     private WatchService watchService;
 
+    /**
+     * Constructs the {@code FileSystemWatcher} by initialising the
+     * {@code WatchService} and configuring it as a daemon.
+     */
     public FileSystemWatcher() {
         try {
             watchService = FileSystems.getDefault().newWatchService();
@@ -63,6 +67,18 @@ public class FileSystemWatcher extends Thread {
         }
     }
 
+    /**
+     * Register a {@code PathTreeItem} on the watch service for a set of events.
+     *
+     * As of 0.2 the only supported events are {@code ENTRY_CREATE} and
+     * {@code ENTRY_DELETE}. All other event kinds are silently ignored.
+     *
+     * The {@code register} method caches a reference on registering a
+     * {@code PathTreeItem}.
+     *
+     * @param pathTreeItem to register
+     * @param events to register for
+     */
     public void register(final PathTreeItem pathTreeItem, final Kind<?>... events) {
         LOGGER.log(Level.INFO, "Registering {0}", pathTreeItem);
         try {
