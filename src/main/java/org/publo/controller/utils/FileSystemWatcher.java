@@ -26,11 +26,16 @@ package org.publo.controller.utils;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.concurrent.Callable;
+import java.nio.file.Watchable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,18 +50,28 @@ public class FileSystemWatcher extends Thread {
     private static final Logger LOGGER
             = Logger.getLogger(FileSystemWatcher.class.getName());
 
-    private final WatchService watchService;
-    private final Callable<Path> callable;
+    private static final Map<Watchable, PathTreeItem> CACHE = new HashMap<>();
 
-    public FileSystemWatcher(final Callable<Path> callable) throws IOException {
-        this.callable = callable;
-        this.watchService = FileSystems.getDefault().newWatchService();
-        setDaemon(true);
+    private WatchService watchService;
+
+    public FileSystemWatcher() {
+        try {
+            watchService = FileSystems.getDefault().newWatchService();
+            setDaemon(true);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void register(final Path path, final Kind<?>... events)
-            throws IOException {
-        path.register(this.watchService, events);
+    public void register(final PathTreeItem pathTreeItem, final Kind<?>... events) {
+        LOGGER.log(Level.INFO, "Registering {0}", pathTreeItem);
+        try {
+            final Path path = pathTreeItem.getPath();
+            CACHE.put(path, pathTreeItem);
+            path.register(this.watchService, events);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -64,9 +79,29 @@ public class FileSystemWatcher extends Thread {
         try {
             WatchKey key = this.watchService.take();
             while (key != null) {
+                final Watchable path = key.watchable();
+                LOGGER.log(Level.INFO, "Watchable item: {0}", path);
+                final PathTreeItem parentItem = CACHE.get(path);
                 for (WatchEvent event : key.pollEvents()) {
-                    //Path directoryNode = (Path) event.context();
-                    callable.call();
+                    final Path relPath = (Path) event.context();
+                    LOGGER.log(Level.INFO, "Resource {0}", relPath);
+                    final String label = relPath.getFileName().toString();
+                    final Kind kind = event.kind();
+                    LOGGER.log(Level.INFO, "Event {0} ", kind.name());
+                    final Path absPath = parentItem.getPath().resolve(relPath);
+                    final List<PathTreeItem> children = parentItem.getChildren();
+                    if (ENTRY_CREATE.equals(kind)) {
+                        final PathTreeItem newItem
+                                = new PathTreeItem(label, absPath);
+                        children.add(newItem);
+                    } else if (ENTRY_DELETE.equals(kind)) {
+                        for (int i = 0; i < children.size(); i++) {
+                            final PathTreeItem child = children.get(i);
+                            if (absPath.equals(child.getPath())) {
+                                children.remove(i);
+                            }
+                        }
+                    }
                 }
                 key.reset();
                 key = this.watchService.take();

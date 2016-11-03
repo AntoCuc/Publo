@@ -23,8 +23,12 @@
  */
 package org.publo.controller.utils;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.publo.controller.ProjectBrowserController;
 
 /**
  * Defines a TreeItem representing a path in the file-system.
@@ -34,11 +38,22 @@ import javafx.scene.control.TreeItem;
  */
 public class PathTreeItem extends TreeItem {
 
+    private static final Image DIR_IMG
+            = new Image(ProjectBrowserController.class.getResourceAsStream("/media/folder.png"));
+
+    private static final Image FILE_IMG
+            = new Image(ProjectBrowserController.class.getResourceAsStream("/media/page_white.png"));
+
     private final Path path;
 
-    public PathTreeItem(String label, Path dir) {
+    public PathTreeItem(String label, Path path) {
         super(label);
-        this.path = dir;
+        this.path = path;
+        if (Files.isDirectory(path)) {
+            setGraphic(new ImageView(DIR_IMG));
+        } else {
+            setGraphic(new ImageView(FILE_IMG));
+        }
     }
 
     public Path getPath() {
