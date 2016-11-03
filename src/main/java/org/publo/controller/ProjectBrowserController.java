@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +85,7 @@ public class ProjectBrowserController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(final URL url, final ResourceBundle rb) {
         if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
             try {
                 Files.createDirectories(PROJECTS_PATH);
@@ -101,7 +102,7 @@ public class ProjectBrowserController implements Initializable {
      * Attach a listener to the selection model so to open files as they are
      * highlighted.
      */
-    void initProjectBrowser(Page page) {
+    void initProjectBrowser(final Page page) {
         initialise(TREE_ROOT);
         WATCHER.register(TREE_ROOT, ENTRY_CREATE, ENTRY_DELETE);
         final FileSelectedListener listener = new FileSelectedListener(page);
@@ -119,9 +120,9 @@ public class ProjectBrowserController implements Initializable {
 
         @Override
         public void changed(
-                ObservableValue<? extends Boolean> observable,
-                Boolean oldValue,
-                Boolean newValue) {
+                final ObservableValue<? extends Boolean> observable,
+                final Boolean oldValue,
+                final Boolean newValue) {
             final BooleanProperty bb = (BooleanProperty) observable;
             final PathTreeItem expandedItem = (PathTreeItem) bb.getBean();
             expandedItem.getChildren().clear();
@@ -140,13 +141,14 @@ public class ProjectBrowserController implements Initializable {
      *
      * @param directoryNode
      */
-    private void initialise(PathTreeItem directoryNode) {
-        directoryNode.getChildren().clear();
+    private void initialise(final PathTreeItem directoryNode) {
+        final List<PathTreeItem> children = directoryNode.getChildren();
+        children.clear();
         try {
             Files.list(directoryNode.getPath()).forEach(path -> {
                 final String label = path.getFileName().toString();
                 final PathTreeItem treeItem = new PathTreeItem(label, path);
-                directoryNode.getChildren().add(treeItem);
+                children.add(treeItem);
                 if (Files.isDirectory(path)) {
                     treeItem.getChildren().add(DEFAULT_TREE_ITEM);
                     final DirectoryExpandedListener listener
@@ -170,16 +172,17 @@ public class ProjectBrowserController implements Initializable {
 
         private final Page page;
 
-        private FileSelectedListener(Page page) {
+        private FileSelectedListener(final Page page) {
             this.page = page;
         }
 
         @Override
-        public void changed(ObservableValue<? extends TreeItem> observable,
-                TreeItem oldValue,
-                TreeItem newValue) {
-            PathTreeItem selectedTreeItem = (PathTreeItem) newValue;
-            Path selectedPath = selectedTreeItem.getPath();
+        public void changed(
+                final ObservableValue<? extends TreeItem> observable,
+                final TreeItem oldValue,
+                final TreeItem newValue) {
+            final PathTreeItem selectedTreeItem = (PathTreeItem) newValue;
+            final Path selectedPath = selectedTreeItem.getPath();
             if (Files.isRegularFile(selectedPath, LinkOption.NOFOLLOW_LINKS)) {
                 try {
                     page.getMarkdown().setValue(Files.readAllLines(selectedPath)
