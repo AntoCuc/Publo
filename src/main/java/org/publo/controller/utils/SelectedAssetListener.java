@@ -21,55 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.model;
+package org.publo.controller.utils;
 
+import java.nio.file.Path;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import org.publo.controller.utils.MarkdownParser;
-import org.publo.controller.utils.TemplateRenderer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TreeItem;
 
 /**
- * Page core model. Holds state concerning the markdown being produced and the
- * template to apply on preview.
+ * Listener concerning the selection of a resource represented by
+ * {@code ProjectBrowser} TreeItems.
  *
  * @author Antonio Cucchiara
- * @since 0.1
+ * @since 0.2
  */
-public class Page {
+public final class SelectedAssetListener implements ChangeListener<TreeItem> {
 
     /**
-     * The {@code Page} logger.
+     * The {@code SelectedAssetListener} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(Page.class.getName());
+            = Logger.getLogger(SelectedAssetListener.class.getName());
 
-    /**
-     * The markdown text being edited in the TextArea.
-     */
-    final StringProperty markdown = new SimpleStringProperty();
+    private final Asset asset;
 
-    /**
-     * The template file name to be applied on rendering.
-     */
-    final StringProperty template = new SimpleStringProperty("Default");
-
-    public StringProperty getMarkdown() {
-        return markdown;
+    public SelectedAssetListener(final Asset asset) {
+        this.asset = asset;
     }
 
-    public StringProperty getTemplate() {
-        return template;
-    }
-
-    /**
-     * Parses the markdown and renders it to a template.
-     *
-     * @return the populated, rendered template
-     */
-    public String renderMarkup() {
-        LOGGER.info("Rendering the markup.");
-        final String contentMarkup = MarkdownParser.parse(markdown.getValue());
-        return TemplateRenderer.render(template.getValue(), contentMarkup);
+    @Override
+    public void changed(
+            ObservableValue<? extends TreeItem> observable,
+            TreeItem oldValue,
+            TreeItem newValue) {
+        final PathTreeItem selectedTreeItem = (PathTreeItem) newValue;
+        final Path selectedPath = selectedTreeItem.getPath();
+        LOGGER.log(Level.INFO, "Selected asset path {0}", selectedPath);
+        asset.setLocation(selectedPath);
     }
 }

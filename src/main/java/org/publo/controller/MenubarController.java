@@ -44,6 +44,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
+import org.publo.controller.utils.Asset;
 import org.publo.model.Page;
 
 /**
@@ -61,11 +62,19 @@ public class MenubarController implements Initializable {
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     private static final String LINE_SEP = System.getProperty("line.separator");
-    
-    private static final FileChooser.ExtensionFilter MD_FILTER = 
-            new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
 
+    private static final FileChooser.ExtensionFilter MD_FILTER
+            = new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
+
+    /**
+     * The currently loaded markdown {@code Page}.
+     */
     private Page page;
+
+    /**
+     * The currently selected {@code Asset}.
+     */
+    private Asset asset;
 
     @FXML
     private MenuBar menuBar;
@@ -98,7 +107,7 @@ public class MenubarController implements Initializable {
             try {
                 page.getMarkdown().setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
-                page.setFilePath(file.toPath());
+                asset.setLocation(file.toPath());
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
@@ -108,7 +117,7 @@ public class MenubarController implements Initializable {
     @FXML
     public void save() {
         Path filePath;
-        if (page.getFilePath() == null) {
+        if (asset.getLocation() == null) {
             FileChooser chooser = new FileChooser();
             chooser.getExtensionFilters().add(MD_FILTER);
             File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
@@ -117,7 +126,7 @@ public class MenubarController implements Initializable {
             }
             filePath = file.toPath();
         } else {
-            filePath = page.getFilePath();
+            filePath = asset.getLocation();
         }
         try {
             Files.write(filePath, page.getMarkdown().getValue().getBytes());
@@ -155,5 +164,4 @@ public class MenubarController implements Initializable {
     void initPage(Page page) {
         this.page = page;
     }
-
 }

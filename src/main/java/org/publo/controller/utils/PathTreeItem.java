@@ -38,6 +38,9 @@ import org.publo.controller.ProjectBrowserController;
  */
 public class PathTreeItem extends TreeItem {
 
+    private static final PathTreeItem DEFAULT_TREE_ITEM
+            = new PathTreeItem("...", ProjectBrowserController.PROJECTS_PATH);
+
     private static final Image DIR_IMG
             = new Image(ProjectBrowserController.class.getResourceAsStream("/media/folder.png"));
 
@@ -51,6 +54,10 @@ public class PathTreeItem extends TreeItem {
         this.path = path;
         if (Files.isDirectory(path)) {
             setGraphic(new ImageView(DIR_IMG));
+            getChildren().add(DEFAULT_TREE_ITEM);
+            final DirectoryExpandedListener listener
+                    = new DirectoryExpandedListener();
+            expandedProperty().addListener(listener);
         } else {
             setGraphic(new ImageView(FILE_IMG));
         }

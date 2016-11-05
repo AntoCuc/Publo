@@ -29,6 +29,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import org.publo.controller.utils.Asset;
 import org.publo.model.Page;
 
 /**
@@ -60,6 +61,7 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         final Page page = new Page();
+        final Asset asset = new Asset();
         textAreaPaneController.initMarkDown(page.getMarkdown());
         page.getMarkdown().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             final String markup = page.renderMarkup();
@@ -74,6 +76,6 @@ public class MainViewController implements Initializable {
             webViewPaneController.updateWebView(pageMarkup);
         });
         menubarPaneController.initPage(page);
-        projectPaneController.initProjectBrowser(page);
+        projectPaneController.initProjectBrowser(page, asset);
     }
 }

@@ -21,55 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.model;
+package org.publo.controller.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import org.publo.controller.utils.MarkdownParser;
-import org.publo.controller.utils.TemplateRenderer;
 
 /**
- * Page core model. Holds state concerning the markdown being produced and the
- * template to apply on preview.
+ * Application {@code Asset} model.
+ *
+ * Holds state concerning resources the application manipulates.
  *
  * @author Antonio Cucchiara
- * @since 0.1
+ * @since 0.2
  */
-public class Page {
+public final class Asset implements Movable {
 
     /**
-     * The {@code Page} logger.
+     * The {@code Asset} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(Page.class.getName());
+            = Logger.getLogger(Asset.class.getName());
 
     /**
-     * The markdown text being edited in the TextArea.
+     * The {@code Asset} current location {@code Path}.
      */
-    final StringProperty markdown = new SimpleStringProperty();
+    private Path location;
 
-    /**
-     * The template file name to be applied on rendering.
-     */
-    final StringProperty template = new SimpleStringProperty("Default");
-
-    public StringProperty getMarkdown() {
-        return markdown;
+    public void setLocation(Path location) {
+        this.location = location;
     }
 
-    public StringProperty getTemplate() {
-        return template;
+    public Path getLocation() {
+        return location;
     }
 
-    /**
-     * Parses the markdown and renders it to a template.
-     *
-     * @return the populated, rendered template
-     */
-    public String renderMarkup() {
-        LOGGER.info("Rendering the markup.");
-        final String contentMarkup = MarkdownParser.parse(markdown.getValue());
-        return TemplateRenderer.render(template.getValue(), contentMarkup);
+    @Override
+    public void move(Path to) {
+        final Path newFilePath = location.getParent().resolve(to);
+        LOGGER.log(Level.INFO, "Moving {0} to {1}",
+                new Object[]{location, newFilePath});
+        try {
+            Files.move(location, newFilePath, REPLACE_EXISTING);
+            location = newFilePath;
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 }
