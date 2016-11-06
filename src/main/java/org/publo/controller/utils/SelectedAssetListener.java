@@ -23,6 +23,7 @@
  */
 package org.publo.controller.utils;
 
+import org.publo.model.Asset;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;

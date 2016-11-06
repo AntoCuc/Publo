@@ -29,7 +29,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import org.publo.controller.utils.Asset;
+import org.publo.model.Asset;
 import org.publo.model.Page;
 
 /**

@@ -44,7 +44,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
-import org.publo.controller.utils.Asset;
+import org.publo.model.Asset;
 import org.publo.model.Page;
 
 /**

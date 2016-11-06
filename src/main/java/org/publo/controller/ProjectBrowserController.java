@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeView;
-import org.publo.controller.utils.Asset;
+import org.publo.model.Asset;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.utils.MdFileSelectedListener;

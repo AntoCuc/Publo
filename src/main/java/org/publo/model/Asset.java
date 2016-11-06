@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.model;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.publo.controller.utils.Movable;
 
 /**
  * Application {@code Asset} model.
