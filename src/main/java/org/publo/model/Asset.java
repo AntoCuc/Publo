@@ -61,7 +61,7 @@ public final class Asset implements Movable {
     }
 
     @Override
-    public void move(Path to) {
+    public Path move(Path to) {
         final Path newFilePath = location.getParent().resolve(to);
         LOGGER.log(Level.INFO, "Moving {0} to {1}",
                 new Object[]{location, newFilePath});
@@ -71,5 +71,6 @@ public final class Asset implements Movable {
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+        return newFilePath;
     }
 }

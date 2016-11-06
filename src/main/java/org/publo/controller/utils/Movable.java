@@ -39,7 +39,8 @@ public interface Movable {
      * Move the resource {@code to} a new location.
      *
      * @param to the new resource location
+     * @return the new resource path
      */
-    public void move(Path to);
+    public Path move(final Path to);
 
 }

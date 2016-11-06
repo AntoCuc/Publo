@@ -47,7 +47,7 @@ public class PathTreeItem extends TreeItem {
     private static final Image FILE_IMG
             = new Image(ProjectBrowserController.class.getResourceAsStream("/media/page_white.png"));
 
-    private final Path path;
+    private Path path;
 
     public PathTreeItem(String label, Path path) {
         super(label);
@@ -66,5 +66,8 @@ public class PathTreeItem extends TreeItem {
     public Path getPath() {
         return path;
     }
-
+    
+    public void setPath(Path path) {
+        this.path = path;
+    }
 }

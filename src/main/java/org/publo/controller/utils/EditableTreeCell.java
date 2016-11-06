@@ -23,6 +23,7 @@
  */
 package org.publo.controller.utils;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +68,11 @@ public final class EditableTreeCell extends TreeCell<String> {
                         final String cellContent = getText();
                         LOGGER.log(Level.INFO, "Renaming to {0}", cellContent);
                         commitEdit(cellContent);
-                        movableResource.move(Paths.get(cellContent));
+                        final Path newPath = 
+                                movableResource.move(Paths.get(cellContent));
+                        PathTreeItem treeItem
+                                = (PathTreeItem) getTreeItem();
+                        treeItem.setPath(newPath);
                     }
                 });
             }
