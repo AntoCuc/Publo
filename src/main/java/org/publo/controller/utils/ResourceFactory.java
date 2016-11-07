@@ -23,52 +23,37 @@
  */
 package org.publo.controller.utils;
 
-import org.publo.controller.listener.DirectoryExpandedListener;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import javafx.scene.control.TreeItem;
+import java.io.InputStream;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.publo.controller.ProjectBrowserController;
 
 /**
- * Defines a TreeItem representing a path in the file-system.
+ * Application resources factory.
  *
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public class PathTreeItem extends TreeItem {
+public class ResourceFactory {
 
-    private static final PathTreeItem DEFAULT_TREE_ITEM
-            = new PathTreeItem("...", ProjectBrowserController.PROJECTS_PATH);
-
-    private static final ImageView DIR_IMG
-            = ResourceFactory.buildImageView("/media/folder.png");
-
-    private static final ImageView FILE_IMG
-            = ResourceFactory.buildImageView("/media/page_white.png");
-
-    private Path path;
-
-    public PathTreeItem(String label, Path path) {
-        super(label);
-        this.path = path;
-        if (Files.isDirectory(path)) {
-            setGraphic(DIR_IMG);
-            getChildren().add(DEFAULT_TREE_ITEM);
-            final DirectoryExpandedListener listener
-                    = new DirectoryExpandedListener();
-            expandedProperty().addListener(listener);
-        } else {
-            setGraphic(FILE_IMG);
-        }
+    /**
+     * Build an {@code ImageView} node to display on JavaFX components.
+     *
+     * @param classPathLocation of the resource
+     * @return a JavaFX ImageView
+     */
+    public static ImageView buildImageView(final String classPathLocation) {
+        final InputStream resourceStream = fetchResource(classPathLocation);
+        final Image resourceImage = new Image(resourceStream);
+        return new ImageView(resourceImage);
     }
 
-    public Path getPath() {
-        return path;
-    }
-
-    public void setPath(Path path) {
-        this.path = path;
+    /**
+     * Get a ClassPath Resource's {@code InputStream}.
+     *
+     * @param classpathLocation
+     * @return the resource InputStream
+     */
+    private static InputStream fetchResource(final String classpathLocation) {
+        return ResourceFactory.class.getResourceAsStream(classpathLocation);
     }
 }
