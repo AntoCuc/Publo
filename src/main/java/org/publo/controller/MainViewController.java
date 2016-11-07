@@ -25,6 +25,8 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -41,6 +43,12 @@ import org.publo.model.PageSource;
  * @since 0.1
  */
 public class MainViewController implements Initializable {
+
+    /**
+     * The {@code MainViewController} logger.
+     */
+    private static final Logger LOGGER
+            = Logger.getLogger(MainViewController.class.getName());
 
     @FXML
     private MenubarController menubarPaneController;
@@ -82,6 +90,8 @@ public class MainViewController implements Initializable {
                 (ObservableValue<? extends String> observable,
                         final String oldValue,
                         final String newValue) -> {
+                    LOGGER.log(Level.INFO, "Template changed from {0} to {1}",
+                            new Object[]{oldValue, newValue});
                     final StringProperty template = (StringProperty) observable;
                     final String renderedMarkup = markup.updateTemplate(template);
                     webViewPaneController.updateWebView(renderedMarkup);
