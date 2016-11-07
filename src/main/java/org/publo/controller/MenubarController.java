@@ -45,6 +45,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
 import org.publo.model.Asset;
+import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
 
 /**
@@ -69,7 +70,12 @@ public class MenubarController implements Initializable {
     /**
      * The currently loaded markdown {@code PageSource}.
      */
-    private PageSource page;
+    private PageSource source;
+    
+    /**
+     * The currently loaded {@code PageMarkup}.
+     */
+    private PageMarkup markup;
 
     /**
      * The currently selected {@code Asset}.
@@ -105,7 +111,7 @@ public class MenubarController implements Initializable {
         File file = chooser.showOpenDialog(menuBar.getScene().getWindow());
         if (file != null) {
             try {
-                page.getMarkdown().setValue(Files.readAllLines(file.toPath())
+                source.getMarkdown().setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
                 asset.setLocation(file.toPath());
             } catch (IOException ex) {
@@ -129,7 +135,7 @@ public class MenubarController implements Initializable {
             filePath = asset.getLocation();
         }
         try {
-            Files.write(filePath, page.getMarkdown().getValue().getBytes());
+            Files.write(filePath, source.getMarkdown().getValue().getBytes());
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
@@ -158,11 +164,15 @@ public class MenubarController implements Initializable {
     @FXML
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
-        page.getTemplate().setValue(radioMenuItem.getText());
+        markup.getTemplate().setValue(radioMenuItem.getText());
     }
 
-    void initMenubar(final PageSource page, final Asset asset) {
-        this.page = page;
+    void initMenubar(
+            final PageSource source,
+            final PageMarkup markup,
+            final Asset asset) {
+        this.source = source;
+        this.markup = markup;
         this.asset = asset;
     }
 }

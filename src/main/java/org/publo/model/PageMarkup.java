@@ -30,26 +30,55 @@ import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
 
 /**
- * PageSource core model. Holds state concerning the markdown being produced and the
+ * PageMarkup core model. Holds state concerning the markup rendered and the
  * template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class PageSource {
+public class PageMarkup {
 
     /**
-     * The {@code PageSource} logger.
+     * The {@code PageMarkup} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(PageSource.class.getName());
+            = Logger.getLogger(PageMarkup.class.getName());
 
     /**
-     * The markdown text being edited in the TextArea.
+     * The template file name to be applied on rendering.
      */
-    final StringProperty markdown = new SimpleStringProperty();
+    private final StringProperty template = new SimpleStringProperty("Default");
+    
+    private String markdownCache = "";
 
-    public StringProperty getMarkdown() {
-        return markdown;
+    public StringProperty getTemplate() {
+        return template;
+    }
+
+    /**
+     * Parses the markdown and renders it to a template.
+     *
+     * @param markdown to render
+     * @return the populated, rendered template
+     */
+    public String renderMarkup(final StringProperty markdown) {
+        LOGGER.info("Caching the markdown.");
+        final String markdownValue = markdown.getValue();
+        this.markdownCache = markdownValue;
+        LOGGER.info("Rendering the markup.");
+        final String contentMarkup = MarkdownParser.parse(markdownValue);
+        return TemplateRenderer.render(template.getValue(), contentMarkup);
+    }
+    
+    /**
+     * Renders the markup applying a template.
+     * 
+     * @param template to render to
+     * @return the rendered markup
+     */
+    public String updateTemplate(final StringProperty template) {
+        LOGGER.info("Updating template.");
+        final String contentMarkup = MarkdownParser.parse(markdownCache);
+        return TemplateRenderer.render(template.getValue(), contentMarkup);
     }
 }

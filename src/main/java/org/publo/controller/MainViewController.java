@@ -25,11 +25,13 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import org.publo.model.Asset;
+import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
 
 /**
@@ -48,7 +50,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     private WebViewController webViewPaneController;
-    
+
     @FXML
     private ProjectBrowserController projectPaneController;
 
@@ -60,22 +62,31 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        final PageSource page = new PageSource();
+        final PageSource source = new PageSource();
+        final PageMarkup markup = new PageMarkup();
         final Asset asset = new Asset();
-        textAreaPaneController.initMarkDown(page.getMarkdown());
-        page.getMarkdown().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final String markup = page.renderMarkup();
-            webViewPaneController.updateWebView(markup);
-            final TextArea textArea = textAreaPaneController.getTextArea();
-            if (!newValue.equals(textArea.getText())) {
-                textArea.setText(newValue);
-            }
-        });
-        page.getTemplate().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            final String pageMarkup = page.renderMarkup();
-            webViewPaneController.updateWebView(pageMarkup);
-        });
-        menubarPaneController.initMenubar(page, asset);
-        projectPaneController.initProjectBrowser(page, asset);
+        textAreaPaneController.initMarkDown(source.getMarkdown());
+        source.getMarkdown().addListener(
+                (ObservableValue<? extends String> observable,
+                        final String oldValue,
+                        final String newValue) -> {
+                    final StringProperty markdown = (StringProperty) observable;
+                    final String renderedMarkup = markup.renderMarkup(markdown);
+                    webViewPaneController.updateWebView(renderedMarkup);
+                    final TextArea textArea = textAreaPaneController.getTextArea();
+                    if (!newValue.equals(textArea.getText())) {
+                        textArea.setText(newValue);
+                    }
+                });
+        markup.getTemplate().addListener(
+                (ObservableValue<? extends String> observable,
+                        final String oldValue,
+                        final String newValue) -> {
+                    final StringProperty template = (StringProperty) observable;
+                    final String renderedMarkup = markup.updateTemplate(template);
+                    webViewPaneController.updateWebView(renderedMarkup);
+                });
+        menubarPaneController.initMenubar(source, markup, asset);
+        projectPaneController.initProjectBrowser(source, asset);
     }
 }
