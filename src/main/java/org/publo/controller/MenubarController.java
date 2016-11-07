@@ -45,7 +45,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
 import org.publo.model.Asset;
-import org.publo.model.Page;
+import org.publo.model.PageSource;
 
 /**
  * Event flow coordinating controller.
@@ -67,9 +67,9 @@ public class MenubarController implements Initializable {
             = new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
 
     /**
-     * The currently loaded markdown {@code Page}.
+     * The currently loaded markdown {@code PageSource}.
      */
-    private Page page;
+    private PageSource page;
 
     /**
      * The currently selected {@code Asset}.
@@ -161,7 +161,7 @@ public class MenubarController implements Initializable {
         page.getTemplate().setValue(radioMenuItem.getText());
     }
 
-    void initMenubar(final Page page, final Asset asset) {
+    void initMenubar(final PageSource page, final Asset asset) {
         this.page = page;
         this.asset = asset;
     }

@@ -40,7 +40,7 @@ import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.listener.MdFileSelectedListener;
 import org.publo.controller.listener.SelectedAssetListener;
-import org.publo.model.Page;
+import org.publo.model.PageSource;
 
 /**
  * Event flow coordinating controller.
@@ -94,7 +94,7 @@ public class ProjectBrowserController implements Initializable {
      *
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
-    void initProjectBrowser(final Page page, final Asset asset) {
+    void initProjectBrowser(final PageSource page, final Asset asset) {
         final MdFileSelectedListener mdFileSelectedListener
                 = new MdFileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty()

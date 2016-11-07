@@ -30,7 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import org.publo.model.Asset;
-import org.publo.model.Page;
+import org.publo.model.PageSource;
 
 /**
  * Event flow coordinating controller.
@@ -60,7 +60,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        final Page page = new Page();
+        final PageSource page = new PageSource();
         final Asset asset = new Asset();
         textAreaPaneController.initMarkDown(page.getMarkdown());
         page.getMarkdown().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {

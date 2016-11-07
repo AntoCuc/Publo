@@ -30,19 +30,19 @@ import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
 
 /**
- * Page core model. Holds state concerning the markdown being produced and the
+ * PageSource core model. Holds state concerning the markdown being produced and the
  * template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class Page {
+public class PageSource {
 
     /**
-     * The {@code Page} logger.
+     * The {@code PageSource} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(Page.class.getName());
+            = Logger.getLogger(PageSource.class.getName());
 
     /**
      * The markdown text being edited in the TextArea.

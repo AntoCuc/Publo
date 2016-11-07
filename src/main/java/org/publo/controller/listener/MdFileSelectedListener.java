@@ -34,7 +34,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.model.Page;
+import org.publo.model.PageSource;
 
 /**
  * Listener concerning the selection of markdown files represented by
@@ -53,17 +53,17 @@ public final class MdFileSelectedListener implements ChangeListener<TreeItem> {
     private static final String LINE_SEP = System.getProperty("line.separator");
 
     /**
-     * The {@code Page} logger.
+     * The {@code PageSource} logger.
      */
     private static final Logger LOGGER
             = Logger.getLogger(MdFileSelectedListener.class.getName());
 
     /**
-     * The {@code Page} model allowing markdown sharing amongst components.
+     * The {@code PageSource} model allowing markdown sharing amongst components.
      */
-    private final Page page;
+    private final PageSource page;
 
-    public MdFileSelectedListener(final Page page) {
+    public MdFileSelectedListener(final PageSource page) {
         this.page = page;
     }
 
