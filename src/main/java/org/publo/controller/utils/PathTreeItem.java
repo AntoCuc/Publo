@@ -42,25 +42,19 @@ public class PathTreeItem extends TreeItem {
     private static final PathTreeItem DEFAULT_TREE_ITEM
             = new PathTreeItem("...", ProjectBrowserController.PROJECTS_PATH);
 
-    private static final ImageView DIR_IMG
-            = ResourceFactory.buildImageView("/media/folder.png");
-
-    private static final ImageView FILE_IMG
-            = ResourceFactory.buildImageView("/media/page_white.png");
-
     private Path path;
 
     public PathTreeItem(String label, Path path) {
         super(label);
         this.path = path;
         if (Files.isDirectory(path)) {
-            setGraphic(DIR_IMG);
+            setGraphic(ResourceFactory.buildImageView("/media/folder.png"));
             getChildren().add(DEFAULT_TREE_ITEM);
             final DirectoryExpandedListener listener
                     = new DirectoryExpandedListener();
             expandedProperty().addListener(listener);
         } else {
-            setGraphic(FILE_IMG);
+            setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
         }
     }
 
