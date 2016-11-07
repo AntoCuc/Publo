@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.controller.listener;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
+import org.publo.controller.utils.PathTreeItem;
 import org.publo.model.Page;
 
 /**

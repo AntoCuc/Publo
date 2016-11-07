@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.controller.listener;
 
 import org.publo.model.Asset;
 import java.nio.file.Path;
@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
+import org.publo.controller.utils.PathTreeItem;
 
 /**
  * Listener concerning the selection of a resource represented by

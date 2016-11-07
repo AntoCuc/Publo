@@ -38,8 +38,8 @@ import javafx.scene.control.TreeView;
 import org.publo.model.Asset;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.controller.utils.MdFileSelectedListener;
-import org.publo.controller.utils.SelectedAssetListener;
+import org.publo.controller.listener.MdFileSelectedListener;
+import org.publo.controller.listener.SelectedAssetListener;
 import org.publo.model.Page;
 
 /**

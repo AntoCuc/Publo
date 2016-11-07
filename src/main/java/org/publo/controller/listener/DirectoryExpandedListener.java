@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.controller.listener;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,6 +36,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.publo.controller.ProjectBrowserController;
+import org.publo.controller.utils.FileSystemWatcher;
+import org.publo.controller.utils.PathTreeItem;
 
 /**
  * Listener concerning the expansion of directory-representing TreeItems. On
