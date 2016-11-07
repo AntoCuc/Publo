@@ -161,7 +161,8 @@ public class MenubarController implements Initializable {
         page.getTemplate().setValue(radioMenuItem.getText());
     }
 
-    void initPage(Page page) {
+    void initMenubar(final Page page, final Asset asset) {
         this.page = page;
+        this.asset = asset;
     }
 }

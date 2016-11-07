@@ -75,7 +75,7 @@ public class MainViewController implements Initializable {
             final String pageMarkup = page.renderMarkup();
             webViewPaneController.updateWebView(pageMarkup);
         });
-        menubarPaneController.initPage(page);
+        menubarPaneController.initMenubar(page, asset);
         projectPaneController.initProjectBrowser(page, asset);
     }
 }
