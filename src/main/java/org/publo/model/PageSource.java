@@ -23,20 +23,27 @@
  */
 package org.publo.model;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.publo.controller.utils.MarkdownParser;
-import org.publo.controller.utils.TemplateRenderer;
+import javafx.scene.control.TreeItem;
+import org.publo.controller.utils.PathTreeItem;
+import org.publo.controller.utils.Updatable;
 
 /**
- * PageSource core model. Holds state concerning the markdown being produced and the
- * template to apply on preview.
+ * PageSource core model. Holds state concerning the markdown being produced and
+ * the template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class PageSource {
+public final class PageSource implements Updatable<TreeItem> {
 
     /**
      * The {@code PageSource} logger.
@@ -45,11 +52,40 @@ public class PageSource {
             = Logger.getLogger(PageSource.class.getName());
 
     /**
+     * OS-independent line separator.
+     */
+    private static final String LINE_SEP
+            = System.getProperty("line.separator");
+
+    /**
      * The markdown text being edited in the TextArea.
      */
-    final StringProperty markdown = new SimpleStringProperty("");
+    private final StringProperty markdown = new SimpleStringProperty("");
 
     public StringProperty getMarkdown() {
         return markdown;
+    }
+
+    /**
+     * Updates the <code>markdown</code> content based on the selected
+     * <code>TreeItem</code>.
+     *
+     * @param selTreeItem
+     * @return
+     */
+    @Override
+    public TreeItem update(TreeItem selTreeItem) {
+        LOGGER.log(Level.INFO, "Selected item {0}", selTreeItem.getValue());
+        final PathTreeItem selPathTreeItem = (PathTreeItem) selTreeItem;
+        final Path selectedPath = selPathTreeItem.getPath();
+        if (Files.isRegularFile(selectedPath, LinkOption.NOFOLLOW_LINKS)) {
+            try {
+                markdown.setValue(Files.readAllLines(selectedPath)
+                        .stream().collect(Collectors.joining(LINE_SEP)));
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+        return selTreeItem;
     }
 }

@@ -39,7 +39,6 @@ import javafx.scene.control.TreeView;
 import org.publo.model.PageFile;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.controller.listener.SourceFileSelectedListener;
 import org.publo.controller.listener.ResourceChangeListener;
 import org.publo.model.PageSource;
 
@@ -96,8 +95,8 @@ public class ProjectBrowserController implements Initializable {
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
     void initProjectBrowser(final PageSource source, final PageFile file) {
-        final SourceFileSelectedListener sourceFileSelectedListener
-                = new SourceFileSelectedListener(source);
+        final ResourceChangeListener<TreeItem> sourceFileSelectedListener
+                = new ResourceChangeListener<>(source);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(sourceFileSelectedListener);
         final ResourceChangeListener<TreeItem> treeItemChangeListener
