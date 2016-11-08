@@ -23,8 +23,6 @@
  */
 package org.publo.controller.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.publo.controller.utils.Updatable;
@@ -49,6 +47,8 @@ public final class SourceChangeListener<T> implements ChangeListener<T> {
             ObservableValue<? extends T> observable,
             T oldValue,
             T newValue) {
-        resource.update(newValue);
+        if (!newValue.equals(oldValue)) {
+            resource.update(newValue);
+        }
     }
 }
