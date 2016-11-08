@@ -47,7 +47,7 @@ public class PageSource {
     /**
      * The markdown text being edited in the TextArea.
      */
-    final StringProperty markdown = new SimpleStringProperty();
+    final StringProperty markdown = new SimpleStringProperty("");
 
     public StringProperty getMarkdown() {
         return markdown;
