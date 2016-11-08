@@ -36,10 +36,10 @@ import org.publo.controller.utils.Updatable;
  */
 public final class ResourceChangeListener<T> implements ChangeListener<T> {
 
-    private final Updatable<T> resource;
+    private final Updatable<T> updatableResource;
 
-    public ResourceChangeListener(final Updatable<T> resource) {
-        this.resource = resource;
+    public ResourceChangeListener(final Updatable<T> updatableResource) {
+        this.updatableResource = updatableResource;
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class ResourceChangeListener<T> implements ChangeListener<T> {
             T oldValue,
             T newValue) {
         if (!newValue.equals(oldValue)) {
-            resource.update(newValue);
+            updatableResource.update(newValue);
         }
     }
 }
