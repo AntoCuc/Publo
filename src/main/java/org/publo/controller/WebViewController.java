@@ -25,10 +25,13 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.publo.controller.utils.Updatable;
+import org.publo.model.PageMarkup;
 
 /**
  * Event flow coordinating controller.
@@ -36,18 +39,46 @@ import javafx.scene.web.WebView;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class WebViewController implements Initializable {
-    
+public class WebViewController implements Initializable, Updatable<String> {
+
     @FXML
     private WebView webView;
-    
-    public void updateWebView(String markup) {
+
+    private PageMarkup markup;
+
+    /**
+     * Update the {@code WebView} with the markup.
+     *
+     * @param markup to update to
+     */
+    public void updateWebView(final String markup) {
         WebEngine webEngine = webView.getEngine();
         webEngine.loadContent(markup);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    }    
-    
+    }
+
+    /**
+     * Update the {@code WebView} rendering the markdown and updating the UI.
+     *
+     * @param to
+     * @return the rendered markup
+     */
+    @Override
+    public String update(String to) {
+        final String rendered = markup.render(to);
+        updateWebView(rendered);
+        return rendered;
+    }
+
+    /**
+     * Initialise the {@code PageMarkup}
+     *
+     * @param markup to initialise
+     */
+    void init(PageMarkup markup) {
+        this.markup = markup;
+    }
 }

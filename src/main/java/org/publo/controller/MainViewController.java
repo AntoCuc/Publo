@@ -32,6 +32,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import org.publo.controller.listener.SourceChangeListener;
 import org.publo.model.Asset;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
@@ -72,20 +73,21 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         final PageSource source = new PageSource();
         final PageMarkup markup = new PageMarkup();
+        webViewPaneController.init(markup);
         final Asset asset = new Asset();
         textAreaPaneController.initMarkDown(source.getMarkdown());
         source.getMarkdown().addListener(
                 (ObservableValue<? extends String> observable,
                         final String oldValue,
                         final String newValue) -> {
-                    final StringProperty markdown = (StringProperty) observable;
-                    final String renderedMarkup = markup.render(markdown);
-                    webViewPaneController.updateWebView(renderedMarkup);
                     final TextArea textArea = textAreaPaneController.getTextArea();
                     if (!newValue.equals(textArea.getText())) {
                         textArea.setText(newValue);
                     }
                 });
+        final SourceChangeListener<String> sourceChangeListener
+                = new SourceChangeListener<>(webViewPaneController);
+        source.getMarkdown().addListener(sourceChangeListener);
         markup.getTemplate().addListener(
                 (ObservableValue<? extends String> observable,
                         final String oldValue,

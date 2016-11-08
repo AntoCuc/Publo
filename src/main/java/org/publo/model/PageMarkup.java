@@ -61,13 +61,12 @@ public class PageMarkup {
      * @param markdown to render
      * @return the populated, rendered template
      */
-    public String render(final StringProperty markdown) {
+    public String render(final String markdown) {
         LOGGER.info("Caching the markdown.");
-        final String markdownValue = markdown.getValue();
-        this.markdownCache = markdownValue;
+        this.markdownCache = markdown;
         LOGGER.info("Rendering the markup.");
-        final String contentMarkup = MarkdownParser.parse(markdownValue);
-        return TemplateRenderer.render(template.getValue(), contentMarkup);
+        final String markup = MarkdownParser.parse(markdown);
+        return TemplateRenderer.render(template.getValue(), markup);
     }
     
     /**
