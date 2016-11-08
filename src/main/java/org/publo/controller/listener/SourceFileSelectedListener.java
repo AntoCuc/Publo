@@ -45,7 +45,7 @@ import org.publo.model.PageSource;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public final class MdFileSelectedListener implements ChangeListener<TreeItem> {
+public final class SourceFileSelectedListener implements ChangeListener<TreeItem> {
 
     /**
      * OS-independent line separator.
@@ -56,14 +56,14 @@ public final class MdFileSelectedListener implements ChangeListener<TreeItem> {
      * The {@code PageSource} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(MdFileSelectedListener.class.getName());
+            = Logger.getLogger(SourceFileSelectedListener.class.getName());
 
     /**
      * The {@code PageSource} model allowing markdown sharing amongst components.
      */
     private final PageSource page;
 
-    public MdFileSelectedListener(final PageSource page) {
+    public SourceFileSelectedListener(final PageSource page) {
         this.page = page;
     }
 

@@ -38,7 +38,7 @@ import javafx.scene.control.TreeView;
 import org.publo.model.Asset;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.controller.listener.MdFileSelectedListener;
+import org.publo.controller.listener.SourceFileSelectedListener;
 import org.publo.controller.listener.AssetSelectedListener;
 import org.publo.model.PageSource;
 
@@ -95,8 +95,8 @@ public class ProjectBrowserController implements Initializable {
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
     void initProjectBrowser(final PageSource page, final Asset asset) {
-        final MdFileSelectedListener mdFileSelectedListener
-                = new MdFileSelectedListener(page);
+        final SourceFileSelectedListener mdFileSelectedListener
+                = new SourceFileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(mdFileSelectedListener);
         final AssetSelectedListener selectedAssetListener
