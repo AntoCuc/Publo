@@ -95,14 +95,14 @@ public class ProjectBrowserController implements Initializable {
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
     void initProjectBrowser(final PageSource page, final Asset asset) {
-        final SourceFileSelectedListener mdFileSelectedListener
+        final SourceFileSelectedListener sourceFileSelectedListener
                 = new SourceFileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty()
-                .addListener(mdFileSelectedListener);
-        final AssetSelectedListener selectedAssetListener
+                .addListener(sourceFileSelectedListener);
+        final AssetSelectedListener assetSelectedListener
                 = new AssetSelectedListener(asset);
         treeView.getSelectionModel().selectedItemProperty()
-                .addListener(selectedAssetListener);
+                .addListener(assetSelectedListener);
         treeView.setRoot(TREE_ROOT);
         treeView.setShowRoot(false);
         treeView.setEditable(true);
