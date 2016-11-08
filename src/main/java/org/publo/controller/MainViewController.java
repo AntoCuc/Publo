@@ -79,7 +79,7 @@ public class MainViewController implements Initializable {
                         final String oldValue,
                         final String newValue) -> {
                     final StringProperty markdown = (StringProperty) observable;
-                    final String renderedMarkup = markup.renderMarkup(markdown);
+                    final String renderedMarkup = markup.render(markdown);
                     webViewPaneController.updateWebView(renderedMarkup);
                     final TextArea textArea = textAreaPaneController.getTextArea();
                     if (!newValue.equals(textArea.getText())) {

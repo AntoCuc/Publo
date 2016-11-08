@@ -61,7 +61,7 @@ public class PageMarkup {
      * @param markdown to render
      * @return the populated, rendered template
      */
-    public String renderMarkup(final StringProperty markdown) {
+    public String render(final StringProperty markdown) {
         LOGGER.info("Caching the markdown.");
         final String markdownValue = markdown.getValue();
         this.markdownCache = markdownValue;
