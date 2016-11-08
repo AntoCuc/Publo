@@ -72,10 +72,12 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         final PageSource source = new PageSource();
+        textAreaPaneController.initMarkDown(source.getMarkdown());
         final PageMarkup markup = new PageMarkup();
         webViewPaneController.init(markup);
         final Asset asset = new Asset();
-        textAreaPaneController.initMarkDown(source.getMarkdown());
+        menubarPaneController.initMenubar(source, markup, asset);
+        projectPaneController.initProjectBrowser(source, asset);
         source.getMarkdown().addListener(
                 (ObservableValue<? extends String> observable,
                         final String oldValue,
@@ -98,7 +100,5 @@ public class MainViewController implements Initializable {
                     final String renderedMarkup = markup.updateTemplate(template);
                     webViewPaneController.updateWebView(renderedMarkup);
                 });
-        menubarPaneController.initMenubar(source, markup, asset);
-        projectPaneController.initProjectBrowser(source, asset);
     }
 }
