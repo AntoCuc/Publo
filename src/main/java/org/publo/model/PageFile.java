@@ -29,7 +29,10 @@ import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.TreeItem;
 import org.publo.controller.utils.Movable;
+import org.publo.controller.utils.PathTreeItem;
+import org.publo.controller.utils.Updatable;
 
 /**
  * Application {@code PageFile} model.
@@ -39,7 +42,7 @@ import org.publo.controller.utils.Movable;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public final class PageFile implements Movable {
+public final class PageFile implements Movable, Updatable<TreeItem> {
 
     /**
      * The {@code PageFile} logger.
@@ -72,5 +75,14 @@ public final class PageFile implements Movable {
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return newFilePath;
+    }
+
+    @Override
+    public TreeItem update(TreeItem selectedTreeItem) {
+        PathTreeItem selPathTreeItem = (PathTreeItem) selectedTreeItem;
+        final Path selectedPath = selPathTreeItem.getPath();
+        LOGGER.log(Level.INFO, "Selected asset path {0}", selectedPath);
+        this.location = selectedPath;
+        return selectedTreeItem;
     }
 }

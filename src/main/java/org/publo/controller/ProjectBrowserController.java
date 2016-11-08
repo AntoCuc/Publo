@@ -34,12 +34,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.publo.model.PageFile;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.listener.SourceFileSelectedListener;
-import org.publo.controller.listener.AssetSelectedListener;
+import org.publo.controller.listener.ResourceChangeListener;
 import org.publo.model.PageSource;
 
 /**
@@ -99,10 +100,10 @@ public class ProjectBrowserController implements Initializable {
                 = new SourceFileSelectedListener(source);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(sourceFileSelectedListener);
-        final AssetSelectedListener assetSelectedListener
-                = new AssetSelectedListener(file);
+        final ResourceChangeListener<TreeItem> treeItemChangeListener
+                = new ResourceChangeListener<>(file);
         treeView.getSelectionModel().selectedItemProperty()
-                .addListener(assetSelectedListener);
+                .addListener(treeItemChangeListener);
         treeView.setRoot(TREE_ROOT);
         treeView.setShowRoot(false);
         treeView.setEditable(true);
