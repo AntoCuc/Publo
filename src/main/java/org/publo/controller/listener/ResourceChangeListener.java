@@ -28,7 +28,8 @@ import javafx.beans.value.ObservableValue;
 import org.publo.controller.utils.Updatable;
 
 /**
- * Listener concerning the amendment of source content.
+ * Generic <code>ChangeListener</code> concerning the amendment of
+ * <code>Updatable</code> resources.
  *
  * @author Antonio Cucchiara
  * @param <T> the change listener type
