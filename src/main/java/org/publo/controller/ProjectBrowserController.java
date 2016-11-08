@@ -39,7 +39,7 @@ import org.publo.model.Asset;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.listener.MdFileSelectedListener;
-import org.publo.controller.listener.SelectedAssetListener;
+import org.publo.controller.listener.AssetSelectedListener;
 import org.publo.model.PageSource;
 
 /**
@@ -99,8 +99,8 @@ public class ProjectBrowserController implements Initializable {
                 = new MdFileSelectedListener(page);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(mdFileSelectedListener);
-        final SelectedAssetListener selectedAssetListener
-                = new SelectedAssetListener(asset);
+        final AssetSelectedListener selectedAssetListener
+                = new AssetSelectedListener(asset);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(selectedAssetListener);
         treeView.setRoot(TREE_ROOT);

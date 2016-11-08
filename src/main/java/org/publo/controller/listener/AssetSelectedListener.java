@@ -39,17 +39,17 @@ import org.publo.controller.utils.PathTreeItem;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public final class SelectedAssetListener implements ChangeListener<TreeItem> {
+public final class AssetSelectedListener implements ChangeListener<TreeItem> {
 
     /**
-     * The {@code SelectedAssetListener} logger.
+     * The {@code AssetSelectedListener} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(SelectedAssetListener.class.getName());
+            = Logger.getLogger(AssetSelectedListener.class.getName());
 
     private final Asset asset;
 
-    public SelectedAssetListener(final Asset asset) {
+    public AssetSelectedListener(final Asset asset) {
         this.asset = asset;
     }
 
