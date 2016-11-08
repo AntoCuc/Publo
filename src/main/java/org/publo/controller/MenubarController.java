@@ -44,7 +44,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
-import org.publo.model.Asset;
+import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
 
@@ -78,9 +78,9 @@ public class MenubarController implements Initializable {
     private PageMarkup markup;
 
     /**
-     * The currently selected {@code Asset}.
+     * The currently selected {@code PageFile}.
      */
-    private Asset asset;
+    private PageFile sourceFile;
 
     @FXML
     private MenuBar menuBar;
@@ -113,7 +113,7 @@ public class MenubarController implements Initializable {
             try {
                 source.getMarkdown().setValue(Files.readAllLines(file.toPath())
                         .stream().collect(Collectors.joining(LINE_SEP)));
-                asset.setLocation(file.toPath());
+                sourceFile.setLocation(file.toPath());
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
@@ -123,7 +123,7 @@ public class MenubarController implements Initializable {
     @FXML
     public void save() {
         Path filePath;
-        if (asset.getLocation() == null) {
+        if (sourceFile.getLocation() == null) {
             FileChooser chooser = new FileChooser();
             chooser.getExtensionFilters().add(MD_FILTER);
             File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
@@ -132,7 +132,7 @@ public class MenubarController implements Initializable {
             }
             filePath = file.toPath();
         } else {
-            filePath = asset.getLocation();
+            filePath = sourceFile.getLocation();
         }
         try {
             Files.write(filePath, source.getMarkdown().getValue().getBytes());
@@ -170,9 +170,9 @@ public class MenubarController implements Initializable {
     void initMenubar(
             final PageSource source,
             final PageMarkup markup,
-            final Asset asset) {
+            final PageFile asset) {
         this.source = source;
         this.markup = markup;
-        this.asset = asset;
+        this.sourceFile = asset;
     }
 }

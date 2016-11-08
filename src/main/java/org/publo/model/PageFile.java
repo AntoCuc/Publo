@@ -32,23 +32,23 @@ import java.util.logging.Logger;
 import org.publo.controller.utils.Movable;
 
 /**
- * Application {@code Asset} model.
+ * Application {@code PageFile} model.
  *
  * Holds state concerning resources the application manipulates.
  *
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public final class Asset implements Movable {
+public final class PageFile implements Movable {
 
     /**
-     * The {@code Asset} logger.
+     * The {@code PageFile} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(Asset.class.getName());
+            = Logger.getLogger(PageFile.class.getName());
 
     /**
-     * The {@code Asset} current location {@code Path}.
+     * The {@code PageFile} current location {@code Path}.
      */
     private Path location;
 

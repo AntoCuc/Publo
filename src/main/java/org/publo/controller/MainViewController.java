@@ -33,7 +33,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import org.publo.controller.listener.ResourceChangeListener;
-import org.publo.model.Asset;
+import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
 
@@ -75,9 +75,9 @@ public class MainViewController implements Initializable {
         textAreaPaneController.initMarkDown(source.getMarkdown());
         final PageMarkup markup = new PageMarkup();
         webViewPaneController.init(markup);
-        final Asset asset = new Asset();
-        menubarPaneController.initMenubar(source, markup, asset);
-        projectPaneController.initProjectBrowser(source, asset);
+        final PageFile file = new PageFile();
+        menubarPaneController.initMenubar(source, markup, file);
+        projectPaneController.initProjectBrowser(source, file);
         final ResourceChangeListener<String> sourceChangeListener
                 = new ResourceChangeListener<>(webViewPaneController);
         source.getMarkdown().addListener(sourceChangeListener);

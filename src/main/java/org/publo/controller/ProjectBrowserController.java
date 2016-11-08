@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeView;
-import org.publo.model.Asset;
+import org.publo.model.PageFile;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.listener.SourceFileSelectedListener;
@@ -94,18 +94,18 @@ public class ProjectBrowserController implements Initializable {
      *
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
-    void initProjectBrowser(final PageSource page, final Asset asset) {
+    void initProjectBrowser(final PageSource source, final PageFile file) {
         final SourceFileSelectedListener sourceFileSelectedListener
-                = new SourceFileSelectedListener(page);
+                = new SourceFileSelectedListener(source);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(sourceFileSelectedListener);
         final AssetSelectedListener assetSelectedListener
-                = new AssetSelectedListener(asset);
+                = new AssetSelectedListener(file);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(assetSelectedListener);
         treeView.setRoot(TREE_ROOT);
         treeView.setShowRoot(false);
         treeView.setEditable(true);
-        treeView.setCellFactory((TreeView<String> param) -> new EditableTreeCell(asset));
+        treeView.setCellFactory((TreeView<String> param) -> new EditableTreeCell(file));
     }
 }

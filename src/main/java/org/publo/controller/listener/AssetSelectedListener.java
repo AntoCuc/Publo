@@ -23,7 +23,7 @@
  */
 package org.publo.controller.listener;
 
-import org.publo.model.Asset;
+import org.publo.model.PageFile;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,9 +47,9 @@ public final class AssetSelectedListener implements ChangeListener<TreeItem> {
     private static final Logger LOGGER
             = Logger.getLogger(AssetSelectedListener.class.getName());
 
-    private final Asset asset;
+    private final PageFile asset;
 
-    public AssetSelectedListener(final Asset asset) {
+    public AssetSelectedListener(final PageFile asset) {
         this.asset = asset;
     }
 
