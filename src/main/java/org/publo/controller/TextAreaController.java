@@ -29,6 +29,7 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import org.publo.controller.utils.Updatable;
 
 /**
  * Event flow coordinating controller.
@@ -36,10 +37,10 @@ import javafx.scene.control.TextArea;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class TextAreaController implements Initializable {
-    
+public class TextAreaController implements Initializable, Updatable<String> {
+
     private StringProperty markdown;
-    
+
     @FXML
     private TextArea textArea;
 
@@ -49,13 +50,14 @@ public class TextAreaController implements Initializable {
 
     /**
      * Initialises the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {  
+    public void initialize(URL url, ResourceBundle rb) {
     }
-    
+
     public void initMarkDown(StringProperty md) {
         markdown = md;
     }
@@ -63,8 +65,22 @@ public class TextAreaController implements Initializable {
     public void updateMarkdown() {
         markdown.setValue(textArea.getText());
     }
-    
+
     public void updateTextArea() {
         textArea.setText(markdown.getValue());
+    }
+
+    /**
+     * Updates if necessary.
+     *
+     * @param to update
+     * @return the new value
+     */
+    @Override
+    public String update(String to) {
+        if (!to.equals(textArea.getText())) {
+            textArea.setText(to);
+        }
+        return to;
     }
 }

@@ -34,11 +34,11 @@ import org.publo.controller.utils.Updatable;
  * @param <T> the change listener type
  * @since 0.2
  */
-public final class SourceChangeListener<T> implements ChangeListener<T> {
+public final class ResourceChangeListener<T> implements ChangeListener<T> {
 
     private final Updatable<T> resource;
 
-    public SourceChangeListener(final Updatable<T> resource) {
+    public ResourceChangeListener(final Updatable<T> resource) {
         this.resource = resource;
     }
 

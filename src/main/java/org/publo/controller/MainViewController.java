@@ -32,7 +32,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import org.publo.controller.listener.SourceChangeListener;
+import org.publo.controller.listener.ResourceChangeListener;
 import org.publo.model.Asset;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
@@ -78,18 +78,12 @@ public class MainViewController implements Initializable {
         final Asset asset = new Asset();
         menubarPaneController.initMenubar(source, markup, asset);
         projectPaneController.initProjectBrowser(source, asset);
-        source.getMarkdown().addListener(
-                (ObservableValue<? extends String> observable,
-                        final String oldValue,
-                        final String newValue) -> {
-                    final TextArea textArea = textAreaPaneController.getTextArea();
-                    if (!newValue.equals(textArea.getText())) {
-                        textArea.setText(newValue);
-                    }
-                });
-        final SourceChangeListener<String> sourceChangeListener
-                = new SourceChangeListener<>(webViewPaneController);
+        final ResourceChangeListener<String> sourceChangeListener
+                = new ResourceChangeListener<>(webViewPaneController);
         source.getMarkdown().addListener(sourceChangeListener);
+        final ResourceChangeListener<String> textAreaChangeListener
+                = new ResourceChangeListener<>(textAreaPaneController);
+        source.getMarkdown().addListener(textAreaChangeListener);
         markup.getTemplate().addListener(
                 (ObservableValue<? extends String> observable,
                         final String oldValue,
