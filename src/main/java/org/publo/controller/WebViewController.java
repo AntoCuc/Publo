@@ -25,7 +25,6 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebEngine;
