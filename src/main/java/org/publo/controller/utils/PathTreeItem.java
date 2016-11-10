@@ -27,8 +27,6 @@ import org.publo.controller.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.publo.controller.ProjectBrowserController;
 
 /**
