@@ -77,11 +77,6 @@ public class MenubarController implements Initializable {
      * The currently set {@code PageTemplate}
      */
     private PageTemplate template;
-    
-    /**
-     * The currently loaded {@code PageMarkup}.
-     */
-    private PageMarkup markup;
 
     /**
      * The currently selected {@code PageFile}.
@@ -176,11 +171,9 @@ public class MenubarController implements Initializable {
     void init(
             final PageSource source,
             final PageTemplate template,
-            final PageMarkup markup,
             final PageFile asset) {
         this.source = source;
         this.template = template;
-        this.markup = markup;
         this.sourceFile = asset;
     }
 }

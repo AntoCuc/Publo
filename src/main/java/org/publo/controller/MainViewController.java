@@ -95,7 +95,7 @@ public final class MainViewController implements Initializable {
         });
 
         final PageFile file = new PageFile();
-        menubarPaneController.init(source, pageTemplate, markup, file);
+        menubarPaneController.init(source, pageTemplate, file);
         projectPaneController.init(source, file);
     }
 }
