@@ -36,8 +36,7 @@ public interface Updatable<T> {
      * Update the resource.
      *
      * @param newContent to update resources to
-     * @return the new resource content
      */
-    public T update(final T newContent);
+    public void update(final T newContent);
 
 }

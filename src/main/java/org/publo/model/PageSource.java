@@ -71,10 +71,9 @@ public final class PageSource implements Updatable<TreeItem> {
      * <code>TreeItem</code>.
      *
      * @param selTreeItem
-     * @return
      */
     @Override
-    public TreeItem update(TreeItem selTreeItem) {
+    public void update(TreeItem selTreeItem) {
         LOGGER.log(Level.INFO, "Selected item {0}", selTreeItem.getValue());
         final PathTreeItem selPathTreeItem = (PathTreeItem) selTreeItem;
         final Path selectedPath = selPathTreeItem.getPath();
@@ -86,6 +85,5 @@ public final class PageSource implements Updatable<TreeItem> {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
-        return selTreeItem;
     }
 }

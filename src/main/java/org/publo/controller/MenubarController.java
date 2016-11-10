@@ -47,6 +47,7 @@ import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
+import org.publo.model.PageTemplate;
 
 /**
  * Event flow coordinating controller.
@@ -71,6 +72,11 @@ public class MenubarController implements Initializable {
      * The currently loaded markdown {@code PageSource}.
      */
     private PageSource source;
+    
+    /**
+     * The currently set {@code PageTemplate}
+     */
+    private PageTemplate template;
     
     /**
      * The currently loaded {@code PageMarkup}.
@@ -164,14 +170,16 @@ public class MenubarController implements Initializable {
     @FXML
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
-        markup.getTemplate().setValue(radioMenuItem.getText());
+        template.getTemplate().setValue(radioMenuItem.getText());
     }
 
-    void initMenubar(
+    void init(
             final PageSource source,
+            final PageTemplate template,
             final PageMarkup markup,
             final PageFile asset) {
         this.source = source;
+        this.template = template;
         this.markup = markup;
         this.sourceFile = asset;
     }

@@ -25,12 +25,12 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.publo.controller.utils.Updatable;
-import org.publo.model.PageMarkup;
 
 /**
  * Event flow coordinating controller.
@@ -40,44 +40,28 @@ import org.publo.model.PageMarkup;
  */
 public class WebViewController implements Initializable, Updatable<String> {
 
+    /**
+     * The {@code PageMarkup} logger.
+     */
+    private static final Logger LOGGER
+            = Logger.getLogger(WebViewController.class.getName());
+
     @FXML
     private WebView webView;
-
-    private PageMarkup markup;
-
-    /**
-     * Update the {@code WebView} with the markup.
-     *
-     * @param markup to update to
-     */
-    public void updateWebView(final String markup) {
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(markup);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
 
     /**
-     * Update the {@code WebView} rendering the markdown and updating the UI.
+     * Update the {@code WebView} rendering the content.
      *
-     * @param to
-     * @return the rendered markup
+     * @param content to be rendered
      */
     @Override
-    public String update(String to) {
-        final String rendered = markup.render(to);
-        updateWebView(rendered);
-        return rendered;
-    }
-
-    /**
-     * Initialise the {@code PageMarkup}
-     *
-     * @param markup to initialise
-     */
-    void init(PageMarkup markup) {
-        this.markup = markup;
+    public final void update(final String content) {
+        LOGGER.info("Updating the Web View");
+        WebEngine webEngine = webView.getEngine();
+        webEngine.loadContent(content);
     }
 }

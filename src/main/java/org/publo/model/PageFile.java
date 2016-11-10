@@ -78,11 +78,10 @@ public final class PageFile implements Movable, Updatable<TreeItem> {
     }
 
     @Override
-    public TreeItem update(TreeItem selectedTreeItem) {
+    public void update(TreeItem selectedTreeItem) {
         PathTreeItem selPathTreeItem = (PathTreeItem) selectedTreeItem;
         final Path selectedPath = selPathTreeItem.getPath();
         LOGGER.log(Level.INFO, "Selected asset path {0}", selectedPath);
         this.location = selectedPath;
-        return selectedTreeItem;
     }
 }

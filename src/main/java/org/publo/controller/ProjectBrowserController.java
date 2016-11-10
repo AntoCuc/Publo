@@ -94,7 +94,7 @@ public class ProjectBrowserController implements Initializable {
      *
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
-    void initProjectBrowser(final PageSource source, final PageFile file) {
+    void init(final PageSource source, final PageFile file) {
         final ResourceChangeListener<TreeItem> sourceFileSelectedListener
                 = new ResourceChangeListener<>(source);
         treeView.getSelectionModel().selectedItemProperty()

@@ -21,64 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller;
+package org.publo.model;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
 import org.publo.controller.utils.Updatable;
 
 /**
- * Event flow coordinating controller.
+ * PageTemplate core model. Holds state concerning the template markup rendered
+ * to apply on preview.
  *
  * @author Antonio Cucchiara
- * @since 0.1
+ * @since 0.2
  */
-public class TextAreaController implements Initializable, Updatable<String> {
-
-    private StringProperty markdown;
-
-    @FXML
-    private TextArea textArea;
-
-    public TextArea getTextArea() {
-        return textArea;
-    }
+public final class PageTemplate implements Updatable<String> {
 
     /**
-     * Initialises the controller class.
-     *
-     * @param url
-     * @param rb
+     * The {@code PageMarkup} logger.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    }
-
-    public void init(StringProperty md) {
-        markdown = md;
-    }
-
-    public void updateMarkdown() {
-        markdown.setValue(textArea.getText());
-    }
-
-    public void updateTextArea() {
-        textArea.setText(markdown.getValue());
-    }
+    private static final Logger LOGGER
+            = Logger.getLogger(PageTemplate.class.getName());
 
     /**
-     * Updates if necessary.
-     *
-     * @param to update
+     * The template file name to be applied on rendering.
      */
+    private final StringProperty template = new SimpleStringProperty("Default");
+
+    public StringProperty getTemplate() {
+        return template;
+    }
+
     @Override
-    public void update(String to) {
-        if (!to.equals(textArea.getText())) {
-            textArea.setText(to);
-        }
+    public void update(final String newTemplate) {
+        LOGGER.log(Level.INFO, "Updating template to {0}", newTemplate);
+        template.setValue(newTemplate);
     }
 }

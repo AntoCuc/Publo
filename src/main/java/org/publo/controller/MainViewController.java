@@ -25,17 +25,15 @@ package org.publo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
 import org.publo.controller.listener.ResourceChangeListener;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
+import org.publo.model.PageTemplate;
 
 /**
  * Event flow coordinating controller.
@@ -43,7 +41,7 @@ import org.publo.model.PageSource;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class MainViewController implements Initializable {
+public final class MainViewController implements Initializable {
 
     /**
      * The {@code MainViewController} logger.
@@ -66,33 +64,38 @@ public class MainViewController implements Initializable {
     /**
      * Initialises the controller class.
      *
+     * Bootstraps the <code>ChangeListener</code> chain.
+     *
+     * Listeners Chain:
+     * File Selection Change -> Source Change -> TextArea Change ...
+     * TextArea Change -> Source Change -> Markup Change ...
+     * Template Change -> Markup Change ...
+     * Markup Change -> WebView Update
+     *
      * @param url
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public final void initialize(final URL url, final ResourceBundle rb) {
+        LOGGER.info("Initialising the Main View");
         final PageSource source = new PageSource();
-        textAreaPaneController.initMarkDown(source.getMarkdown());
-        final PageMarkup markup = new PageMarkup();
-        webViewPaneController.init(markup);
+        textAreaPaneController.init(source.getMarkdown());
+
+        final PageTemplate pageTemplate = new PageTemplate();
+        final PageMarkup markup = new PageMarkup(pageTemplate);
+
+        source.getMarkdown().addListener(new ResourceChangeListener<>(markup));
+        source.getMarkdown().addListener(new ResourceChangeListener<>(textAreaPaneController));
+        markup.getMarkup().addListener(new ResourceChangeListener<>(webViewPaneController));
+        pageTemplate.getTemplate().addListener(
+                (ObservableValue<? extends String> observable, 
+                        String oldValue, 
+                        String newValue) -> {
+            markup.update(source.getMarkdown().getValue());
+        });
+
         final PageFile file = new PageFile();
-        menubarPaneController.initMenubar(source, markup, file);
-        projectPaneController.initProjectBrowser(source, file);
-        final ResourceChangeListener<String> sourceChangeListener
-                = new ResourceChangeListener<>(webViewPaneController);
-        source.getMarkdown().addListener(sourceChangeListener);
-        final ResourceChangeListener<String> textAreaChangeListener
-                = new ResourceChangeListener<>(textAreaPaneController);
-        source.getMarkdown().addListener(textAreaChangeListener);
-        markup.getTemplate().addListener(
-                (ObservableValue<? extends String> observable,
-                        final String oldValue,
-                        final String newValue) -> {
-                    LOGGER.log(Level.INFO, "Template changed from {0} to {1}",
-                            new Object[]{oldValue, newValue});
-                    final StringProperty template = (StringProperty) observable;
-                    final String renderedMarkup = markup.updateTemplate(template);
-                    webViewPaneController.updateWebView(renderedMarkup);
-                });
+        menubarPaneController.init(source, pageTemplate, markup, file);
+        projectPaneController.init(source, file);
     }
 }

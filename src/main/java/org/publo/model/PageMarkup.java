@@ -23,11 +23,13 @@
  */
 package org.publo.model;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
+import org.publo.controller.utils.Updatable;
 
 /**
  * PageMarkup core model. Holds state concerning the markup rendered and the
@@ -36,7 +38,7 @@ import org.publo.controller.utils.TemplateRenderer;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class PageMarkup {
+public final class PageMarkup implements Updatable<String> {
 
     /**
      * The {@code PageMarkup} logger.
@@ -45,14 +47,18 @@ public class PageMarkup {
             = Logger.getLogger(PageMarkup.class.getName());
 
     /**
-     * The template file name to be applied on rendering.
+     * The template to be applied on rendering.
      */
-    private final StringProperty template = new SimpleStringProperty("Default");
+    private final PageTemplate pageTemplate;
     
-    private String markdownCache = "";
+    private final StringProperty markup = new SimpleStringProperty("");
 
-    public StringProperty getTemplate() {
-        return template;
+    public PageMarkup(final PageTemplate template) {
+        this.pageTemplate = template;
+    }
+
+    public StringProperty getMarkup() {
+        return markup;
     }
 
     /**
@@ -62,22 +68,15 @@ public class PageMarkup {
      * @return the populated, rendered template
      */
     public String render(final String markdown) {
-        LOGGER.info("Caching the markdown.");
-        this.markdownCache = markdown;
         LOGGER.info("Rendering the markup.");
-        final String markup = MarkdownParser.parse(markdown);
-        return TemplateRenderer.render(template.getValue(), markup);
+        final String rendered = MarkdownParser.parse(markdown);
+        return TemplateRenderer.render(
+                pageTemplate.getTemplate().getValue(), rendered);
     }
-    
-    /**
-     * Renders the markup applying a template.
-     * 
-     * @param template to render to
-     * @return the rendered markup
-     */
-    public String updateTemplate(final StringProperty template) {
-        LOGGER.info("Updating template.");
-        final String contentMarkup = MarkdownParser.parse(markdownCache);
-        return TemplateRenderer.render(template.getValue(), contentMarkup);
+
+    @Override
+    public void update(final String newSource) {
+        LOGGER.log(Level.INFO, "Updating markup");
+        markup.setValue(render(newSource));
     }
 }
