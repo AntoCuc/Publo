@@ -45,7 +45,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
 import org.publo.model.PageFile;
-import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
 import org.publo.model.PageTemplate;
 
