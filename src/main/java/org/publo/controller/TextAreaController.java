@@ -62,14 +62,6 @@ public class TextAreaController implements Initializable, Updatable<String> {
         markdown = md;
     }
 
-    public void updateMarkdown() {
-        markdown.setValue(textArea.getText());
-    }
-
-    public void updateTextArea() {
-        textArea.setText(markdown.getValue());
-    }
-
     /**
      * Updates if necessary.
      *
