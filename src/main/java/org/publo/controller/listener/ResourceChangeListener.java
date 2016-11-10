@@ -28,7 +28,7 @@ import javafx.beans.value.ObservableValue;
 import org.publo.controller.utils.Updatable;
 
 /**
- * Generic <code>ChangeListener</code> concerning the amendment of
+ * Generic <code>ChangeListener</code> concerning the conditional amendment of
  * <code>Updatable</code> resources.
  *
  * @author Antonio Cucchiara
@@ -43,6 +43,13 @@ public final class ResourceChangeListener<T> implements ChangeListener<T> {
         this.updatableResource = updatableResource;
     }
 
+    /**
+     * Update a resource only if its value has changed.
+     * 
+     * @param observable value
+     * @param oldValue of the resource
+     * @param newValue of the resource
+     */
     @Override
     public void changed(
             ObservableValue<? extends T> observable,
