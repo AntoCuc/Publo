@@ -37,7 +37,7 @@ import org.publo.controller.utils.Updatable;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class TextAreaController implements Initializable, Updatable<String> {
+public final class TextAreaController implements Initializable, Updatable<String> {
 
     private StringProperty markdown;
 
@@ -60,6 +60,13 @@ public class TextAreaController implements Initializable, Updatable<String> {
 
     public void init(StringProperty md) {
         markdown = md;
+    }
+
+    /**
+     * Invoke by the UI at every change performed on the TextArea.
+     */
+    public final void updateMarkdown() {
+        markdown.setValue(textArea.getText());
     }
 
     /**
