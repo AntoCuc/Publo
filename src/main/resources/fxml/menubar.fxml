@@ -57,6 +57,16 @@
                             </graphic>
                         </MenuItem>
                         <SeparatorMenuItem />
+                        <MenuItem mnemonicParsing="false" onAction="#exportSite" text="Export site">
+                            <graphic>
+                                <ImageView>
+                                    <image>
+                                        <Image url="media/xhtml.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem onAction="#exit" text="Quit">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

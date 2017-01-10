@@ -44,6 +44,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
+import org.publo.controller.utils.SiteExporter;
 import org.publo.model.PageFile;
 import org.publo.model.PageSource;
 import org.publo.model.PageTemplate;
@@ -71,7 +72,7 @@ public class MenubarController implements Initializable {
      * The currently loaded markdown {@code PageSource}.
      */
     private PageSource source;
-    
+
     /**
      * The currently set {@code PageTemplate}
      */
@@ -165,6 +166,12 @@ public class MenubarController implements Initializable {
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
         template.getTemplate().setValue(radioMenuItem.getText());
+    }
+
+    @FXML
+    public void exportSite() throws IOException {
+        final String selectedTemplate = template.getTemplate().getValue();
+        SiteExporter.export(selectedTemplate);
     }
 
     void init(

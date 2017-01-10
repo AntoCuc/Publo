@@ -19,7 +19,10 @@ Publo users can perform the following operations on markdown files:
 * Preview
 * Apply templates
     * Default
-    * Dark
+    * Pyxill
+    * Github
+    * Gothic
+* Export site
 
 Screenshot
 ----------
