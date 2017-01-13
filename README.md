@@ -32,7 +32,7 @@ Screenshot
 Download Publo
 --------------
 
-Downloads of Publo are going to be available on GitHub releases.
+Downloads of Publo are available on [GitHub releases](https://github.com/AntoCuc/Publo/releases).
 
 ## Software Builds ##
 
