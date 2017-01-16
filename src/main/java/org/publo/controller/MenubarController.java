@@ -136,7 +136,9 @@ public class MenubarController implements Initializable {
             filePath = sourceFile.getLocation();
         }
         try {
-            Files.write(filePath, source.getMarkdown().getValue().getBytes());
+            if (Files.isRegularFile(filePath)) {
+                Files.write(filePath, source.getMarkdown().getValue().getBytes());
+            }
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
