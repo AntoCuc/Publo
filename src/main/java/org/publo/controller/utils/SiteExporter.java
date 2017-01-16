@@ -46,6 +46,7 @@ public class SiteExporter {
             = Logger.getLogger(SiteExporter.class.getName());
 
     private static final Path TARGET_PATH = PROJECTS_PATH.resolve("target");
+    private static final String MARKDOWN_EXT = ".md";
     private static final String MARKUP_EXT = ".html";
 
     /**
@@ -89,13 +90,20 @@ public class SiteExporter {
                 final Path basePath = PROJECTS_PATH.relativize(file);
                 final Path targetPath = TARGET_PATH.resolve(basePath);
                 final String fileName = targetPath.getFileName().toString();
-                final String baseName = getBaseName(fileName);
-                final String pageName = baseName + MARKUP_EXT;
-                final Path filePath = targetPath.resolveSibling(pageName);
-                final String markdown = new String(Files.readAllBytes(file));
-                final String markup = MarkdownParser.parse(markdown);
-                final String page = TemplateRenderer.render(template, markup);
-                Files.write(filePath, page.getBytes());
+                final String extension = getExtension(fileName);
+                if (MARKDOWN_EXT.equals(extension)) {
+                    LOGGER.info("Processing markdown resource.");
+                    final String baseName = getBaseName(fileName);
+                    final String pageName = baseName + MARKUP_EXT;
+                    final Path filePath = targetPath.resolveSibling(pageName);
+                    final String markdown = new String(Files.readAllBytes(file));
+                    final String markup = MarkdownParser.parse(markdown);
+                    final String page = TemplateRenderer.render(template, markup);
+                    Files.write(filePath, page.getBytes());
+                } else {
+                    final Path absFilePath = PROJECTS_PATH.resolve(file);
+                    Files.copy(absFilePath, targetPath);
+                }
                 return FileVisitResult.CONTINUE;
             }
 
@@ -115,12 +123,27 @@ public class SiteExporter {
      * @param fileName to process
      * @return extension stripped file name
      */
-    private static String getBaseName(String fileName) {
+    static String getBaseName(String fileName) {
         int index = fileName.lastIndexOf('.');
         if (index == -1) {
             return fileName;
         } else {
             return fileName.substring(0, index);
+        }
+    }
+
+    /**
+     * Retrieves the extension of a file given its full name.
+     *
+     * @param fileName to process
+     * @return extension stripped file name
+     */
+    static String getExtension(String fileName) {
+        int index = fileName.lastIndexOf('.');
+        if (index == -1) {
+            return "";
+        } else {
+            return fileName.substring(index, fileName.length());
         }
     }
 }
