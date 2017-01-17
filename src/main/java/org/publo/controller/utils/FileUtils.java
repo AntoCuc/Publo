@@ -21,42 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.listener;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import org.publo.controller.utils.Updatable;
+package org.publo.controller.utils;
 
 /**
- * Generic <code>ChangeListener</code> concerning the conditional amendment of
- * <code>Updatable</code> resources.
+ * Holds File utilities.
  *
  * @author Antonio Cucchiara
- * @param <T> the change listener type
- * @since 0.2
+ * @since 0.3
  */
-public final class ResourceChangeListener<T> implements ChangeListener<T> {
+public class FileUtils {
 
-    private final Updatable<T> updatableResource;
-
-    public ResourceChangeListener(final Updatable<T> updatableResource) {
-        this.updatableResource = updatableResource;
+    /**
+     * Retrieves the base name of a file given its full name.
+     *
+     * @param fileName to process
+     * @return extension stripped file name
+     */
+    public static String getBaseName(String fileName) {
+        int index = fileName.lastIndexOf('.');
+        if (index == -1) {
+            return fileName;
+        } else {
+            return fileName.substring(0, index);
+        }
     }
 
     /**
-     * Update a resource only if its value has changed.
-     * 
-     * @param observable value
-     * @param oldValue of the resource
-     * @param newValue of the resource
+     * Retrieves the extension of a file given its full name.
+     *
+     * @param fileName to process
+     * @return extension stripped file name
      */
-    @Override
-    public void changed(
-            ObservableValue<? extends T> observable,
-            T oldValue,
-            T newValue) {
-        if (newValue != null && !newValue.equals(oldValue)) {
-            updatableResource.update(newValue);
+    public static String getExtension(String fileName) {
+        int index = fileName.lastIndexOf('.');
+        if (index == -1) {
+            return "";
+        } else {
+            return fileName.substring(index, fileName.length());
         }
     }
 }

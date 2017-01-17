@@ -24,7 +24,6 @@
 package org.publo.controller.utils;
 
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -48,6 +47,7 @@ public class SiteExporter {
             = Logger.getLogger(SiteExporter.class.getName());
 
     private static final Path TARGET_PATH = PROJECTS_PATH.resolve("target");
+    public static final Path TEMPLATES_PATH = PROJECTS_PATH.resolve("templates");
     private static final String MARKDOWN_EXT = ".md";
     private static final String MARKUP_EXT = ".html";
 
@@ -75,8 +75,8 @@ public class SiteExporter {
                 final Path basePath = PROJECTS_PATH.relativize(dir);
                 final Path dirPath = TARGET_PATH.resolve(basePath);
                 LOGGER.log(Level.INFO, "Target directory {0}", dirPath);
-                if (dir.equals(TARGET_PATH)) {
-                    LOGGER.info("Skipping target directory.");
+                if (TARGET_PATH.equals(dir) || TEMPLATES_PATH.equals(dir)) {
+                    LOGGER.log(Level.INFO, "Skipping {0} directory.", dir);
                     return FileVisitResult.SKIP_SUBTREE;
                 }
                 if (!Files.exists(dirPath)) {
@@ -92,10 +92,10 @@ public class SiteExporter {
                 final Path basePath = PROJECTS_PATH.relativize(file);
                 final Path targetPath = TARGET_PATH.resolve(basePath);
                 final String fileName = targetPath.getFileName().toString();
-                final String extension = getExtension(fileName);
+                final String extension = FileUtils.getExtension(fileName);
                 if (MARKDOWN_EXT.equals(extension)) {
                     LOGGER.info("Processing markdown resource.");
-                    final String baseName = getBaseName(fileName);
+                    final String baseName = FileUtils.getBaseName(fileName);
                     final String pageName = baseName + MARKUP_EXT;
                     final Path filePath = targetPath.resolveSibling(pageName);
                     final String markdown = new String(Files.readAllBytes(file));
@@ -121,35 +121,5 @@ public class SiteExporter {
             }
         };
         Files.walkFileTree(PROJECTS_PATH, projectFileVisitor);
-    }
-
-    /**
-     * Retrieves the base name of a file given its full name.
-     *
-     * @param fileName to process
-     * @return extension stripped file name
-     */
-    static String getBaseName(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index == -1) {
-            return fileName;
-        } else {
-            return fileName.substring(0, index);
-        }
-    }
-
-    /**
-     * Retrieves the extension of a file given its full name.
-     *
-     * @param fileName to process
-     * @return extension stripped file name
-     */
-    static String getExtension(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        } else {
-            return fileName.substring(index, fileName.length());
-        }
     }
 }

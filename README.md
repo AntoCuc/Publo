@@ -7,7 +7,7 @@ Publo was built as part of a challenge a friend (John) made me. He commented on 
 
 We bet a fancy coffee that I would be able to write and release a basic markdown editor on my train home (1.5 hours). Needless to say the challenge was accepted. Publo was born. The first few commits show Publo in its infancy.
 
-Since then Publo was ported to the JavaFX GUI library. The application is very simple in its current form.
+Since then Publo was ported to JavaFX. The application is very simple in its current form.
 
 The original principle of speed of development entailed that Publo's features are very limited and that is still the case.
 
@@ -17,12 +17,19 @@ Publo users can perform the following operations on markdown files:
 * Save
 * Edit
 * Preview
-* Apply templates
-    * Default
-    * Pyxill
-    * Github
-    * Gothic
-* Export site
+* Apply custom templates
+* Export sites
+
+## Templates ##
+
+Publo supports the creation of custom templates.
+
+Templates creation is very simple:
+
+1. Create an html file - for example: `my-template.html`
+2. Place the tag `{{main}}` where your content markup needs to be placed
+3. Place the newly created template file in the `publo-projects/templates` directory
+4. Select it from the drop-down
 
 Screenshot
 ----------

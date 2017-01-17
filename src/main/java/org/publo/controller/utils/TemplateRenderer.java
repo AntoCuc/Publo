@@ -23,10 +23,13 @@
  */
 package org.publo.controller.utils;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.publo.controller.ProjectBrowserController;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 /**
  * Template Rendering Library Wrapper.
@@ -36,7 +39,11 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  */
 public final class TemplateRenderer {
 
-    private static final String TEMPLATES_DIR = "templates/";
+    private static final Logger LOGGER
+            = Logger.getLogger(TemplateRenderer.class.getName());
+
+    public static final String TEMPLATES_DIR
+            = ProjectBrowserController.PROJECTS_PATH + "/templates/";
     private static final String TEMPLATE_SUFFIX = ".html";
 
     /**
@@ -47,7 +54,11 @@ public final class TemplateRenderer {
      * @return the markup
      */
     public static String render(String template, String content) {
-        final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        if (template == null || "".equals(template)) {
+            return content;
+        }
+        LOGGER.log(Level.INFO, "Rendering content on template {0}", template);
+        final FileTemplateResolver resolver = new FileTemplateResolver();
         resolver.setPrefix(TEMPLATES_DIR);
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setSuffix(TEMPLATE_SUFFIX);

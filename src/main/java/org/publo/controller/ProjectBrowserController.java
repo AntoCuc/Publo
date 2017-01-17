@@ -40,6 +40,7 @@ import org.publo.model.PageFile;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
 import org.publo.controller.listener.ResourceChangeListener;
+import org.publo.controller.utils.TemplateRenderer;
 import org.publo.model.PageSource;
 
 /**
@@ -59,6 +60,8 @@ public class ProjectBrowserController implements Initializable {
 
     public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
 
+    public static final Path TEMPLATES_PATH = Paths.get(TemplateRenderer.TEMPLATES_DIR);
+
     private static final PathTreeItem TREE_ROOT = new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
 
     @FXML
@@ -67,7 +70,7 @@ public class ProjectBrowserController implements Initializable {
     /**
      * Initialises the controller class.
      *
-     * Creates the projects directory if it doesn't exist.
+     * Creates the projects and templates directory if it doesn't exist.
      *
      * @param url
      * @param rb
@@ -77,6 +80,7 @@ public class ProjectBrowserController implements Initializable {
         if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
             try {
                 Files.createDirectories(PROJECTS_PATH);
+                Files.createDirectories(TEMPLATES_PATH);
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }

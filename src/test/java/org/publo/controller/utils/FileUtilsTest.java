@@ -26,20 +26,20 @@ package org.publo.controller.utils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class SiteExporterTest {
+public class FileUtilsTest {
 
     @Test
     public void testGetBasename() throws Exception {
         final String basename = "abc";
         final String extension = ".txt";
-        final String result = SiteExporter.getBaseName(basename + extension);
+        final String result = FileUtils.getBaseName(basename + extension);
         assertEquals(basename, result);
     }
-    
+
     @Test
     public void testGetBasenameNoExtension() throws Exception {
         final String basename = "abc";
-        final String result = SiteExporter.getBaseName(basename);
+        final String result = FileUtils.getBaseName(basename);
         assertEquals(basename, result);
     }
 
@@ -47,14 +47,14 @@ public class SiteExporterTest {
     public void testGetExtension() throws Exception {
         final String basename = "abc";
         final String extension = ".txt";
-        final String result = SiteExporter.getExtension(basename + extension);
+        final String result = FileUtils.getExtension(basename + extension);
         assertEquals(extension, result);
     }
-    
+
     @Test
     public void testGetExtensionNoExtension() throws Exception {
         final String basename = "abc";
-        final String result = SiteExporter.getExtension(basename);
+        final String result = FileUtils.getExtension(basename);
         assertEquals("", result);
     }
 }

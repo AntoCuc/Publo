@@ -29,21 +29,29 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
+import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.model.PageFile;
 import org.publo.model.PageSource;
@@ -85,6 +93,9 @@ public class MenubarController implements Initializable {
 
     @FXML
     private MenuBar menuBar;
+
+    @FXML
+    private Menu templateMenu;
 
     /**
      * Initialises the controller class.
@@ -183,5 +194,32 @@ public class MenubarController implements Initializable {
         this.source = source;
         this.template = template;
         this.sourceFile = asset;
+        this.loadTemplates();
+    }
+
+    private void loadTemplates() {
+        LOGGER.info("Loading templates.");
+        templateMenu.getItems().clear();
+        final FileVisitor templatesVisitor = new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(
+                    Path file,
+                    BasicFileAttributes attrs) throws IOException {
+                final String tplFileName = file.getFileName().toString();
+                final String tplName = FileUtils.getBaseName(tplFileName);
+                LOGGER.log(Level.INFO, "Creating template entry {0}", tplFileName);
+                final RadioMenuItem radioMenuItem = new RadioMenuItem(tplName);
+                radioMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
+                    MenubarController.this.setTemplate((ActionEvent) event);
+                });
+                templateMenu.getItems().add(radioMenuItem);
+                return FileVisitResult.CONTINUE;
+            }
+        };
+        try {
+            Files.walkFileTree(SiteExporter.TEMPLATES_PATH, templatesVisitor);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Templates could not be loaded.{0}", ex.getCause());
+        }
     }
 }

@@ -84,20 +84,10 @@
                         <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Template">
+                <Menu fx:id="templateMenu" mnemonicParsing="false" text="Template">
                     <accelerator>
                         <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" selected="true" text="Default">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="templateToggleGroup" />
-                            </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" text="Pyxill" toggleGroup="$templateToggleGroup" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" text="Github" toggleGroup="$templateToggleGroup" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#setTemplate" text="Gothic" toggleGroup="$templateToggleGroup" />
-                    </items>
                 </Menu>
                 <Menu text="Help">
                     <items>
