@@ -50,7 +50,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
-import static org.publo.controller.FileBrowserController.PROJECTS_PATH;
+import static org.publo.filebrowser.controller.FileBrowserController.PROJECTS_PATH;
 import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.model.PageFile;

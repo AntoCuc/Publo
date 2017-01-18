@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.filebrowser.controller.utils;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;

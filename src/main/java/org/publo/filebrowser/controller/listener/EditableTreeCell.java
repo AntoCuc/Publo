@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller.utils;
+package org.publo.filebrowser.controller.listener;
 
+import org.publo.filebrowser.controller.utils.PathTreeItem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -31,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.publo.controller.utils.Movable;
 
 /**
  * A {@code TreeCell} allowing the creation and renaming of {@code TreeItem}s

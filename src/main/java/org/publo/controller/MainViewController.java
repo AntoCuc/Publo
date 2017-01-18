@@ -23,6 +23,7 @@
  */
 package org.publo.controller;
 
+import org.publo.filebrowser.controller.FileBrowserController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;

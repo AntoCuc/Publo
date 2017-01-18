@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.TreeItem;
 import org.publo.controller.utils.Movable;
-import org.publo.controller.utils.PathTreeItem;
+import org.publo.filebrowser.controller.utils.PathTreeItem;
 import org.publo.controller.utils.Updatable;
 
 /**

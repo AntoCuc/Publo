@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller;
+package org.publo.filebrowser.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,8 +37,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.publo.model.PageFile;
-import org.publo.controller.utils.EditableTreeCell;
-import org.publo.controller.utils.PathTreeItem;
+import org.publo.filebrowser.controller.listener.EditableTreeCell;
+import org.publo.filebrowser.controller.utils.PathTreeItem;
 import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.controller.utils.TemplateRenderer;
 import org.publo.model.PageSource;
@@ -97,8 +97,10 @@ public class FileBrowserController implements Initializable {
      * Register the with the file-system watcher.
      *
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
+     * @param source of the page
+     * @param file holding the state
      */
-    void init(final PageSource source, final PageFile file) {
+    public void init(final PageSource source, final PageFile file) {
         final ResourceChangedListener<TreeItem> sourceFileSelectedListener
                 = new ResourceChangedListener<>(source);
         treeView.getSelectionModel().selectedItemProperty()
