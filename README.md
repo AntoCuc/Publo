@@ -21,7 +21,7 @@ Features
 * Editing markdown documents - Allows the creation of great content
 * Preview HTML - To view how your content looks before publishing it
 * Apply custom templates - to design your very own web UI
-* Export sites - To generate a site ready for upload
+* Export - To generate a site ready for upload
 * Run on Windows, OSX and Linux - Because every platform has something special <3
 
 Templates 
