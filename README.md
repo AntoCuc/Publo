@@ -27,9 +27,29 @@ Publo supports the creation of custom templates.
 Templates creation is very simple:
 
 1. Create an html file - for example: `my-template.html`
-2. Place the tag `{{main}}` where your content markup needs to be placed
-3. Place the newly created template file in the `publo-projects/templates` directory
-4. Select it from the drop-down
+2. Place the attribute `th:utext="${main}"` in the tag containing your content
+3. Place the newly created template in the `publo-projects/templates` directory
+4. Select it from the drop-down to use it for preview and export
+
+### A note on page metadata ###
+
+Markdown is a syntax that focuses primarily on the main content of the page.
+Hence, the use of the `main` attribute for template rendering.
+However, webpages, for a range of reasons, may contain useful metadata.
+Publo uses YAML front matter for the definition of such metadata.
+Below an example of the syntax for front matter:
+
+```
+---
+
+title: Title of the page
+description: Description of the page
+<key>: <value>
+
+---
+```
+
+Populating the template with custom data  can be achieved with `th:utext="${<key>}"`.
 
 Screenshot
 ----------

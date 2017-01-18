@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.publo.controller.utils.MarkdownParser;
 import org.publo.controller.utils.TemplateRenderer;
 import org.publo.controller.utils.Updatable;
 
@@ -50,7 +49,7 @@ public final class PageMarkup implements Updatable<String> {
      * The template to be applied on rendering.
      */
     private final PageTemplate pageTemplate;
-    
+
     private final StringProperty markup = new SimpleStringProperty("");
 
     public PageMarkup(final PageTemplate template) {
@@ -69,9 +68,8 @@ public final class PageMarkup implements Updatable<String> {
      */
     public String render(final String markdown) {
         LOGGER.info("Rendering the markup.");
-        final String rendered = MarkdownParser.parse(markdown);
         return TemplateRenderer.render(
-                pageTemplate.getTemplate().getValue(), rendered);
+                pageTemplate.getTemplate().getValue(), markdown);
     }
 
     @Override

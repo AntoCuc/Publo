@@ -23,8 +23,16 @@
  */
 package org.publo.controller.utils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.commonmark.Extension;
+import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
+import org.commonmark.ext.front.matter.YamlFrontMatterVisitor;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.publo.controller.ProjectBrowserController;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -49,13 +57,22 @@ public final class TemplateRenderer {
     /**
      * Renders the content in the default template.
      *
-     * @param template
-     * @param content of the main
-     * @return the markup
+     * @param template to render against
+     * @param markdown of the main
+     * @return the page markup
      */
-    public static String render(String template, String content) {
+    public static String render(final String template, final String markdown) {
+        final List<Extension> extensions
+                = Arrays.asList(YamlFrontMatterExtension.create());
+        final Parser parser = Parser.builder().extensions(extensions).build();
+        final Node document = parser.parse(markdown);
+        final YamlFrontMatterVisitor frontMatterVisitor
+                = new YamlFrontMatterVisitor();
+        document.accept(frontMatterVisitor);
+        final HtmlRenderer renderer = HtmlRenderer.builder().build();
+        final String markup = renderer.render(document);
         if (template == null || "".equals(template)) {
-            return content;
+            return markup;
         }
         LOGGER.log(Level.INFO, "Rendering content on template {0}", template);
         final FileTemplateResolver resolver = new FileTemplateResolver();
@@ -65,7 +82,14 @@ public final class TemplateRenderer {
         final TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(resolver);
         final Context context = new Context();
-        context.setVariable("main", content);
+        context.setVariable("main", markup);
+        frontMatterVisitor.getData().forEach((key, value) -> {
+            final StringBuilder values = new StringBuilder();
+            value.forEach((data) -> {
+                values.append(data);
+            });
+            context.setVariable(key, values.toString());
+        });
         return templateEngine.process(template, context);
     }
 

@@ -99,8 +99,7 @@ public class SiteExporter {
                     final String pageName = baseName + MARKUP_EXT;
                     final Path filePath = targetPath.resolveSibling(pageName);
                     final String markdown = new String(Files.readAllBytes(file));
-                    final String markup = MarkdownParser.parse(markdown);
-                    final String page = TemplateRenderer.render(template, markup);
+                    final String page = TemplateRenderer.render(template, markdown);
                     Files.write(filePath, page.getBytes());
                 } else {
                     final Path absFilePath = PROJECTS_PATH.resolve(file);
