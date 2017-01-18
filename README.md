@@ -1,7 +1,7 @@
 Publo
 =====
 
-*A cross-platform, distraction-less, markdown editor.*
+*A cross-platform, distraction-less, [markdown][markdownspec] editor.*
 
 Publo was built as part of a challenge a friend (John) made me. He commented on Java and Swing complaining about speed of development, especially when a Swing GUI was present.
 
@@ -92,6 +92,6 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 
-
+[markdownspec]: http://spec.commonmark.org/0.27/ "Publo markdown spec."
 [thymeleaf]: http://www.thymeleaf.org/index.html "Thymeleaf official website."
 [thymeleafdocs]: http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html
