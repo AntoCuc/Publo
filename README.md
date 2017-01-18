@@ -22,14 +22,16 @@ Publo users can perform the following operations on markdown files:
 
 ## Templates ##
 
-Publo supports the creation of custom templates.
+Publo supports the creation of custom templates via the [thymeleaf template engine][thymeleaf].
 
-Templates creation is very simple:
+To create a basic template:
 
 1. Create an html file - for example: `my-template.html`
 2. Place the attribute `th:utext="${main}"` in the tag containing your content
 3. Place the newly created template in the `publo-projects/templates` directory
 4. Select it from the drop-down to use it for preview and export
+
+Full documentation can be found on the [thymeleaf official docs][thymeleafdocs].
 
 ### A note on page metadata ###
 
@@ -49,7 +51,7 @@ description: Description of the page
 ---
 ```
 
-Populating the template with custom data  can be achieved with `th:utext="${<key>}"`.
+Populating the template with custom data  can be achieved with `th:utext="${<key>}"`. 
 
 Screenshot
 ----------
@@ -89,3 +91,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. 
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+
+
+[thymeleaf]: http://www.thymeleaf.org/index.html "Thymeleaf official website."
+[thymeleafdocs]: http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html
