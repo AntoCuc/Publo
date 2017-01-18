@@ -8,7 +8,7 @@
 
 <BorderPane id="BorderPane"
             xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="org.publo.controller.ProjectBrowserController">
+            fx:controller="org.publo.filebrowser.controller.FileBrowserController">
     <center>
         <TreeView fx:id="treeView"/>
     </center>
