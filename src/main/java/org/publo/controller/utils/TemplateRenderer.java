@@ -33,6 +33,7 @@ import org.commonmark.ext.front.matter.YamlFrontMatterVisitor;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.jsoup.Jsoup;
 import org.publo.controller.ProjectBrowserController;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -90,7 +91,8 @@ public final class TemplateRenderer {
             });
             context.setVariable(key, values.toString());
         });
-        return templateEngine.process(template, context);
+        final String html = templateEngine.process(template, context);
+        return Jsoup.parseBodyFragment(html).toString();
     }
 
 }
