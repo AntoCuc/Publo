@@ -11,16 +11,17 @@ Since then Publo was ported to JavaFX. The application is very simple in its cur
 
 The original principle of speed of development entailed that Publo's features are very limited and that is still the case.
 
-Publo users can perform the following operations on markdown files:
+Features
+--------
 
-* Open
-* Save
-* Edit
-* Preview
+* Edit markdown documents
+* HTML Preview
 * Apply custom templates
 * Export sites
+* Runs on Windows, OSX and Linux
 
-## Templates ##
+Templates 
+---------
 
 Publo supports the creation of custom templates via the [thymeleaf template engine][thymeleaf].
 
@@ -63,9 +64,16 @@ Download Publo
 
 Downloads of Publo are available on [GitHub releases](https://github.com/AntoCuc/Publo/releases).
 
-## Software Builds ##
+Run Publo
+-----------
 
-## Updates ##
+Running Publo only required a Java JRE 1.8 or greater
+
+Software Builds
+---------------
+
+Updates
+-------
 
 [![Dependency Status](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c)
 
