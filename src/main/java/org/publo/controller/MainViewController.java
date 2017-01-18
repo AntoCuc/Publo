@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.publo.controller.listener.ResourceChangeListener;
+import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
@@ -59,7 +59,7 @@ public final class MainViewController implements Initializable {
     private WebViewController webViewPaneController;
 
     @FXML
-    private ProjectBrowserController projectPaneController;
+    private FileBrowserController projectPaneController;
 
     /**
      * Initialises the controller class.
@@ -84,9 +84,9 @@ public final class MainViewController implements Initializable {
         final PageTemplate pageTemplate = new PageTemplate();
         final PageMarkup markup = new PageMarkup(pageTemplate);
 
-        source.getMarkdown().addListener(new ResourceChangeListener<>(markup));
-        source.getMarkdown().addListener(new ResourceChangeListener<>(textAreaPaneController));
-        markup.getMarkup().addListener(new ResourceChangeListener<>(webViewPaneController));
+        source.getMarkdown().addListener(new ResourceChangedListener<>(markup));
+        source.getMarkdown().addListener(new ResourceChangedListener<>(textAreaPaneController));
+        markup.getMarkup().addListener(new ResourceChangedListener<>(webViewPaneController));
         pageTemplate.getTemplate().addListener(
                 (ObservableValue<? extends String> observable, 
                         String oldValue, 

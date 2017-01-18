@@ -33,7 +33,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.publo.controller.ProjectBrowserController.PROJECTS_PATH;
+import static org.publo.controller.FileBrowserController.PROJECTS_PATH;
 
 /**
  * Exports the markdown to a site.

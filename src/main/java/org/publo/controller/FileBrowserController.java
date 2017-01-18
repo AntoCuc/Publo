@@ -39,7 +39,7 @@ import javafx.scene.control.TreeView;
 import org.publo.model.PageFile;
 import org.publo.controller.utils.EditableTreeCell;
 import org.publo.controller.utils.PathTreeItem;
-import org.publo.controller.listener.ResourceChangeListener;
+import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.controller.utils.TemplateRenderer;
 import org.publo.model.PageSource;
 
@@ -49,10 +49,10 @@ import org.publo.model.PageSource;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public class ProjectBrowserController implements Initializable {
+public class FileBrowserController implements Initializable {
 
     private static final Logger LOGGER
-            = Logger.getLogger(ProjectBrowserController.class.getName());
+            = Logger.getLogger(FileBrowserController.class.getName());
 
     private static final String USER_DIR = System.getProperty("user.home");
 
@@ -99,12 +99,12 @@ public class ProjectBrowserController implements Initializable {
      * Set a {@code CellFactory} facilitating the renaming of {@code TreeItems}.
      */
     void init(final PageSource source, final PageFile file) {
-        final ResourceChangeListener<TreeItem> sourceFileSelectedListener
-                = new ResourceChangeListener<>(source);
+        final ResourceChangedListener<TreeItem> sourceFileSelectedListener
+                = new ResourceChangedListener<>(source);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(sourceFileSelectedListener);
-        final ResourceChangeListener<TreeItem> treeItemChangeListener
-                = new ResourceChangeListener<>(file);
+        final ResourceChangedListener<TreeItem> treeItemChangeListener
+                = new ResourceChangedListener<>(file);
         treeView.getSelectionModel().selectedItemProperty()
                 .addListener(treeItemChangeListener);
         treeView.setRoot(TREE_ROOT);

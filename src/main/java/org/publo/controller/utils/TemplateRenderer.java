@@ -34,7 +34,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
-import org.publo.controller.ProjectBrowserController;
+import org.publo.controller.FileBrowserController;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -52,7 +52,7 @@ public final class TemplateRenderer {
             = Logger.getLogger(TemplateRenderer.class.getName());
 
     public static final String TEMPLATES_DIR
-            = ProjectBrowserController.PROJECTS_PATH + "/templates/";
+            = FileBrowserController.PROJECTS_PATH + "/templates/";
     private static final String TEMPLATE_SUFFIX = ".html";
 
     /**

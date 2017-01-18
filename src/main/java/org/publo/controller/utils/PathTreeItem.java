@@ -27,7 +27,7 @@ import org.publo.controller.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;
-import org.publo.controller.ProjectBrowserController;
+import org.publo.controller.FileBrowserController;
 
 /**
  * Defines a TreeItem representing a path in the file-system.
@@ -38,7 +38,7 @@ import org.publo.controller.ProjectBrowserController;
 public class PathTreeItem extends TreeItem {
 
     private static final PathTreeItem DEFAULT_TREE_ITEM
-            = new PathTreeItem("...", ProjectBrowserController.PROJECTS_PATH);
+            = new PathTreeItem("...", FileBrowserController.PROJECTS_PATH);
 
     private Path path;
 
