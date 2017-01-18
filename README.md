@@ -1,24 +1,28 @@
 Publo
 =====
 
-*A cross-platform, distraction-less, [markdown][markdownspec] editor.*
+*Publo enables web writers create great [markdown][markdownspec] content.*
 
-Publo was built as part of a challenge a friend (John) made me. He commented on Java and Swing complaining about speed of development, especially when a Swing GUI was present.
+The preview and export facility are the primary features of the editor that when combined with
+the ability to easily create templates allow you to design a unique user experience. 
+
+History
+-------
+
+The first version of Publo was built as part of a challenge. A friend commented on Java and Swing complaining about speed of development, especially when a Swing GUI was present.
 
 We bet a fancy coffee that I would be able to write and release a basic markdown editor on my train home (1.5 hours). Needless to say the challenge was accepted. Publo was born. The first few commits show Publo in its infancy.
 
-Since then Publo was ported to JavaFX. The application is very simple in its current form.
-
-The original principle of speed of development entailed that Publo's features are very limited and that is still the case.
+Since then Publo was ported to JavaFX 2.0.
 
 Features
 --------
 
-* Edit markdown documents
-* HTML Preview
-* Apply custom templates
-* Export sites
-* Runs on Windows, OSX and Linux
+* Editing markdown documents - Allows the creation of great content
+* Preview HTML - To view how your content looks before publishing it
+* Apply custom templates - to design your very own web UI
+* Export sites - To generate a site ready for upload
+* Run on Windows, OSX and Linux - Because every platform has something special <3
 
 Templates 
 ---------
@@ -32,13 +36,13 @@ To create a basic template:
 3. Place the newly created template in the `publo-projects/templates` directory
 4. Select it from the drop-down to use it for preview and export
 
-Full documentation can be found on the [thymeleaf official docs][thymeleafdocs].
+Full documentation can be found on the [thymeleaf official documentation][thymeleafdocs].
 
 ### A note on page metadata ###
 
 Markdown is a syntax that focuses primarily on the main content of the page.
 Hence, the use of the `main` attribute for template rendering.
-However, webpages, for a range of reasons, may contain useful metadata.
+However, webpages, for a range of reasons, may contain useful metadata (titles, descriptions, author tags ...).
 Publo uses YAML front matter for the definition of such metadata.
 Below an example of the syntax for front matter:
 
@@ -67,7 +71,13 @@ Downloads of Publo are available on [GitHub releases](https://github.com/AntoCuc
 Run Publo
 -----------
 
-Running Publo only required a Java JRE 1.8 or greater
+Running Publo only requires a Java JRE 1.8 or greater.
+
+You can download the version for your favourite operating system from the release tab.
+
+* On Windows -> double-click the executable.
+* On Mac -> Move the app to the Applications folder and run using finder
+* On Linux -> `java -jar publo.jar`
 
 Software Builds
 ---------------
