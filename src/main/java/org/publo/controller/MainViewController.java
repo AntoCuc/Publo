@@ -42,7 +42,7 @@ import org.publo.textarea.TextAreaPane;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class MainViewController implements Initializable {
+public final class MainViewController {
 
     /**
      * The {@code MainViewController} logger.
@@ -71,11 +71,9 @@ public final class MainViewController implements Initializable {
      * Change ... TextArea Change -> Source Change -> Markup Change ... Template
      * Change -> Markup Change ... Markup Change -> WebView Update
      *
-     * @param url
-     * @param rb
      */
-    @Override
-    public final void initialize(final URL url, final ResourceBundle rb) {
+    @FXML
+    public final void initialize() {
         LOGGER.info("Initialising the Main View");
 
         final PageTemplate pageTemplate = new PageTemplate();

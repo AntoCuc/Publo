@@ -65,7 +65,7 @@ public class TextAreaPane extends BorderPane implements ChangeListener {
      */
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-        if (!oldValue.equals(newValue)) {
+        if (oldValue!= null && !oldValue.equals(newValue)) {
             PathTreeItem pathTreeItem = (PathTreeItem) newValue;
             final String fileContent = FileUtils.readFileContent(pathTreeItem.getPath());
             textArea.textProperty().setValue(fileContent);
