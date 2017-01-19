@@ -23,17 +23,9 @@
  */
 package org.publo.filebrowser.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.publo.model.PageFile;
@@ -49,10 +41,7 @@ import org.publo.model.PageSource;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public class FileBrowserController implements Initializable {
-
-    private static final Logger LOGGER
-            = Logger.getLogger(FileBrowserController.class.getName());
+public class FileBrowserController {
 
     private static final String USER_DIR = System.getProperty("user.home");
 
@@ -66,26 +55,6 @@ public class FileBrowserController implements Initializable {
 
     @FXML
     private TreeView<String> treeView;
-
-    /**
-     * Initialises the controller class.
-     *
-     * Creates the projects and templates directory if it doesn't exist.
-     *
-     * @param url
-     * @param rb
-     */
-    @Override
-    public void initialize(final URL url, final ResourceBundle rb) {
-        if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
-            try {
-                Files.createDirectories(PROJECTS_PATH);
-                Files.createDirectories(TEMPLATES_PATH);
-            } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-    }
 
     /**
      * Initialise the project browser TreeItems using the projects directory as

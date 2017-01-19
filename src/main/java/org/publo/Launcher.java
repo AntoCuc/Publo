@@ -23,13 +23,20 @@
  */
 package org.publo;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import static org.publo.filebrowser.controller.FileBrowserController.PROJECTS_PATH;
+import static org.publo.filebrowser.controller.FileBrowserController.TEMPLATES_PATH;
 
 /**
  * JavaFX Application Launcher.
@@ -39,10 +46,22 @@ import javafx.stage.Stage;
  */
 public class Launcher extends Application {
 
+    private static final Logger LOGGER
+            = Logger.getLogger(Launcher.class.getName());
+
     private static final String APP_NAME = "Publo";
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
+        if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
+            try {
+                Files.createDirectories(PROJECTS_PATH);
+                Files.createDirectories(TEMPLATES_PATH);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
+        }
+
         primaryStage.setTitle(APP_NAME);
         InputStream imgStream = Launcher.class.getResourceAsStream("/media/page_white.png");
         primaryStage.getIcons().add(new Image(imgStream));
