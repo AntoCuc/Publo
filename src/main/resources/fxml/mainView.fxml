@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.publo.filebrowser.*?>
+<?import org.publo.textarea.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
@@ -16,7 +17,6 @@
     <center>
         <SplitPane dividerPositions="0.25" >
             <items>
-                <!-- <fx:include fx:id="projectPane" source="fileBrowser.fxml"/> -->
                 <FileBrowserPane fx:id="fileBrowserPane" />
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
@@ -25,10 +25,7 @@
                     <rowConstraints>
                         <RowConstraints percentHeight="100"/> 
                     </rowConstraints>
-                    <fx:include fx:id="textAreaPane" 
-                                source="textArea.fxml" 
-                                GridPane.columnIndex="0" 
-                                GridPane.rowIndex="0"/>
+                    <TextAreaPane fx:id="textAreaPane" />
                     <fx:include fx:id="webViewPane" 
                                 source="webView.fxml" 
                                 GridPane.columnIndex="1" 

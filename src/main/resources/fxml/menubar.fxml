@@ -32,18 +32,6 @@
                             </graphic>
                         </MenuItem>
                         <SeparatorMenuItem />
-                        <MenuItem onAction="#open" text="Open">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                            </accelerator>
-                            <graphic>
-                                <ImageView>
-                                    <image>
-                                        <Image url="media/folder.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </MenuItem>
                         <MenuItem onAction="#save" text="Save">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

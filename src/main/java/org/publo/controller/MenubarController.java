@@ -37,7 +37,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -51,8 +50,8 @@ import static org.publo.Launcher.PROJECTS_PATH;
 import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.model.PageFile;
-import org.publo.model.PageSource;
 import org.publo.model.PageTemplate;
+import org.publo.textarea.TextAreaPane;
 
 /**
  * Event flow coordinating controller.
@@ -76,7 +75,7 @@ public class MenubarController {
     /**
      * The currently loaded markdown {@code PageSource}.
      */
-    private PageSource source;
+    private TextAreaPane textAreaPane;
 
     /**
      * The currently set {@code PageTemplate}
@@ -107,22 +106,6 @@ public class MenubarController {
     }
 
     @FXML
-    public void open() {
-        FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(MD_FILTER);
-        File file = chooser.showOpenDialog(menuBar.getScene().getWindow());
-        if (file != null) {
-            try {
-                source.getMarkdown().setValue(Files.readAllLines(file.toPath())
-                        .stream().collect(Collectors.joining(LINE_SEP)));
-                sourceFile.setLocation(file.toPath());
-            } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    @FXML
     public void save() {
         Path filePath;
         if (sourceFile.getLocation() == null) {
@@ -138,7 +121,7 @@ public class MenubarController {
         }
         try {
             if (Files.isRegularFile(filePath)) {
-                Files.write(filePath, source.getMarkdown().getValue().getBytes());
+                Files.write(filePath, textAreaPane.getText().getBytes());
             }
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -178,10 +161,10 @@ public class MenubarController {
     }
 
     void init(
-            final PageSource source,
+            final TextAreaPane textAreaPane,
             final PageTemplate template,
             final PageFile asset) {
-        this.source = source;
+        this.textAreaPane = textAreaPane;
         this.template = template;
         this.sourceFile = asset;
         this.loadTemplates();

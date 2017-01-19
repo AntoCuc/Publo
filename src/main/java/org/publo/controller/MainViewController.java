@@ -23,18 +23,24 @@
  */
 package org.publo.controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.filebrowser.FileBrowserPane;
+import org.publo.filebrowser.utils.PathTreeItem;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
-import org.publo.model.PageSource;
 import org.publo.model.PageTemplate;
+import org.publo.textarea.TextAreaPane;
 
 /**
  * Event flow coordinating controller.
@@ -50,11 +56,17 @@ public final class MainViewController implements Initializable {
     private static final Logger LOGGER
             = Logger.getLogger(MainViewController.class.getName());
 
+    /**
+     * OS-independent line separator.
+     */
+    private static final String LINE_SEP
+            = System.getProperty("line.separator");
+
     @FXML
     private MenubarController menubarPaneController;
 
     @FXML
-    private TextAreaController textAreaPaneController;
+    private TextAreaPane textAreaPane;
 
     @FXML
     private WebViewController webViewPaneController;
@@ -77,25 +89,34 @@ public final class MainViewController implements Initializable {
     @Override
     public final void initialize(final URL url, final ResourceBundle rb) {
         LOGGER.info("Initialising the Main View");
-        final PageSource source = new PageSource();
-        textAreaPaneController.init(source.getMarkdown());
 
         final PageTemplate pageTemplate = new PageTemplate();
         final PageMarkup markup = new PageMarkup(pageTemplate);
 
-        source.getMarkdown().addListener(new ResourceChangedListener<>(markup));
-        source.getMarkdown().addListener(new ResourceChangedListener<>(textAreaPaneController));
+        textAreaPane.addTextChangeListener(new ResourceChangedListener<>(markup));
         markup.getMarkup().addListener(new ResourceChangedListener<>(webViewPaneController));
         pageTemplate.getTemplate().addListener(
                 (ObservableValue<? extends String> observable,
                         String oldValue,
                         String newValue) -> {
-                    markup.update(source.getMarkdown().getValue());
+                    markup.update(textAreaPane.getText());
                 });
 
         final PageFile file = new PageFile();
-        menubarPaneController.init(source, pageTemplate, file);
-        fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(source));
+        menubarPaneController.init(textAreaPane, pageTemplate, file);
+        fileBrowserPane.addTreeItemSelectionListener(
+                (ChangeListener) (ObservableValue observable,
+                        Object oldValue,
+                        Object newValue) -> {
+                    PathTreeItem newPath = (PathTreeItem) newValue;
+                    try {
+                        textAreaPane
+                        .updateText(Files.readAllLines(newPath.getPath())
+                                .stream().collect(Collectors.joining(LINE_SEP)));
+                    } catch (IOException ex) {
+                        LOGGER.log(Level.SEVERE, null, ex);
+                    }
+                });
         fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
     }
 }

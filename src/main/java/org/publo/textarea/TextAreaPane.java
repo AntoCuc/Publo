@@ -21,50 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller;
+package org.publo.textarea;
 
 import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextArea;
-import org.publo.controller.utils.Updatable;
+import javafx.scene.layout.BorderPane;
 
 /**
- * Event flow coordinating controller.
+ * A {@code BorderPane} {@code TextArea}.
  *
  * @author Antonio Cucchiara
- * @since 0.1
+ * @since 0.3
  */
-public final class TextAreaController implements Updatable<String> {
+public class TextAreaPane extends BorderPane {
 
-    private StringProperty markdown;
+    private final TextArea textArea;
 
-    @FXML
-    private TextArea textArea;
-
-    public TextArea getTextArea() {
-        return textArea;
+    public TextAreaPane() {
+        this.textArea = new TextArea();
+        this.textArea.setWrapText(true);
+        this.setCenter(this.textArea);
     }
 
-    public void init(StringProperty md) {
-        markdown = md;
+    public void addTextChangeListener(ChangeListener<String> listener) {
+        this.textArea.textProperty().addListener(listener);
     }
 
-    /**
-     * Invoke by the UI at every change performed on the TextArea.
-     */
-    public final void updateMarkdown() {
-        markdown.setValue(textArea.getText());
-    }
-
-    /**
-     * Updates if necessary.
-     *
-     * @param to update
-     */
-    @Override
-    public void update(String to) {
-        if (!to.equals(textArea.getText())) {
-            textArea.setText(to);
+    public void updateText(final String newValue) {
+        final StringProperty textProperty = this.textArea.textProperty();
+        if (textProperty.isNotEqualTo(newValue).getValue()) {
+            textProperty.setValue(newValue);
         }
+    }
+    
+    public String getText() {
+        return this.textArea.textProperty().getValue();
     }
 }
