@@ -29,9 +29,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import org.publo.Launcher;
-import org.publo.filebrowser.controller.listener.EditableTreeCell;
-import org.publo.filebrowser.controller.utils.FileTreeView;
-import org.publo.filebrowser.controller.utils.PathTreeItem;
+import org.publo.filebrowser.listener.EditableTreeCell;
+import org.publo.filebrowser.utils.FileTreeView;
+import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * A {@code BorderPane} with file browsing capabilities. It allows the addition

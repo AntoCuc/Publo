@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.filebrowser.controller.utils;
+package org.publo.filebrowser.utils;
 
-import org.publo.filebrowser.controller.listener.DirectoryExpandedListener;
+import org.publo.filebrowser.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.scene.control.TreeItem;

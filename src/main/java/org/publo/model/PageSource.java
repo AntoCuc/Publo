@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
-import org.publo.filebrowser.controller.utils.PathTreeItem;
+import org.publo.filebrowser.utils.PathTreeItem;
 import org.publo.controller.utils.Updatable;
 
 /**

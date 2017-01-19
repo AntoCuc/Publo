@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.filebrowser.controller.listener;
+package org.publo.filebrowser.listener;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,8 +34,8 @@ import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.publo.filebrowser.controller.utils.FileSystemWatcher;
-import org.publo.filebrowser.controller.utils.PathTreeItem;
+import org.publo.filebrowser.utils.FileSystemWatcher;
+import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * Listener concerning the expansion of directory-representing TreeItems. On
