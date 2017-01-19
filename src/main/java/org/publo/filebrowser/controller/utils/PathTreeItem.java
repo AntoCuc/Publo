@@ -41,6 +41,10 @@ public class PathTreeItem extends TreeItem {
             = new PathTreeItem("...", PROJECTS_PATH);
 
     private Path path;
+    
+    public PathTreeItem(final Path path) {
+        this(path.getFileName().toString(), path);
+    }
 
     public PathTreeItem(String label, Path path) {
         super(label);

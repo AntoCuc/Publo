@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.publo.filebrowser.controller.FileBrowserController;
 import org.publo.filebrowser.controller.utils.FileSystemWatcher;
 import org.publo.filebrowser.controller.utils.PathTreeItem;
 
@@ -60,7 +59,7 @@ public class DirectoryExpandedListener implements ChangeListener<Boolean> {
      * The {@code DirectoryExpendedListener} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(FileBrowserController.class.getName());
+            = Logger.getLogger(DirectoryExpandedListener.class.getName());
 
     @Override
     public void changed(

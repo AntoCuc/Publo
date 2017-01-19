@@ -5,6 +5,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.publo.filebrowser.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
@@ -15,7 +16,8 @@
     <center>
         <SplitPane dividerPositions="0.25" >
             <items>
-                <fx:include fx:id="projectPane" source="fileBrowser.fxml"/>
+                <!-- <fx:include fx:id="projectPane" source="fileBrowser.fxml"/> -->
+                <FileBrowser fx:id="fileBrowser" />
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="50" />

@@ -23,14 +23,15 @@
  */
 package org.publo.controller;
 
-import org.publo.filebrowser.controller.FileBrowserController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import org.publo.Launcher;
 import org.publo.controller.listener.ResourceChangedListener;
+import org.publo.filebrowser.FileBrowser;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
@@ -60,7 +61,7 @@ public final class MainViewController implements Initializable {
     private WebViewController webViewPaneController;
 
     @FXML
-    private FileBrowserController projectPaneController;
+    private FileBrowser fileBrowser;
 
     /**
      * Initialises the controller class.
@@ -97,6 +98,8 @@ public final class MainViewController implements Initializable {
 
         final PageFile file = new PageFile();
         menubarPaneController.init(source, pageTemplate, file);
-        projectPaneController.init(source, file);
+        fileBrowser.addSelectionListener(new ResourceChangedListener<>(source));
+        fileBrowser.addSelectionListener(new ResourceChangedListener<>(file));
+        fileBrowser.setRoot(Launcher.PROJECTS_PATH);
     }
 }
