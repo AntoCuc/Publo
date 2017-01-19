@@ -23,16 +23,14 @@
  */
 package org.publo.filebrowser.controller;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.publo.Launcher;
 import org.publo.model.PageFile;
 import org.publo.filebrowser.controller.listener.EditableTreeCell;
 import org.publo.filebrowser.controller.utils.PathTreeItem;
 import org.publo.controller.listener.ResourceChangedListener;
-import org.publo.controller.utils.TemplateRenderer;
 import org.publo.model.PageSource;
 
 /**
@@ -43,15 +41,8 @@ import org.publo.model.PageSource;
  */
 public class FileBrowserController {
 
-    private static final String USER_DIR = System.getProperty("user.home");
-
-    private static final String PROJ_DIR_NAME = "publo-projects";
-
-    public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
-
-    public static final Path TEMPLATES_PATH = Paths.get(TemplateRenderer.TEMPLATES_DIR);
-
-    private static final PathTreeItem TREE_ROOT = new PathTreeItem(PROJ_DIR_NAME, PROJECTS_PATH);
+    private static final PathTreeItem TREE_ROOT
+            = new PathTreeItem(Launcher.PROJ_DIR_NAME, Launcher.PROJECTS_PATH);
 
     @FXML
     private TreeView<String> treeView;

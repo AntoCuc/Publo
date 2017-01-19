@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -35,8 +37,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import static org.publo.filebrowser.controller.FileBrowserController.PROJECTS_PATH;
-import static org.publo.filebrowser.controller.FileBrowserController.TEMPLATES_PATH;
+import org.publo.controller.utils.TemplateRenderer;
 
 /**
  * JavaFX Application Launcher.
@@ -50,6 +51,18 @@ public class Launcher extends Application {
             = Logger.getLogger(Launcher.class.getName());
 
     private static final String APP_NAME = "Publo";
+    
+    /**
+     * Directories
+     */
+    private static final String USER_DIR = System.getProperty("user.home");
+    public static final String PROJ_DIR_NAME = "publo-projects";
+    
+    /**
+     * Paths
+     */
+    public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
+    public static final Path TEMPLATES_PATH = Paths.get(TemplateRenderer.TEMPLATES_DIR);
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
