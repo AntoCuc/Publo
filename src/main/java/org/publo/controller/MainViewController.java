@@ -23,20 +23,14 @@
  */
 package org.publo.controller;
 
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.filebrowser.FileBrowserPane;
-import org.publo.filebrowser.utils.PathTreeItem;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageTemplate;
@@ -55,12 +49,6 @@ public final class MainViewController implements Initializable {
      */
     private static final Logger LOGGER
             = Logger.getLogger(MainViewController.class.getName());
-
-    /**
-     * OS-independent line separator.
-     */
-    private static final String LINE_SEP
-            = System.getProperty("line.separator");
 
     @FXML
     private MenubarController menubarPaneController;
@@ -104,19 +92,7 @@ public final class MainViewController implements Initializable {
 
         final PageFile file = new PageFile();
         menubarPaneController.init(textAreaPane, pageTemplate, file);
-        fileBrowserPane.addTreeItemSelectionListener(
-                (ChangeListener) (ObservableValue observable,
-                        Object oldValue,
-                        Object newValue) -> {
-                    PathTreeItem newPath = (PathTreeItem) newValue;
-                    try {
-                        textAreaPane
-                        .updateText(Files.readAllLines(newPath.getPath())
-                                .stream().collect(Collectors.joining(LINE_SEP)));
-                    } catch (IOException ex) {
-                        LOGGER.log(Level.SEVERE, null, ex);
-                    }
-                });
+        fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
         fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
     }
 }

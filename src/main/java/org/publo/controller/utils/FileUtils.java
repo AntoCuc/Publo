@@ -23,6 +23,14 @@
  */
 package org.publo.controller.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import org.publo.controller.MainViewController;
+
 /**
  * Holds File utilities.
  *
@@ -30,6 +38,18 @@ package org.publo.controller.utils;
  * @since 0.3
  */
 public class FileUtils {
+
+    /**
+     * The {@code FileUtils} logger.
+     */
+    private static final Logger LOGGER
+            = Logger.getLogger(MainViewController.class.getName());
+
+    /**
+     * OS-independent line separator.
+     */
+    private static final String LINE_SEP
+            = System.getProperty("line.separator");
 
     /**
      * Retrieves the base name of a file given its full name.
@@ -58,6 +78,24 @@ public class FileUtils {
             return "";
         } else {
             return fileName.substring(index, fileName.length());
+        }
+    }
+
+    /**
+     * Read a file content {@code String} based on {@code Path}
+     *
+     * @param filePath
+     * @return the file content
+     */
+    public static String readFileContent(Path filePath) {
+        try {
+            return Files
+                    .readAllLines(filePath)
+                    .stream()
+                    .collect(Collectors.joining(LINE_SEP));
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Could not read file.", ex);
+            return "";
         }
     }
 }

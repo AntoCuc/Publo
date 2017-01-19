@@ -25,8 +25,11 @@ package org.publo.textarea;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import org.publo.controller.utils.FileUtils;
+import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * A {@code BorderPane} {@code TextArea}.
@@ -34,7 +37,7 @@ import javafx.scene.layout.BorderPane;
  * @author Antonio Cucchiara
  * @since 0.3
  */
-public class TextAreaPane extends BorderPane {
+public class TextAreaPane extends BorderPane implements ChangeListener {
 
     private final TextArea textArea;
 
@@ -48,14 +51,24 @@ public class TextAreaPane extends BorderPane {
         this.textArea.textProperty().addListener(listener);
     }
 
-    public void updateText(final String newValue) {
-        final StringProperty textProperty = this.textArea.textProperty();
-        if (textProperty.isNotEqualTo(newValue).getValue()) {
-            textProperty.setValue(newValue);
-        }
-    }
-    
     public String getText() {
         return this.textArea.textProperty().getValue();
+    }
+
+    /**
+     * On Selection of a new {@code PathTreeItem} on the file browser. Reload
+     * the content of the {@code TextArea}.
+     *
+     * @param observable not used
+     * @param oldValue used to verify the presence of changes
+     * @param newValue populate the area
+     */
+    @Override
+    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        if (!oldValue.equals(newValue)) {
+            PathTreeItem pathTreeItem = (PathTreeItem) newValue;
+            final String fileContent = FileUtils.readFileContent(pathTreeItem.getPath());
+            textArea.textProperty().setValue(fileContent);
+        }
     }
 }
