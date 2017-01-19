@@ -100,6 +100,5 @@ public final class MainViewController implements Initializable {
         menubarPaneController.init(source, pageTemplate, file);
         fileBrowser.addSelectionListener(new ResourceChangedListener<>(source));
         fileBrowser.addSelectionListener(new ResourceChangedListener<>(file));
-        fileBrowser.setRoot(Launcher.PROJECTS_PATH);
     }
 }
