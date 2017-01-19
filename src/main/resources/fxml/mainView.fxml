@@ -15,7 +15,7 @@
     <center>
         <SplitPane dividerPositions="0.25" >
             <items>
-                <fx:include fx:id="projectPane" source="projectBrowser.fxml"/>
+                <fx:include fx:id="projectPane" source="fileBrowser.fxml"/>
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="50" />
