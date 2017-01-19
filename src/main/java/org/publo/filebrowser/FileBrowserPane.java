@@ -34,23 +34,32 @@ import org.publo.filebrowser.controller.utils.FileTreeView;
 import org.publo.filebrowser.controller.utils.PathTreeItem;
 
 /**
+ * A {@code BorderPane} with file browsing capabilities. It allows the addition
+ * of selection {@code ChangeListener}s so to maintain models relevant and
+ * provides basic file manipulation facilities.
+ *
+ * Creating a standalone FileBrowserPane would allow for its abstraction in a
+ * reusable JavaFX {@code Pane}.
+ *
+ * The only TODO is to work out a sensible API that could allow the delay in
+ * creation and initialisation of the {@code TreeView} in a custom {@code Path}.
  *
  * @author Antonio Cucchiara
- * @since 0.2
+ * @since 0.3
  */
-public final class FileBrowser extends BorderPane {
+public final class FileBrowserPane extends BorderPane {
 
     private final TreeView<String> treeView;
 
-    public FileBrowser() {
+    public FileBrowserPane() {
         this(Launcher.PROJECTS_PATH);
     }
 
-    public FileBrowser(final String rootPathString) {
+    public FileBrowserPane(final String rootPathString) {
         this(Paths.get(rootPathString));
     }
 
-    public FileBrowser(final Path rootPath) {
+    public FileBrowserPane(final Path rootPath) {
         this.treeView = new FileTreeView<>(new PathTreeItem(rootPath));
         this.treeView.setEditable(true);
         this.treeView.setShowRoot(false);
@@ -60,12 +69,12 @@ public final class FileBrowser extends BorderPane {
         );
         this.setCenter(this.treeView);
     }
-    
+
     public void setRoot(final Path newRoot) {
         this.treeView.setRoot(new PathTreeItem(newRoot));
     }
 
-    public final void addSelectionListener(ChangeListener listener) {
+    public final void addTreeItemSelectionListener(ChangeListener listener) {
         this.treeView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(listener);

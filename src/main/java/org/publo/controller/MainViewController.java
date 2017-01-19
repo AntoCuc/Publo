@@ -29,9 +29,8 @@ import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.publo.Launcher;
 import org.publo.controller.listener.ResourceChangedListener;
-import org.publo.filebrowser.FileBrowser;
+import org.publo.filebrowser.FileBrowserPane;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageSource;
@@ -61,18 +60,16 @@ public final class MainViewController implements Initializable {
     private WebViewController webViewPaneController;
 
     @FXML
-    private FileBrowser fileBrowser;
+    private FileBrowserPane fileBrowserPane;
 
     /**
      * Initialises the controller class.
      *
      * Bootstraps the <code>ChangeListener</code> chain.
      *
-     * Listeners Chain:
-     * File Selection Change -> Source Change -> TextArea Change ...
-     * TextArea Change -> Source Change -> Markup Change ...
-     * Template Change -> Markup Change ...
-     * Markup Change -> WebView Update
+     * Listeners Chain: File Selection Change -> Source Change -> TextArea
+     * Change ... TextArea Change -> Source Change -> Markup Change ... Template
+     * Change -> Markup Change ... Markup Change -> WebView Update
      *
      * @param url
      * @param rb
@@ -90,15 +87,15 @@ public final class MainViewController implements Initializable {
         source.getMarkdown().addListener(new ResourceChangedListener<>(textAreaPaneController));
         markup.getMarkup().addListener(new ResourceChangedListener<>(webViewPaneController));
         pageTemplate.getTemplate().addListener(
-                (ObservableValue<? extends String> observable, 
-                        String oldValue, 
+                (ObservableValue<? extends String> observable,
+                        String oldValue,
                         String newValue) -> {
-            markup.update(source.getMarkdown().getValue());
-        });
+                    markup.update(source.getMarkdown().getValue());
+                });
 
         final PageFile file = new PageFile();
         menubarPaneController.init(source, pageTemplate, file);
-        fileBrowser.addSelectionListener(new ResourceChangedListener<>(source));
-        fileBrowser.addSelectionListener(new ResourceChangedListener<>(file));
+        fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(source));
+        fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
     }
 }
