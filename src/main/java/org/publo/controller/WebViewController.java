@@ -38,7 +38,7 @@ import org.publo.controller.utils.Updatable;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class WebViewController implements Initializable, Updatable<String> {
+public class WebViewController implements Updatable<String> {
 
     /**
      * The {@code PageMarkup} logger.
@@ -48,10 +48,6 @@ public class WebViewController implements Initializable, Updatable<String> {
 
     @FXML
     private WebView webView;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    }
 
     /**
      * Update the {@code WebView} rendering the content.

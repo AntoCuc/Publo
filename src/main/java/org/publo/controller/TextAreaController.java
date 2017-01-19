@@ -23,11 +23,8 @@
  */
 package org.publo.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import org.publo.controller.utils.Updatable;
 
@@ -37,7 +34,7 @@ import org.publo.controller.utils.Updatable;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class TextAreaController implements Initializable, Updatable<String> {
+public final class TextAreaController implements Updatable<String> {
 
     private StringProperty markdown;
 
@@ -46,16 +43,6 @@ public final class TextAreaController implements Initializable, Updatable<String
 
     public TextArea getTextArea() {
         return textArea;
-    }
-
-    /**
-     * Initialises the controller class.
-     *
-     * @param url
-     * @param rb
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
     }
 
     public void init(StringProperty md) {

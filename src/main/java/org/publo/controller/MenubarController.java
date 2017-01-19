@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -36,7 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -44,7 +42,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
@@ -63,7 +60,7 @@ import org.publo.model.PageTemplate;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class MenubarController implements Initializable {
+public class MenubarController {
 
     private static final Logger LOGGER
             = Logger.getLogger(MenubarController.class.getName());
@@ -96,13 +93,6 @@ public class MenubarController implements Initializable {
 
     @FXML
     private Menu templateMenu;
-
-    /**
-     * Initialises the controller class.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
 
     @FXML
     public void newProject() throws IOException {
