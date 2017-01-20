@@ -37,6 +37,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -50,7 +51,6 @@ import static org.publo.Launcher.PROJECTS_PATH;
 import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.model.PageFile;
-import org.publo.model.PageTemplate;
 import org.publo.textarea.TextAreaPane;
 
 /**
@@ -67,8 +67,6 @@ public class MenubarController {
     private static final String ABOUT_LINK
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
-    private static final String LINE_SEP = System.getProperty("line.separator");
-
     private static final FileChooser.ExtensionFilter MD_FILTER
             = new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
 
@@ -78,9 +76,9 @@ public class MenubarController {
     private TextAreaPane textAreaPane;
 
     /**
-     * The currently set {@code PageTemplate}
+     * The currently set template {@code StringProperty}
      */
-    private PageTemplate template;
+    private StringProperty template;
 
     /**
      * The currently selected {@code PageFile}.
@@ -151,18 +149,18 @@ public class MenubarController {
     @FXML
     public void setTemplate(ActionEvent event) {
         RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
-        template.getTemplate().setValue(radioMenuItem.getText());
+        template.setValue(radioMenuItem.getText());
     }
 
     @FXML
     public void exportSite() throws IOException {
-        final String selectedTemplate = template.getTemplate().getValue();
+        final String selectedTemplate = template.getValue();
         SiteExporter.export(selectedTemplate);
     }
 
     void init(
             final TextAreaPane textAreaPane,
-            final PageTemplate template,
+            final StringProperty template,
             final PageFile asset) {
         this.textAreaPane = textAreaPane;
         this.template = template;

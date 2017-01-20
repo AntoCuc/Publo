@@ -30,7 +30,6 @@ import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.filebrowser.FileBrowserPane;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
-import org.publo.model.PageTemplate;
 import org.publo.preview.PreviewPane;
 import org.publo.textarea.TextAreaPane;
 
@@ -76,8 +75,8 @@ public final class MainViewController {
 
         final PageMarkup markup = new PageMarkup();
         textAreaPane.addTextChangeListener(new ResourceChangedListener<>(markup));
-        markup.getMarkup().addListener(previewPane);
-        markup.getTemplate().getTemplate().addListener(
+        markup.getMarkupProperty().addListener(previewPane);
+        markup.getTemplateProperty().addListener(
                 (ObservableValue<? extends String> observable,
                         String oldValue,
                         String newValue) -> {
@@ -85,7 +84,7 @@ public final class MainViewController {
                 });
 
         final PageFile file = new PageFile();
-        menubarPaneController.init(textAreaPane, markup.getTemplate(), file);
+        menubarPaneController.init(textAreaPane, markup.getTemplateProperty(), file);
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
         fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
     }

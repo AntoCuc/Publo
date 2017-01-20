@@ -31,8 +31,8 @@ import org.publo.controller.utils.TemplateRenderer;
 import org.publo.controller.utils.Updatable;
 
 /**
- * PageMarkup core model. Holds state concerning the markup rendered and the
- * template to apply on preview.
+ * PageMarkup core model. Holds state concerning the markupProperty rendered and the
+ template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
@@ -45,23 +45,16 @@ public final class PageMarkup implements Updatable<String> {
     private static final Logger LOGGER
             = Logger.getLogger(PageMarkup.class.getName());
 
-    /**
-     * The template to be applied on rendering.
-     */
-    private final PageTemplate pageTemplate;
+    private final StringProperty templateProperty = new SimpleStringProperty("Default");
 
-    private final StringProperty markup = new SimpleStringProperty("");
+    private final StringProperty markupProperty = new SimpleStringProperty("");
 
-    public PageMarkup() {
-        this.pageTemplate = new PageTemplate();
+    public StringProperty getMarkupProperty() {
+        return markupProperty;
     }
 
-    public StringProperty getMarkup() {
-        return markup;
-    }
-    
-    public PageTemplate getTemplate() {
-        return pageTemplate;
+    public StringProperty getTemplateProperty() {
+        return templateProperty;
     }
 
     /**
@@ -73,7 +66,7 @@ public final class PageMarkup implements Updatable<String> {
     public void update(final String markdown) {
         LOGGER.log(Level.INFO, "Updating markup");
         final String renderedMarkup = TemplateRenderer.render(
-                pageTemplate.getTemplate().getValue(), markdown);
-        markup.setValue(renderedMarkup);
+                templateProperty.getValue(), markdown);
+        markupProperty.setValue(renderedMarkup);
     }
 }
