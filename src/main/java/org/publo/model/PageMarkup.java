@@ -64,17 +64,12 @@ public final class PageMarkup implements Updatable<String> {
      * Parses the markdown and renders it to a template.
      *
      * @param markdown to render
-     * @return the populated, rendered template
      */
-    public String render(final String markdown) {
-        LOGGER.info("Rendering the markup.");
-        return TemplateRenderer.render(
-                pageTemplate.getTemplate().getValue(), markdown);
-    }
-
     @Override
-    public void update(final String newSource) {
+    public void update(final String markdown) {
         LOGGER.log(Level.INFO, "Updating markup");
-        markup.setValue(render(newSource));
+        final String renderedMarkup = TemplateRenderer.render(
+                pageTemplate.getTemplate().getValue(), markdown);
+        markup.setValue(renderedMarkup);
     }
 }
