@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  * Thread watching the registered paths.
@@ -111,12 +112,14 @@ public class FileSystemWatcher extends Thread {
                                 = new PathTreeItem(label, absPath);
                         children.add(newItem);
                     } else if (ENTRY_DELETE.equals(kind)) {
-                        for (int i = 0; i < children.size(); i++) {
-                            final PathTreeItem child = children.get(i);
-                            if (absPath.equals(child.getPath())) {
-                                children.remove(i);
+                        Platform.runLater(() -> {
+                            for (int i = 0; i < children.size(); i++) {
+                                final PathTreeItem child = children.get(i);
+                                if (absPath.equals(child.getPath())) {
+                                    children.remove(i);
+                                }
                             }
-                        }
+                        });
                     }
                 }
                 key.reset();

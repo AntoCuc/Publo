@@ -26,18 +26,28 @@ package org.publo.filebrowser.utils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.publo.controller.utils.Movable;
 
 /**
+ * A {@code TreeView} representing the file {@code FileSystem}.
  *
  * @author Antonio Cucchiara
- * @param <T>
+ * @param <T> The type of the item contained within the {@link TreeItem} value.
  * @since 0.3
  */
 public class FileTreeView<T> extends TreeView<T> implements Movable {
@@ -59,6 +69,43 @@ public class FileTreeView<T> extends TreeView<T> implements Movable {
                     LOGGER.log(Level.INFO, "Selected file {0}", selectedPath);
                     currentPath = selectedPath;
                 });
+
+        final MenuItem newFileMenuItem = new MenuItem("New");
+        newFileMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
+            final Path newFilePath = Paths.get(
+                    this.currentPath.toString(),
+                    "New File.md"
+            );
+            try {
+                Files.createFile(newFilePath);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to create new file", ex);
+            }
+        });
+        final MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
+            Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm file deletion");
+            confirmationAlert.setHeaderText("Warning!");
+            confirmationAlert.setContentText(
+                    "Are you sure you want to permanently delete "
+                    + currentPath.getFileName()
+                    + "?");
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            if (result.isPresent() && ButtonType.OK == result.get()) {
+                try {
+                    Files.deleteIfExists(currentPath);
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE,
+                            "Unable to delete " + currentPath, ex);
+                }
+            }
+        });
+        final ContextMenu contextMenu = new ContextMenu(
+                newFileMenuItem,
+                deleteMenuItem
+        );
+        this.setContextMenu(contextMenu);
     }
 
     @Override
