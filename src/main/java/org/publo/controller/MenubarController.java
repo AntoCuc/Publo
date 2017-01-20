@@ -28,29 +28,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import static org.publo.Launcher.PROJECTS_PATH;
-import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.filebrowser.utils.PathTreeItem;
 import org.publo.textarea.TextAreaPane;
@@ -78,20 +67,12 @@ public final class MenubarController implements ChangeListener {
     private TextAreaPane textAreaPane;
 
     /**
-     * The currently set template {@code StringProperty}
-     */
-    private StringProperty template;
-
-    /**
      * The currently selected {@code Path}.
      */
     private Path activePath;
 
     @FXML
     private MenuBar menuBar;
-
-    @FXML
-    private Menu templateMenu;
 
     @FXML
     public void newProject() throws IOException {
@@ -150,50 +131,12 @@ public final class MenubarController implements ChangeListener {
     }
 
     @FXML
-    public void setTemplate(ActionEvent event) {
-        RadioMenuItem radioMenuItem = (RadioMenuItem) event.getSource();
-        template.setValue(radioMenuItem.getText());
-    }
-
-    @FXML
     public void exportSite() throws IOException {
-        final String selectedTemplate = template.getValue();
-        SiteExporter.export(selectedTemplate);
+        SiteExporter.export();
     }
 
-    void init(
-            final TextAreaPane textAreaPane,
-            final StringProperty template
-    ) {
+    void init(final TextAreaPane textAreaPane) {
         this.textAreaPane = textAreaPane;
-        this.template = template;
-        this.loadTemplates();
-    }
-
-    private void loadTemplates() {
-        LOGGER.info("Loading templates.");
-        templateMenu.getItems().clear();
-        final FileVisitor templatesVisitor = new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(
-                    Path file,
-                    BasicFileAttributes attrs) throws IOException {
-                final String tplFileName = file.getFileName().toString();
-                final String tplName = FileUtils.getBaseName(tplFileName);
-                LOGGER.log(Level.INFO, "Creating template entry {0}", tplFileName);
-                final RadioMenuItem radioMenuItem = new RadioMenuItem(tplName);
-                radioMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
-                    MenubarController.this.setTemplate((ActionEvent) event);
-                });
-                templateMenu.getItems().add(radioMenuItem);
-                return FileVisitResult.CONTINUE;
-            }
-        };
-        try {
-            Files.walkFileTree(SiteExporter.TEMPLATES_PATH, templatesVisitor);
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Templates could not be loaded.{0}", ex.getCause());
-        }
     }
 
     /**

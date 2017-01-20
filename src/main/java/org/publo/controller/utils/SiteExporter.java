@@ -60,10 +60,9 @@ public class SiteExporter {
      * file it will attempt to parse its content as markdown, wrap it in an
      * template and write a markup file.
      *
-     * @param template content wrapper
      * @throws IOException
      */
-    public static void export(final String template) throws IOException {
+    public static void export() throws IOException {
 
         final FileVisitor<Path> projectFileVisitor
                 = new SimpleFileVisitor<Path>() {
@@ -99,7 +98,7 @@ public class SiteExporter {
                     final String pageName = baseName + MARKUP_EXT;
                     final Path filePath = targetPath.resolveSibling(pageName);
                     final String markdown = new String(Files.readAllBytes(file));
-                    final String page = TemplateRenderer.render(template, markdown);
+                    final String page = TemplateRenderer.render(markdown);
                     Files.write(filePath, page.getBytes());
                 } else {
                     final Path absFilePath = PROJECTS_PATH.resolve(file);

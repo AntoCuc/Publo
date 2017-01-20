@@ -25,6 +25,7 @@ package org.publo.controller.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.commonmark.Extension;
@@ -58,11 +59,10 @@ public final class TemplateRenderer {
     /**
      * Renders the content in the default template.
      *
-     * @param template to render against
      * @param markdown of the main
      * @return the page markup
      */
-    public static String render(final String template, final String markdown) {
+    public static String render(final String markdown) {
         final List<Extension> extensions
                 = Arrays.asList(YamlFrontMatterExtension.create());
         final Parser parser = Parser.builder().extensions(extensions).build();
@@ -72,10 +72,6 @@ public final class TemplateRenderer {
         document.accept(frontMatterVisitor);
         final HtmlRenderer renderer = HtmlRenderer.builder().build();
         final String markup = renderer.render(document);
-        if (template == null || "".equals(template)) {
-            return markup;
-        }
-        LOGGER.log(Level.INFO, "Rendering content on template {0}", template);
         final FileTemplateResolver resolver = new FileTemplateResolver();
         resolver.setPrefix(TEMPLATES_DIR);
         resolver.setTemplateMode(TemplateMode.HTML);
@@ -84,13 +80,20 @@ public final class TemplateRenderer {
         templateEngine.setTemplateResolver(resolver);
         final Context context = new Context();
         context.setVariable("main", markup);
-        frontMatterVisitor.getData().forEach((key, value) -> {
-            final StringBuilder values = new StringBuilder();
-            value.forEach((data) -> {
-                values.append(data);
+        String template = "Default";
+        final Map<String, List<String>> data = frontMatterVisitor.getData();
+        for (String key : data.keySet()) {
+            final StringBuilder valueBuilder = new StringBuilder();
+            data.get(key).forEach((item) -> {
+                valueBuilder.append(item);
             });
-            context.setVariable(key, values.toString());
-        });
+            final String value = valueBuilder.toString();
+            if ("template".equals(key)) {
+                LOGGER.log(Level.INFO, "Found template definition: {0}", value);
+                template = value;
+            }
+            context.setVariable(key, value);
+        }
         final String html = templateEngine.process(template, context);
         return Jsoup.parseBodyFragment(html).toString();
     }

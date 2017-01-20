@@ -72,11 +72,6 @@
                         <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator>
                 </Menu>
-                <Menu fx:id="templateMenu" mnemonicParsing="false" text="Template">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                    </accelerator>
-                </Menu>
                 <Menu text="Help">
                     <items>
                         <MenuItem onAction="#about" text="About">

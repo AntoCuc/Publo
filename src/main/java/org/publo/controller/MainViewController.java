@@ -24,10 +24,8 @@
 package org.publo.controller;
 
 import java.util.logging.Logger;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import org.publo.filebrowser.FileBrowserPane;
-import org.publo.model.PageMarkup;
 import org.publo.preview.PreviewPane;
 import org.publo.textarea.TextAreaPane;
 
@@ -62,25 +60,13 @@ public final class MainViewController {
      *
      * Bootstraps the <code>ChangeListener</code> chain.
      *
-     * Listeners Chain: File Selection Change -> Source Change -> TextArea
-     * Change ... TextArea Change -> Source Change -> Markup Change ... Template
-     * Change -> Markup Change ... Markup Change -> WebView Update
-     *
      */
     @FXML
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
-        final PageMarkup markup = new PageMarkup();
-        textAreaPane.addTextChangeListener(markup);
-        markup.getMarkupProperty().addListener(previewPane);
-        markup.getTemplateProperty().addListener(
-                (ObservableValue<? extends String> observable,
-                        String oldValue,
-                        String newValue) -> {
-                    markup.changed(null, null, textAreaPane.getText());
-                });
-        menubarPaneController.init(textAreaPane, markup.getTemplateProperty());
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
+        menubarPaneController.init(textAreaPane);
         fileBrowserPane.addTreeItemSelectionListener(menubarPaneController);
+        textAreaPane.addTextChangeListener(previewPane);
     }
 }

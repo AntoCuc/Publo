@@ -29,6 +29,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.publo.controller.utils.TemplateRenderer;
 
 /**
  * A {@code BorderPane} {@code WebView}.
@@ -61,7 +62,8 @@ public class PreviewPane extends BorderPane implements ChangeListener {
             Object oldValue,
             Object newValue) {
         LOGGER.info("Updating the Preview Pane.");
+        final String renderedMarkup = TemplateRenderer.render(newValue.toString());
         final WebEngine webEngine = this.webView.getEngine();
-        webEngine.loadContent(newValue.toString());
+        webEngine.loadContent(renderedMarkup);
     }
 }
