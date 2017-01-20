@@ -53,7 +53,7 @@ public final class MainViewController {
 
     @FXML
     private TextAreaPane textAreaPane;
-    
+
     @FXML
     private PreviewPane previewPane;
 
@@ -74,12 +74,10 @@ public final class MainViewController {
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
 
-        final PageTemplate pageTemplate = new PageTemplate();
-        final PageMarkup markup = new PageMarkup(pageTemplate);
-
+        final PageMarkup markup = new PageMarkup();
         textAreaPane.addTextChangeListener(new ResourceChangedListener<>(markup));
         markup.getMarkup().addListener(previewPane);
-        pageTemplate.getTemplate().addListener(
+        markup.getTemplate().getTemplate().addListener(
                 (ObservableValue<? extends String> observable,
                         String oldValue,
                         String newValue) -> {
@@ -87,7 +85,7 @@ public final class MainViewController {
                 });
 
         final PageFile file = new PageFile();
-        menubarPaneController.init(textAreaPane, pageTemplate, file);
+        menubarPaneController.init(textAreaPane, markup.getTemplate(), file);
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
         fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
     }

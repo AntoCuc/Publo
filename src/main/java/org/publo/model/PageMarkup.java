@@ -52,12 +52,16 @@ public final class PageMarkup implements Updatable<String> {
 
     private final StringProperty markup = new SimpleStringProperty("");
 
-    public PageMarkup(final PageTemplate template) {
-        this.pageTemplate = template;
+    public PageMarkup() {
+        this.pageTemplate = new PageTemplate();
     }
 
     public StringProperty getMarkup() {
         return markup;
+    }
+    
+    public PageTemplate getTemplate() {
+        return pageTemplate;
     }
 
     /**
