@@ -32,7 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.publo.controller.utils.Movable;
+import org.publo.filebrowser.utils.FileTreeView;
 
 /**
  * A {@code TreeCell} allowing the creation and renaming of {@code TreeItem}s
@@ -57,9 +57,9 @@ public final class EditableTreeCell extends TreeCell<String> {
     /**
      * Constructs an {@code EditableTreeCell} for a {@code MovableResource}.
      *
-     * @param movableResource to relocate
+     * @param treeView reference
      */
-    public EditableTreeCell(final Movable movableResource) {
+    public EditableTreeCell(final FileTreeView treeView) {
         this.textField = new TextField() {
             {
                 setOnKeyReleased((KeyEvent event) -> {
@@ -70,8 +70,8 @@ public final class EditableTreeCell extends TreeCell<String> {
                         final String cellContent = getText();
                         LOGGER.log(Level.INFO, "Renaming to {0}", cellContent);
                         commitEdit(cellContent);
-                        final Path newPath = 
-                                movableResource.move(Paths.get(cellContent));
+                        final Path newPath
+                                = treeView.moveSelectedFile(Paths.get(cellContent));
                         PathTreeItem treeItem
                                 = (PathTreeItem) getTreeItem();
                         treeItem.setPath(newPath);

@@ -41,7 +41,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import org.publo.controller.utils.Movable;
 
 /**
  * A {@code TreeView} representing the file {@code FileSystem}.
@@ -50,7 +49,7 @@ import org.publo.controller.utils.Movable;
  * @param <T> The type of the item contained within the {@link TreeItem} value.
  * @since 0.3
  */
-public class FileTreeView<T> extends TreeView<T> implements Movable {
+public class FileTreeView<T> extends TreeView<T> {
 
     private static final Logger LOGGER
             = Logger.getLogger(FileTreeView.class.getName());
@@ -108,8 +107,13 @@ public class FileTreeView<T> extends TreeView<T> implements Movable {
         this.setContextMenu(contextMenu);
     }
 
-    @Override
-    public Path move(Path to) {
+    /**
+     * Moves the selected file to the {@code Path}.
+     *
+     * @param to
+     * @return
+     */
+    public Path moveSelectedFile(Path to) {
         final Path newFilePath = this.currentPath.getParent().resolve(to);
         LOGGER.log(Level.INFO, "Moving {0} to {1}",
                 new Object[]{this.currentPath, newFilePath});
