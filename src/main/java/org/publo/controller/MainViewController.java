@@ -26,9 +26,7 @@ package org.publo.controller;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.filebrowser.FileBrowserPane;
-import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.preview.PreviewPane;
 import org.publo.textarea.TextAreaPane;
@@ -72,7 +70,6 @@ public final class MainViewController {
     @FXML
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
-
         final PageMarkup markup = new PageMarkup();
         textAreaPane.addTextChangeListener(markup);
         markup.getMarkupProperty().addListener(previewPane);
@@ -82,10 +79,8 @@ public final class MainViewController {
                         String newValue) -> {
                     markup.changed(null, null, textAreaPane.getText());
                 });
-
-        final PageFile file = new PageFile();
-        menubarPaneController.init(textAreaPane, markup.getTemplateProperty(), file);
+        menubarPaneController.init(textAreaPane, markup.getTemplateProperty());
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
-        fileBrowserPane.addTreeItemSelectionListener(new ResourceChangedListener<>(file));
+        fileBrowserPane.addTreeItemSelectionListener(menubarPaneController);
     }
 }

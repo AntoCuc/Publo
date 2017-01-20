@@ -38,6 +38,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -50,7 +52,7 @@ import javafx.stage.FileChooser;
 import static org.publo.Launcher.PROJECTS_PATH;
 import org.publo.controller.utils.FileUtils;
 import org.publo.controller.utils.SiteExporter;
-import org.publo.model.PageFile;
+import org.publo.filebrowser.utils.PathTreeItem;
 import org.publo.textarea.TextAreaPane;
 
 /**
@@ -59,7 +61,7 @@ import org.publo.textarea.TextAreaPane;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public class MenubarController {
+public final class MenubarController implements ChangeListener {
 
     private static final Logger LOGGER
             = Logger.getLogger(MenubarController.class.getName());
@@ -81,9 +83,9 @@ public class MenubarController {
     private StringProperty template;
 
     /**
-     * The currently selected {@code PageFile}.
+     * The currently selected {@code Path}.
      */
-    private PageFile sourceFile;
+    private Path activePath;
 
     @FXML
     private MenuBar menuBar;
@@ -106,7 +108,7 @@ public class MenubarController {
     @FXML
     public void save() {
         Path filePath;
-        if (sourceFile.getLocation() == null) {
+        if (activePath == null) {
             FileChooser chooser = new FileChooser();
             chooser.getExtensionFilters().add(MD_FILTER);
             File file = chooser.showSaveDialog(menuBar.getScene().getWindow());
@@ -115,9 +117,10 @@ public class MenubarController {
             }
             filePath = file.toPath();
         } else {
-            filePath = sourceFile.getLocation();
+            filePath = activePath;
         }
         try {
+            LOGGER.log(Level.INFO, "Saving {0}", filePath);
             if (Files.isRegularFile(filePath)) {
                 Files.write(filePath, textAreaPane.getText().getBytes());
             }
@@ -160,11 +163,10 @@ public class MenubarController {
 
     void init(
             final TextAreaPane textAreaPane,
-            final StringProperty template,
-            final PageFile asset) {
+            final StringProperty template
+    ) {
         this.textAreaPane = textAreaPane;
         this.template = template;
-        this.sourceFile = asset;
         this.loadTemplates();
     }
 
@@ -191,6 +193,24 @@ public class MenubarController {
             Files.walkFileTree(SiteExporter.TEMPLATES_PATH, templatesVisitor);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Templates could not be loaded.{0}", ex.getCause());
+        }
+    }
+
+    /**
+     * On Selection of a new {@code PathTreeItem} on the file browser update the
+     * active path.
+     *
+     * @param observable not used
+     * @param oldValue used to verify the presence of changes
+     * @param newValue to update state
+     */
+    @Override
+    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        if (oldValue == null || !oldValue.equals(newValue)) {
+            final PathTreeItem pathTreeItem = (PathTreeItem) newValue;
+            final Path newPath = pathTreeItem.getPath();
+            LOGGER.log(Level.INFO, "Active path: {0}", newPath);
+            activePath = newPath;
         }
     }
 }
