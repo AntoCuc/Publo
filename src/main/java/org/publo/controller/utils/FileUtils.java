@@ -88,14 +88,16 @@ public class FileUtils {
      * @return the file content
      */
     public static String readFileContent(Path filePath) {
-        try {
-            return Files
-                    .readAllLines(filePath)
-                    .stream()
-                    .collect(Collectors.joining(LINE_SEP));
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Could not read file.", ex);
-            return "";
+        if (Files.isRegularFile(filePath)) {
+            try {
+                return Files
+                        .readAllLines(filePath)
+                        .stream()
+                        .collect(Collectors.joining(LINE_SEP));
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Could not read file.", ex);
+            }
         }
+        return "";
     }
 }
