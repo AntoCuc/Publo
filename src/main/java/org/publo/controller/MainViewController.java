@@ -74,13 +74,13 @@ public final class MainViewController {
         LOGGER.info("Initialising the Main View");
 
         final PageMarkup markup = new PageMarkup();
-        textAreaPane.addTextChangeListener(new ResourceChangedListener<>(markup));
+        textAreaPane.addTextChangeListener(markup);
         markup.getMarkupProperty().addListener(previewPane);
         markup.getTemplateProperty().addListener(
                 (ObservableValue<? extends String> observable,
                         String oldValue,
                         String newValue) -> {
-                    markup.update(textAreaPane.getText());
+                    markup.changed(null, null, textAreaPane.getText());
                 });
 
         final PageFile file = new PageFile();

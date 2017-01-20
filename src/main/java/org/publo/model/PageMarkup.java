@@ -27,17 +27,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import org.publo.controller.utils.TemplateRenderer;
-import org.publo.controller.utils.Updatable;
 
 /**
- * PageMarkup core model. Holds state concerning the markupProperty rendered and the
- template to apply on preview.
+ * PageMarkup core model. Holds state concerning the markupProperty rendered and
+ * the template to apply on preview.
  *
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class PageMarkup implements Updatable<String> {
+public final class PageMarkup implements ChangeListener {
 
     /**
      * The {@code PageMarkup} logger.
@@ -58,15 +59,15 @@ public final class PageMarkup implements Updatable<String> {
     }
 
     /**
-     * Parses the markdown and renders it to a template.
-     *
-     * @param markdown to render
+     * Parses the changed markdown and renders it to a template.
      */
     @Override
-    public void update(final String markdown) {
+    public void changed(ObservableValue observable,
+            Object oldValue,
+            Object newValue) {
         LOGGER.log(Level.INFO, "Updating markup");
         final String renderedMarkup = TemplateRenderer.render(
-                templateProperty.getValue(), markdown);
+                templateProperty.getValue(), newValue.toString());
         markupProperty.setValue(renderedMarkup);
     }
 }
