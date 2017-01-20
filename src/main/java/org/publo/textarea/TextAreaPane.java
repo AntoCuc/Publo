@@ -23,7 +23,7 @@
  */
 package org.publo.textarea;
 
-import javafx.beans.property.StringProperty;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextArea;
@@ -38,6 +38,9 @@ import org.publo.filebrowser.utils.PathTreeItem;
  * @since 0.3
  */
 public class TextAreaPane extends BorderPane implements ChangeListener {
+
+    private static final Logger LOGGER
+            = Logger.getLogger(TextAreaPane.class.getName());
 
     private final TextArea textArea;
 
@@ -65,7 +68,8 @@ public class TextAreaPane extends BorderPane implements ChangeListener {
      */
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-        if (oldValue!= null && !oldValue.equals(newValue)) {
+        if (oldValue == null || !oldValue.equals(newValue)) {
+            LOGGER.info("Updating the TextArea.");
             PathTreeItem pathTreeItem = (PathTreeItem) newValue;
             final String fileContent = FileUtils.readFileContent(pathTreeItem.getPath());
             textArea.textProperty().setValue(fileContent);

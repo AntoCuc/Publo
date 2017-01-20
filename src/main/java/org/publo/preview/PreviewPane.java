@@ -21,43 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.publo.controller;
+package org.publo.preview;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.publo.controller.utils.Updatable;
 
 /**
- * Event flow coordinating controller.
+ * A {@code BorderPane} {@code WebView}.
  *
  * @author Antonio Cucchiara
- * @since 0.1
+ * @since 0.3
  */
-public class WebViewController implements Updatable<String> {
+public class PreviewPane extends BorderPane implements ChangeListener {
 
-    /**
-     * The {@code PageMarkup} logger.
-     */
     private static final Logger LOGGER
-            = Logger.getLogger(WebViewController.class.getName());
+            = Logger.getLogger(PreviewPane.class.getName());
 
-    @FXML
-    private WebView webView;
+    private final WebView webView;
+
+    public PreviewPane() {
+        this.webView = new WebView();
+        this.setCenter(this.webView);
+    }
 
     /**
-     * Update the {@code WebView} rendering the content.
+     * On change of the {@code TextArea} update the {@code WebView}.
      *
-     * @param content to be rendered
+     * @param observable not used
+     * @param oldValue used to verify the presence of changes
+     * @param newValue populate the area
      */
     @Override
-    public final void update(final String content) {
-        LOGGER.info("Updating the Web View");
-        WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(content);
+    public void changed(
+            ObservableValue observable,
+            Object oldValue,
+            Object newValue) {
+        LOGGER.info("Updating the Preview Pane.");
+        final WebEngine webEngine = this.webView.getEngine();
+        webEngine.loadContent(newValue.toString());
     }
 }

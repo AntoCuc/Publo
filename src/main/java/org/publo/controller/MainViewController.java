@@ -23,17 +23,15 @@
  */
 package org.publo.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import org.publo.controller.listener.ResourceChangedListener;
 import org.publo.filebrowser.FileBrowserPane;
 import org.publo.model.PageFile;
 import org.publo.model.PageMarkup;
 import org.publo.model.PageTemplate;
+import org.publo.preview.PreviewPane;
 import org.publo.textarea.TextAreaPane;
 
 /**
@@ -55,9 +53,9 @@ public final class MainViewController {
 
     @FXML
     private TextAreaPane textAreaPane;
-
+    
     @FXML
-    private WebViewController webViewPaneController;
+    private PreviewPane previewPane;
 
     @FXML
     private FileBrowserPane fileBrowserPane;
@@ -80,7 +78,7 @@ public final class MainViewController {
         final PageMarkup markup = new PageMarkup(pageTemplate);
 
         textAreaPane.addTextChangeListener(new ResourceChangedListener<>(markup));
-        markup.getMarkup().addListener(new ResourceChangedListener<>(webViewPaneController));
+        markup.getMarkup().addListener(previewPane);
         pageTemplate.getTemplate().addListener(
                 (ObservableValue<? extends String> observable,
                         String oldValue,

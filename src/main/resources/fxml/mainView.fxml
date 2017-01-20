@@ -6,7 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.publo.filebrowser.*?>
-<?import org.publo.textarea.*?>
+<?import org.publo.textarea.TextAreaPane ?>
+<?import org.publo.preview.PreviewPane ?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
@@ -25,11 +26,10 @@
                     <rowConstraints>
                         <RowConstraints percentHeight="100"/> 
                     </rowConstraints>
-                    <TextAreaPane fx:id="textAreaPane" />
-                    <fx:include fx:id="webViewPane" 
-                                source="webView.fxml" 
-                                GridPane.columnIndex="1" 
-                                GridPane.rowIndex="0"/>
+                    <TextAreaPane fx:id="textAreaPane" GridPane.columnIndex="0" 
+                                  GridPane.rowIndex="0" />
+                    <PreviewPane fx:id="previewPane" GridPane.columnIndex="1" 
+                                 GridPane.rowIndex="0" />
                 </GridPane>
             </items>
         </SplitPane>
