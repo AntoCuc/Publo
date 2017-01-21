@@ -39,6 +39,7 @@ import static org.publo.Launcher.PROJECTS_PATH;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 /**
@@ -51,6 +52,8 @@ public final class TemplateRenderer {
 
     private static final Logger LOGGER
             = Logger.getLogger(TemplateRenderer.class.getName());
+    
+    private static final String DEFAULT_TEMPLATE_NAME = "default-template";
 
     public static final String TEMPLATES_DIR
             = PROJECTS_PATH + "/templates/";
@@ -72,30 +75,44 @@ public final class TemplateRenderer {
         document.accept(frontMatterVisitor);
         final HtmlRenderer renderer = HtmlRenderer.builder().build();
         final String markup = renderer.render(document);
-        final FileTemplateResolver resolver = new FileTemplateResolver();
-        resolver.setPrefix(TEMPLATES_DIR);
-        resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setSuffix(TEMPLATE_SUFFIX);
-        final TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(resolver);
         final Context context = new Context();
         context.setVariable("main", markup);
-        String template = "Default";
         final Map<String, List<String>> data = frontMatterVisitor.getData();
-        for (String key : data.keySet()) {
+        data.keySet().stream().forEach((key) -> {
             final StringBuilder valueBuilder = new StringBuilder();
             data.get(key).forEach((item) -> {
                 valueBuilder.append(item);
             });
             final String value = valueBuilder.toString();
-            if ("template".equals(key)) {
-                LOGGER.log(Level.INFO, "Found template definition: {0}", value);
-                template = value;
-            }
             context.setVariable(key, value);
-        }
-        final String html = templateEngine.process(template, context);
+        });
+        final String html = render(context);
         return Jsoup.parseBodyFragment(html).toString();
     }
 
+    private static String render(final Context context) {
+        String output;
+        try {
+            final FileTemplateResolver fileTemplateResover
+                    = new FileTemplateResolver();
+            fileTemplateResover.setPrefix(TEMPLATES_DIR);
+            fileTemplateResover.setTemplateMode(TemplateMode.HTML);
+            fileTemplateResover.setSuffix(TEMPLATE_SUFFIX);
+            final TemplateEngine templateEngine = new TemplateEngine();
+            templateEngine.setTemplateResolver(fileTemplateResover);
+            String template = "" + context.getVariable("template");
+            LOGGER.log(Level.INFO, "Rendering {0}", template);
+            output = templateEngine.process(template, context);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Using default template.", ex);
+            final ClassLoaderTemplateResolver fileTemplateResover
+                    = new ClassLoaderTemplateResolver();
+            fileTemplateResover.setTemplateMode(TemplateMode.HTML);
+            fileTemplateResover.setSuffix(TEMPLATE_SUFFIX);
+            final TemplateEngine templateEngine = new TemplateEngine();
+            templateEngine.setTemplateResolver(fileTemplateResover);
+            output = templateEngine.process(DEFAULT_TEMPLATE_NAME, context);
+        }
+        return output;
+    }
 }
