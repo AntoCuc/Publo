@@ -38,6 +38,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.publo.controller.utils.TemplateRenderer;
+import org.publo.filebrowser.FileBrowserPane;
 
 /**
  * JavaFX Application Launcher.
@@ -66,6 +67,13 @@ public class Launcher extends Application {
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
+        /**
+         * Initialise the FileBrowser
+         */
+        System.setProperty(FileBrowserPane.BROWSER_ROOT_KEY, PROJECTS_PATH.toString());
+        /**
+         * Initialise the file system (first-run only)
+         */
         if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
             try {
                 Files.createDirectories(PROJECTS_PATH);

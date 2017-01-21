@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import org.publo.Launcher;
 import org.publo.filebrowser.listener.EditableTreeCell;
 import org.publo.filebrowser.utils.FileTreeView;
 import org.publo.filebrowser.utils.PathTreeItem;
@@ -49,10 +48,15 @@ import org.publo.filebrowser.utils.PathTreeItem;
  */
 public final class FileBrowserPane extends BorderPane {
 
+    private static final String USER_HOME = System.getProperty("user.home");
+    public static final String BROWSER_ROOT_KEY = "browser.root.path";
+    private static final String BROWSER_ROOT
+            = System.getProperty(BROWSER_ROOT_KEY);
+
     private final TreeView<String> treeView;
 
     public FileBrowserPane() {
-        this(Launcher.PROJECTS_PATH);
+        this((BROWSER_ROOT == null) ? USER_HOME : BROWSER_ROOT);
     }
 
     public FileBrowserPane(final String rootPathString) {
