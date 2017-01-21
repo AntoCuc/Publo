@@ -23,11 +23,21 @@
  */
 package org.publo.textarea;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.Animation;
+import javafx.animation.Animation.Status;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 import org.publo.controller.utils.FileUtils;
 import org.publo.filebrowser.utils.PathTreeItem;
 
@@ -44,10 +54,12 @@ public class TextAreaPane extends BorderPane
             = Logger.getLogger(TextAreaPane.class.getName());
 
     private final TextArea textArea;
+    private final FileAutoSave autoSave;
 
     public TextAreaPane() {
         this.textArea = new TextArea();
         this.textArea.setWrapText(true);
+        this.autoSave = new FileAutoSave();
         this.setCenter(this.textArea);
     }
 
@@ -77,6 +89,79 @@ public class TextAreaPane extends BorderPane
             final String fileContent
                     = FileUtils.readFileContent(newValue.getPath());
             textArea.textProperty().setValue(fileContent);
+            autoSave.start(textArea.textProperty(), newValue.getPath());
+        }
+    }
+
+    /**
+     * File auto save facility. Auto saving occurs every 2500 milliseconds.
+     */
+    private class FileAutoSave {
+
+        /**
+         * The {@code FileAutoSave} logger
+         */
+        private final Logger LOGGER
+                = Logger.getLogger(FileAutoSave.class.getName());
+
+        /**
+         * The file content in its most up-to-date form.
+         */
+        private StringProperty fileContent;
+
+        /**
+         * The current file {@code Path}.
+         */
+        private Path filePath;
+
+        /**
+         * The internal {@code Timeline}.
+         */
+        private final Timeline autoSaveTimer;
+
+        public FileAutoSave() {
+            this.autoSaveTimer = new Timeline(new KeyFrame(
+                    Duration.millis(2500),
+                    ae -> save()));
+            this.autoSaveTimer.setCycleCount(Animation.INDEFINITE);
+        }
+
+        /**
+         * Sets the paths and starts the {@code TimeLine}.
+         *
+         * Based on the {@code Animation} documentation the states can only be
+         * {@link Status#STOPPED}, {@link Status#PAUSED} or
+         * {@link Status#RUNNING}.
+         *
+         * If already started, it will trustingly check if
+         * {@link Status#RUNNING} and, if so, temporarily pause.
+         *
+         * @param fileContent to auto save
+         * @param filePath to auto save to
+         */
+        private void start(
+                final StringProperty fileContent,
+                final Path filePath) {
+            if (Status.RUNNING == autoSaveTimer.getStatus()) {
+                autoSaveTimer.pause();
+            }
+            this.fileContent = fileContent;
+            this.filePath = filePath;
+            this.autoSaveTimer.play();
+        }
+
+        /**
+         * Saves the {@link fileContent} to the {@link filePath}.
+         */
+        private void save() {
+            LOGGER.log(Level.INFO, "Saving {0}", filePath);
+            if (Files.isRegularFile(filePath)) {
+                try {
+                    Files.write(filePath, fileContent.getValue().getBytes());
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, "Could not save the file.", ex);
+                }
+            }
         }
     }
 }
