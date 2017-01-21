@@ -56,7 +56,7 @@ public class Launcher extends Application {
      * Directories
      */
     private static final String USER_DIR = System.getProperty("user.home");
-    public static final String PROJ_DIR_NAME = "publo-projects";
+    public static final String PROJ_DIR_NAME = ".publo";
     
     /**
      * Paths
