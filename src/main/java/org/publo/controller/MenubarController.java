@@ -50,7 +50,8 @@ import org.publo.textarea.TextAreaPane;
  * @author Antonio Cucchiara
  * @since 0.1
  */
-public final class MenubarController implements ChangeListener {
+public final class MenubarController
+        implements ChangeListener<PathTreeItem> {
 
     private static final Logger LOGGER
             = Logger.getLogger(MenubarController.class.getName());
@@ -148,10 +149,12 @@ public final class MenubarController implements ChangeListener {
      * @param newValue to update state
      */
     @Override
-    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+    public void changed(
+            final ObservableValue observable,
+            final PathTreeItem oldValue,
+            final PathTreeItem newValue) {
         if (oldValue == null || !oldValue.equals(newValue)) {
-            final PathTreeItem pathTreeItem = (PathTreeItem) newValue;
-            final Path newPath = pathTreeItem.getPath();
+            final Path newPath = newValue.getPath();
             LOGGER.log(Level.INFO, "Active path: {0}", newPath);
             activePath = newPath;
         }

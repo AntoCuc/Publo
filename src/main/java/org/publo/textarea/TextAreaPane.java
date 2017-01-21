@@ -37,7 +37,8 @@ import org.publo.filebrowser.utils.PathTreeItem;
  * @author Antonio Cucchiara
  * @since 0.3
  */
-public class TextAreaPane extends BorderPane implements ChangeListener {
+public class TextAreaPane extends BorderPane
+        implements ChangeListener<PathTreeItem> {
 
     private static final Logger LOGGER
             = Logger.getLogger(TextAreaPane.class.getName());
@@ -67,11 +68,14 @@ public class TextAreaPane extends BorderPane implements ChangeListener {
      * @param newValue populate the area
      */
     @Override
-    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+    public void changed(
+            final ObservableValue observable,
+            final PathTreeItem oldValue,
+            final PathTreeItem newValue) {
         if (oldValue == null || !oldValue.equals(newValue)) {
             LOGGER.info("Updating the TextArea.");
-            PathTreeItem pathTreeItem = (PathTreeItem) newValue;
-            final String fileContent = FileUtils.readFileContent(pathTreeItem.getPath());
+            final String fileContent
+                    = FileUtils.readFileContent(newValue.getPath());
             textArea.textProperty().setValue(fileContent);
         }
     }
