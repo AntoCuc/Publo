@@ -24,6 +24,7 @@
 package org.publo.filebrowser.utils;
 
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,7 +70,7 @@ public class FileTreeView<T> extends TreeView<T> {
                     currentPath = selectedPath;
                 });
 
-        final MenuItem newFileMenuItem = new MenuItem("New");
+        final MenuItem newFileMenuItem = new MenuItem("New markdown file");
         newFileMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
             final Path newFilePath = Paths.get(
                     this.currentPath.toString(),
@@ -79,6 +80,28 @@ public class FileTreeView<T> extends TreeView<T> {
                 Files.createFile(newFilePath);
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to create new file", ex);
+                final Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("An error occured");
+                alert.setHeaderText("Error whilst creating the file");
+                alert.setContentText("Please check your permissions.");
+                alert.showAndWait();
+            }
+        });
+        final MenuItem newDirectoryMenuItem = new MenuItem("New directory");
+        newDirectoryMenuItem.addEventHandler(EventType.ROOT, (Event event) -> {
+            final Path newFilePath = Paths.get(
+                    this.currentPath.toString(),
+                    "New Directory"
+            );
+            try {
+                Files.createDirectory(newFilePath);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to create new directory", ex);
+                final Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("An error occured");
+                alert.setHeaderText("Error whilst creating the directory");
+                alert.setContentText("Please check your permission.");
+                alert.showAndWait();
             }
         });
         final MenuItem deleteMenuItem = new MenuItem("Delete");
@@ -94,6 +117,13 @@ public class FileTreeView<T> extends TreeView<T> {
             if (result.isPresent() && ButtonType.OK == result.get()) {
                 try {
                     Files.deleteIfExists(currentPath);
+                } catch (DirectoryNotEmptyException ex) {
+                    final Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("An error occured");
+                    alert.setHeaderText("Error whilst deleting");
+                    alert.setContentText("The directory you are trying to "
+                            + "delete is not empty.");
+                    alert.showAndWait();
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE,
                             "Unable to delete " + currentPath, ex);
@@ -102,6 +132,7 @@ public class FileTreeView<T> extends TreeView<T> {
         });
         final ContextMenu contextMenu = new ContextMenu(
                 newFileMenuItem,
+                newDirectoryMenuItem,
                 deleteMenuItem
         );
         this.setContextMenu(contextMenu);
