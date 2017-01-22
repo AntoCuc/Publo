@@ -37,7 +37,9 @@ import org.publo.controller.utils.TemplateRenderer;
  * @author Antonio Cucchiara
  * @since 0.3
  */
-public class PreviewPane extends BorderPane implements ChangeListener {
+public final class PreviewPane
+        extends BorderPane
+        implements ChangeListener<String> {
 
     private static final Logger LOGGER
             = Logger.getLogger(PreviewPane.class.getName());
@@ -58,11 +60,11 @@ public class PreviewPane extends BorderPane implements ChangeListener {
      */
     @Override
     public void changed(
-            ObservableValue observable,
-            Object oldValue,
-            Object newValue) {
+            final ObservableValue observable,
+            final String oldValue,
+            final String newValue) {
         LOGGER.info("Updating the Preview Pane.");
-        final String renderedMarkup = TemplateRenderer.render(newValue.toString());
+        final String renderedMarkup = TemplateRenderer.render(newValue);
         final WebEngine webEngine = this.webView.getEngine();
         webEngine.loadContent(renderedMarkup);
     }
