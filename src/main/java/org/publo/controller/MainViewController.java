@@ -44,9 +44,6 @@ public final class MainViewController {
             = Logger.getLogger(MainViewController.class.getName());
 
     @FXML
-    private MenubarController menubarPaneController;
-
-    @FXML
     private TextAreaPane textAreaPane;
 
     @FXML
@@ -65,8 +62,6 @@ public final class MainViewController {
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
-        menubarPaneController.init(textAreaPane);
-        fileBrowserPane.addTreeItemSelectionListener(menubarPaneController);
         textAreaPane.addTextChangeListener(previewPane);
     }
 }

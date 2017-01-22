@@ -5,16 +5,13 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.publo.filebrowser.*?>
+<?import org.publo.filebrowser.FileBrowserPane ?>
 <?import org.publo.textarea.TextAreaPane ?>
 <?import org.publo.preview.PreviewPane ?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8"
             fx:controller="org.publo.controller.MainViewController">
-    <top>
-        <fx:include fx:id="menubarPane" source="menubar.fxml"/>
-    </top>
     <center>
         <SplitPane dividerPositions="0.25" >
             <items>
