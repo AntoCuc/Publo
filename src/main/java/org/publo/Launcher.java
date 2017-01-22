@@ -46,6 +46,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import org.publo.controller.utils.SiteExporter;
 import org.publo.controller.utils.TemplateRenderer;
 import org.publo.filebrowser.FileBrowserPane;
 
@@ -123,6 +124,9 @@ public class Launcher extends Application {
                             LOGGER.log(Level.SEVERE, "Browser not supported.");
                         }
                     }
+                    break;
+                case F7:
+                    SiteExporter.export();
                     break;
                 case F11:
                     primaryStage.setFullScreen(true);

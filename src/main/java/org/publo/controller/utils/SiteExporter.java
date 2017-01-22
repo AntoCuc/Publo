@@ -33,6 +33,8 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import static org.publo.Launcher.PROJECTS_PATH;
 
 /**
@@ -60,9 +62,8 @@ public class SiteExporter {
      * file it will attempt to parse its content as markdown, wrap it in an
      * template and write a markup file.
      *
-     * @throws IOException
      */
-    public static void export() throws IOException {
+    public static void export() {
 
         final FileVisitor<Path> projectFileVisitor
                 = new SimpleFileVisitor<Path>() {
@@ -118,6 +119,22 @@ public class SiteExporter {
                 return FileVisitResult.CONTINUE;
             }
         };
-        Files.walkFileTree(PROJECTS_PATH, projectFileVisitor);
+        try {
+            Files.walkFileTree(PROJECTS_PATH, projectFileVisitor);
+            final Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Export completed");
+            alert.setContentText("Your site has been successfully exported. "
+                    + "Find the output in " + TARGET_PATH);
+            alert.showAndWait();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "An error has occured", ex);
+            final Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Unable to export site");
+            alert.setHeaderText("Error whilst exporting your site");
+            alert.setContentText("Please check that the " + PROJECTS_PATH
+                    + "directory exists and that your have write permissions.");
+            alert.showAndWait();
+        }
     }
 }
