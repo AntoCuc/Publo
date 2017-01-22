@@ -101,27 +101,32 @@ public class Launcher extends Application {
         final FXMLLoader mainView = new FXMLLoader(mainViewFxml);
         final Scene scene = new Scene(mainView.load());
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (evt) -> {
-            if (evt.getCode() == KeyCode.F1) {
-                final Alert confirmDialog = new Alert(AlertType.CONFIRMATION);
-                confirmDialog.setTitle("Confirmation prompt");
-                confirmDialog.setHeaderText("Help and Support");
-                confirmDialog.setContentText("We are going to open the browser"
-                        + " and navigate to the online help."
-                        + " Is that ok?");
-                Optional<ButtonType> result = confirmDialog.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            URI uri = new URI(ABOUT_LINK);
-                            desktop.browse(uri);
-                        } catch (URISyntaxException | IOException e) {
-                            LOGGER.log(Level.SEVERE, "Failed to reach website.", e);
+            switch (evt.getCode()) {
+                case F1:
+                    final Alert confirmDialog = new Alert(AlertType.CONFIRMATION);
+                    confirmDialog.setTitle("Confirmation prompt");
+                    confirmDialog.setHeaderText("Help and Support");
+                    confirmDialog.setContentText("We are going to open the browser"
+                            + " and navigate to the online help."
+                            + " Is that ok?");
+                    Optional<ButtonType> result = confirmDialog.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        Desktop desktop = Desktop.getDesktop();
+                        if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                            try {
+                                URI uri = new URI(ABOUT_LINK);
+                                desktop.browse(uri);
+                            } catch (URISyntaxException | IOException e) {
+                                LOGGER.log(Level.SEVERE, "Failed to reach website.", e);
+                            }
+                        } else {
+                            LOGGER.log(Level.SEVERE, "Browser not supported.");
                         }
-                    } else {
-                        LOGGER.log(Level.SEVERE, "Browser not supported.");
                     }
-                }
+                    break;
+                case F11:
+                    primaryStage.setFullScreen(true);
+                    break;
             }
         });
         primaryStage.setScene(scene);
