@@ -145,9 +145,11 @@ public class TextAreaPane extends BorderPane
             if (Status.RUNNING == autoSaveTimer.getStatus()) {
                 autoSaveTimer.pause();
             }
-            this.fileContent = fileContent;
-            this.filePath = filePath;
-            this.autoSaveTimer.play();
+            if (Files.isRegularFile(filePath)) {
+                this.fileContent = fileContent;
+                this.filePath = filePath;
+                this.autoSaveTimer.play();
+            }
         }
 
         /**
