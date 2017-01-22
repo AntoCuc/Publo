@@ -33,7 +33,7 @@ To create a basic template:
 
 1. Create an html file - for example: `my-template.html`
 2. Place the attribute `th:utext="${main}"` in the tag containing your content
-3. Place the newly created template in the `publo-projects/templates` directory
+3. Place the newly created template in the `.publo/templates` directory
 4. Select it from the drop-down to use it for preview and export
 
 Full documentation can be found on the [thymeleaf official documentation][thymeleafdocs].
