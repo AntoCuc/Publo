@@ -24,6 +24,7 @@
 package org.publo.controller;
 
 import java.util.logging.Logger;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import org.publo.filebrowser.FileBrowserPane;
 import org.publo.preview.PreviewPane;
@@ -63,5 +64,9 @@ public final class MainViewController {
         LOGGER.info("Initialising the Main View");
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
         textAreaPane.addTextChangeListener(previewPane);
+        textAreaPane.scrollPercentageProperty().addListener((evt) -> {
+            double percentageScrolled = ((DoubleProperty) evt).getValue();
+            previewPane.scrollTo(percentageScrolled);
+        });
     }
 }

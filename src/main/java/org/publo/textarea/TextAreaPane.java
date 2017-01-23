@@ -32,9 +32,14 @@ import javafx.animation.Animation;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
@@ -54,11 +59,36 @@ public class TextAreaPane extends BorderPane
             = Logger.getLogger(TextAreaPane.class.getName());
 
     private final TextArea textArea;
+
+    /**
+     * Property holding the TextArea scroll position in percentage of the page
+     * scrolled.
+     */
+    private final DoubleProperty scrollPercentageProperty;
+
     private final FileAutoSave autoSave;
 
     public TextAreaPane() {
         this.textArea = new TextArea();
         this.textArea.setWrapText(true);
+        this.scrollPercentageProperty = new SimpleDoubleProperty(0.0);
+        this.scrollPercentageProperty.bind(Bindings.createDoubleBinding(() -> {
+            final Node text = textArea.lookup(".content");
+            final Node scrollPane = textArea.lookup(".scroll-pane");
+            if (text == null || scrollPane == null) {
+                return 0.0;
+            }
+            final double textHeight = text.getLayoutBounds().getHeight();
+            final double textAreaHeight = ((ScrollPane) scrollPane)
+                    .getViewportBounds().getHeight();
+            if (textHeight <= textAreaHeight) {
+                return 100.0;
+            }
+            final double percentage
+                    = textArea.getScrollTop() / (textHeight - textAreaHeight);
+            LOGGER.log(Level.FINEST, "Percent scrolled {0}", percentage);
+            return percentage;
+        }, textArea.scrollTopProperty()));
         this.autoSave = new FileAutoSave();
         this.setCenter(this.textArea);
     }
@@ -69,6 +99,15 @@ public class TextAreaPane extends BorderPane
 
     public String getText() {
         return this.textArea.textProperty().getValue();
+    }
+
+    /**
+     * Retrieves a reference to the scroll percentage property.
+     *
+     * @return the property
+     */
+    public DoubleProperty scrollPercentageProperty() {
+        return this.scrollPercentageProperty;
     }
 
     /**

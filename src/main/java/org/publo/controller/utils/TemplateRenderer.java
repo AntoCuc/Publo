@@ -35,6 +35,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import static org.publo.Launcher.PROJECTS_PATH;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -52,7 +54,7 @@ public final class TemplateRenderer {
 
     private static final Logger LOGGER
             = Logger.getLogger(TemplateRenderer.class.getName());
-    
+
     private static final String DEFAULT_TEMPLATE_NAME = "default-template";
 
     public static final String TEMPLATES_DIR
@@ -60,12 +62,25 @@ public final class TemplateRenderer {
     private static final String TEMPLATE_SUFFIX = ".html";
 
     /**
-     * Renders the content in the default template.
+     * Renders the content for export. No preview scrolling is available when
+     * using this method.
      *
      * @param markdown of the main
      * @return the page markup
      */
     public static String render(final String markdown) {
+        return render(markdown, false);
+    }
+
+    /**
+     * Renders the content. Provides the option to the preview facility by
+     * injecting a window scrolling java-script function in the markup.
+     *
+     * @param markdown of the main
+     * @param preview mode flag
+     * @return the page markup
+     */
+    public static String render(final String markdown, boolean preview) {
         final List<Extension> extensions
                 = Arrays.asList(YamlFrontMatterExtension.create());
         final Parser parser = Parser.builder().extensions(extensions).build();
@@ -87,7 +102,12 @@ public final class TemplateRenderer {
             context.setVariable(key, value);
         });
         final String html = render(context);
-        return Jsoup.parseBodyFragment(html).toString();
+        Document htmlDoc = Jsoup.parse(html);
+        if (preview) {
+            Element headElement = htmlDoc.head();
+            headElement.append("<script>function scrollWin(value){ window.scrollTo(0, (document.body.scrollHeight - window.innerHeight) * value); }</script>");
+        }
+        return htmlDoc.toString();
     }
 
     private static String render(final Context context) {

@@ -45,10 +45,21 @@ public final class PreviewPane
             = Logger.getLogger(PreviewPane.class.getName());
 
     private final WebView webView;
+    private final WebEngine webEngine;
 
     public PreviewPane() {
         this.webView = new WebView();
+        this.webEngine = this.webView.getEngine();
         this.setCenter(this.webView);
+    }
+
+    /**
+     * Scrolls the {@code WebView} to the requested percentage.
+     *
+     * @param percentage of the page to scroll to
+     */
+    public void scrollTo(double percentage) {
+        this.webEngine.executeScript("window.scrollWin(" + percentage + ");");
     }
 
     /**
@@ -64,8 +75,7 @@ public final class PreviewPane
             final String oldValue,
             final String newValue) {
         LOGGER.info("Updating the Preview Pane.");
-        final String renderedMarkup = TemplateRenderer.render(newValue);
-        final WebEngine webEngine = this.webView.getEngine();
+        final String renderedMarkup = TemplateRenderer.render(newValue, true);
         webEngine.loadContent(renderedMarkup);
     }
 }
