@@ -1,10 +1,19 @@
-Publo
-=====
+Publo <small>- meaning: small, humble</small>
+=============================================
 
 *Publo enables web writers create great [markdown][markdownspec] content.*
 
 The preview and export facility are the primary features of the editor that when combined with
-the ability to easily create templates allow you to design a unique user experience. 
+the ability to easily create templates allow you to design a unique user experience.
+
+Usage
+-----
+
+Publo can be operated via the function keys.
+
+F1  - Load this page
+F7  - Export the site
+F11 - Enter full screen mode (Escape to exit it)
 
 History
 -------
