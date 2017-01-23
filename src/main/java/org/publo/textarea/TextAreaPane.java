@@ -42,7 +42,9 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
+import javax.swing.text.StyleConstants;
 import org.publo.controller.utils.FileUtils;
 import org.publo.filebrowser.utils.PathTreeItem;
 
@@ -71,6 +73,7 @@ public class TextAreaPane extends BorderPane
     public TextAreaPane() {
         this.textArea = new TextArea();
         this.textArea.setWrapText(true);
+        this.textArea.setFont(Font.font("monospaced", 16));
         this.scrollPercentageProperty = new SimpleDoubleProperty(0.0);
         this.scrollPercentageProperty.bind(Bindings.createDoubleBinding(() -> {
             final Node text = textArea.lookup(".content");
