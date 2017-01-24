@@ -25,6 +25,7 @@ package org.publo.filebrowser;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
@@ -84,4 +85,10 @@ public final class FileBrowserPane extends BorderPane {
                 .addListener(listener);
     }
 
+    public final void addTreeItemInvalidationListener(
+            final InvalidationListener listener) {
+        this.treeView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(listener);
+    }
 }

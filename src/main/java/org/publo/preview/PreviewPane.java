@@ -23,13 +23,18 @@
  */
 package org.publo.preview;
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.publo.controller.utils.TemplateRenderer;
+import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * A {@code BorderPane} {@code WebView}.
@@ -39,13 +44,19 @@ import org.publo.controller.utils.TemplateRenderer;
  */
 public final class PreviewPane
         extends BorderPane
-        implements ChangeListener<String> {
+        implements ChangeListener<String>, InvalidationListener {
 
     private static final Logger LOGGER
             = Logger.getLogger(PreviewPane.class.getName());
 
     private final WebView webView;
     private final WebEngine webEngine;
+
+    /**
+     * The {@code WebView} markup base path. Used to point the
+     * {@code WebEngine to the corrent assets location}.
+     */
+    private Path basePath;
 
     public PreviewPane() {
         this.webView = new WebView();
@@ -75,7 +86,17 @@ public final class PreviewPane
             final String oldValue,
             final String newValue) {
         LOGGER.info("Updating the Preview Pane.");
-        final String renderedMarkup = TemplateRenderer.render(newValue, true);
+        final String renderedMarkup
+                = TemplateRenderer.render(newValue, this.basePath);
         webEngine.loadContent(renderedMarkup);
+    }
+
+    @Override
+    public void invalidated(Observable observable) {
+        LOGGER.info("Updating the base path for preview.");
+        final ReadOnlyObjectProperty property
+                = (ReadOnlyObjectProperty) observable;
+        final PathTreeItem pathTreeItem = (PathTreeItem) property.getValue();
+        this.basePath = pathTreeItem.getPath();
     }
 }

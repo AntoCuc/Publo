@@ -63,6 +63,7 @@ public final class MainViewController {
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
+        fileBrowserPane.addTreeItemInvalidationListener(previewPane);
         textAreaPane.addTextChangeListener(previewPane);
         textAreaPane.scrollPercentageProperty().addListener((evt) -> {
             double percentageScrolled = ((DoubleProperty) evt).getValue();

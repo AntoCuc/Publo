@@ -23,6 +23,7 @@
  */
 package org.publo.controller.utils;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -69,18 +70,24 @@ public final class TemplateRenderer {
      * @return the page markup
      */
     public static String render(final String markdown) {
-        return render(markdown, false);
+        return render(markdown, null);
     }
 
     /**
      * Renders the content. Provides the option to the preview facility by
-     * injecting a window scrolling java-script function in the markup.
+     * injecting a window scrolling java-script function in the markup and a
+     * base path for the retrieval of media assets.
+     *
+     * If the basepath is not defined it will assume the markup generated is not
+     * going to be used in a {@code WebView} preview.
      *
      * @param markdown of the main
-     * @param preview mode flag
+     * @param basePath for preview media loading
      * @return the page markup
      */
-    public static String render(final String markdown, boolean preview) {
+    public static String render(
+            final String markdown,
+            final Path basePath) {
         final List<Extension> extensions
                 = Arrays.asList(YamlFrontMatterExtension.create());
         final Parser parser = Parser.builder().extensions(extensions).build();
@@ -103,9 +110,10 @@ public final class TemplateRenderer {
         });
         final String html = render(context);
         Document htmlDoc = Jsoup.parse(html);
-        if (preview) {
+        if (basePath != null) {
             Element headElement = htmlDoc.head();
             headElement.append("<script>function scrollWin(value){ window.scrollTo(0, (document.body.scrollHeight - window.innerHeight) * value); }</script>");
+            headElement.append("<base href=\"" + basePath.getParent().toUri() + "\" />");
         }
         return htmlDoc.toString();
     }
