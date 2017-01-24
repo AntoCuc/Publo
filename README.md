@@ -11,8 +11,8 @@ Usage
 
 Publo can be operated via the function keys.
 
-F1  - Load this page
-F7  - Export the site
+F1  - Load this page  
+F7  - Export the site  
 F11 - Enter full screen mode (Escape to exit it)
 
 History
