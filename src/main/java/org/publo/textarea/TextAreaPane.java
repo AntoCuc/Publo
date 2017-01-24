@@ -39,12 +39,12 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
-import javax.swing.text.StyleConstants;
 import org.publo.controller.utils.FileUtils;
 import org.publo.filebrowser.utils.PathTreeItem;
 
@@ -128,10 +128,19 @@ public class TextAreaPane extends BorderPane
             final PathTreeItem newValue) {
         if (oldValue == null || !oldValue.equals(newValue)) {
             LOGGER.info("Updating the TextArea.");
-            final String fileContent
-                    = FileUtils.readFileContent(newValue.getPath());
-            textArea.textProperty().setValue(fileContent);
-            autoSave.start(textArea.textProperty(), newValue.getPath());
+            try {
+                final String fileContent
+                        = FileUtils.readFileContent(newValue.getPath());
+                textArea.textProperty().setValue(fileContent);
+                autoSave.start(textArea.textProperty(), newValue.getPath());
+            } catch (IOException ex) {
+                final Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error prompt");
+                alert.setHeaderText("Failed to load the file");
+                alert.setContentText("The file selected could not be rendered"
+                        + " as text.");
+                alert.showAndWait();
+            }
         }
     }
 

@@ -86,8 +86,9 @@ public class FileUtils {
      *
      * @param filePath
      * @return the file content
+     * @throws IOException for failures to read the file
      */
-    public static String readFileContent(Path filePath) {
+    public static String readFileContent(Path filePath) throws IOException {
         if (Files.isRegularFile(filePath)) {
             try {
                 return Files
@@ -96,6 +97,7 @@ public class FileUtils {
                         .collect(Collectors.joining(LINE_SEP));
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, "Could not read file.", ex);
+                throw ex;
             }
         }
         return "";
