@@ -26,6 +26,7 @@ package org.publo.filebrowser.utils;
 import org.publo.filebrowser.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import javafx.scene.control.TreeItem;
 import static org.publo.Launcher.PROJECTS_PATH;
 
@@ -41,7 +42,7 @@ public class PathTreeItem extends TreeItem {
             = new PathTreeItem("...", PROJECTS_PATH);
 
     private Path path;
-    
+
     public PathTreeItem(final Path path) {
         this(path.getFileName().toString(), path);
     }
@@ -67,4 +68,26 @@ public class PathTreeItem extends TreeItem {
     public void setPath(Path path) {
         this.path = path;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(path);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PathTreeItem other = (PathTreeItem) obj;
+        return !(!Objects.equals(this.path, other.path)
+                && !Objects.equals(super.getValue(), other.getValue()));
+    }
+
 }

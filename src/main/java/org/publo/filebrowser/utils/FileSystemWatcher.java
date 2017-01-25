@@ -110,7 +110,9 @@ public class FileSystemWatcher extends Thread {
                     if (ENTRY_CREATE.equals(kind)) {
                         final PathTreeItem newItem
                                 = new PathTreeItem(label, absPath);
-                        children.add(newItem);
+                        if (!children.contains(newItem)) {
+                            children.add(newItem);
+                        }
                     } else if (ENTRY_DELETE.equals(kind)) {
                         Platform.runLater(() -> {
                             for (int i = 0; i < children.size(); i++) {
