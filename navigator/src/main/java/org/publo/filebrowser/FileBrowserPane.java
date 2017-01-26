@@ -51,7 +51,7 @@ public final class FileBrowserPane extends BorderPane {
 
     private static final String USER_HOME = System.getProperty("user.home");
     public static final String BROWSER_ROOT_KEY = "browser.root.path";
-    private static final String BROWSER_ROOT
+    public static final String BROWSER_ROOT
             = System.getProperty(BROWSER_ROOT_KEY);
 
     private final TreeView<String> treeView;

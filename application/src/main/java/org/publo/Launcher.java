@@ -43,11 +43,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.publo.controller.utils.SiteExporter;
-import org.publo.controller.utils.TemplateRenderer;
 import org.publo.filebrowser.FileBrowserPane;
 
 /**
@@ -68,12 +66,14 @@ public class Launcher extends Application {
      */
     private static final String USER_DIR = System.getProperty("user.home");
     public static final String PROJ_DIR_NAME = ".publo";
+    public static final String TEMPLATES_DIR_NAME = "templates";
 
     /**
      * Paths
      */
     public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
-    public static final Path TEMPLATES_PATH = Paths.get(TemplateRenderer.TEMPLATES_DIR);
+    public static final Path TEMPLATES_PATH = Paths.get(
+            USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
     private static final String ABOUT_LINK
             = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 

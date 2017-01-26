@@ -24,6 +24,7 @@
 package org.publo.controller.utils;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,6 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import static org.publo.Launcher.PROJECTS_PATH;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -57,10 +57,16 @@ public final class TemplateRenderer {
             = Logger.getLogger(TemplateRenderer.class.getName());
 
     private static final String DEFAULT_TEMPLATE_NAME = "default-template";
-
-    public static final String TEMPLATES_DIR
-            = PROJECTS_PATH + "/templates/";
     private static final String TEMPLATE_SUFFIX = ".html";
+    
+    /**
+     * TODO?
+     */
+    private static final String USER_DIR = System.getProperty("user.home");
+    public static final String PROJ_DIR_NAME = ".publo";
+    public static final String TEMPLATES_DIR_NAME = "templates";
+    private static final Path TEMPLATES_DIR
+            = Paths.get(USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
 
     /**
      * Renders the content for export. No preview scrolling is available when
@@ -123,7 +129,7 @@ public final class TemplateRenderer {
         try {
             final FileTemplateResolver fileTemplateResover
                     = new FileTemplateResolver();
-            fileTemplateResover.setPrefix(TEMPLATES_DIR);
+            fileTemplateResover.setPrefix(TEMPLATES_DIR + "/");
             fileTemplateResover.setTemplateMode(TemplateMode.HTML);
             fileTemplateResover.setSuffix(TEMPLATE_SUFFIX);
             final TemplateEngine templateEngine = new TemplateEngine();

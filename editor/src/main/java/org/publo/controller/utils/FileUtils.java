@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.publo.controller.MainViewController;
 
 /**
  * Holds File utilities.
@@ -43,7 +42,7 @@ public class FileUtils {
      * The {@code FileUtils} logger.
      */
     private static final Logger LOGGER
-            = Logger.getLogger(MainViewController.class.getName());
+            = Logger.getLogger(FileUtils.class.getName());
 
     /**
      * OS-independent line separator.

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets ?>
+<?import org.publo.filebrowser.FileBrowserPane ?>
+<?import org.publo.textarea.TextAreaPane ?>
+<?import org.publo.preview.PreviewPane ?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1"
+          xmlns="http://javafx.com/javafx/8"
+          fx:controller="org.publo.controller.MainViewController">
+    <padding>
+        <Insets  bottom="5" left="5" right="5" top="5" />
+    </padding> 
+    <columnConstraints>
+        <ColumnConstraints halignment="LEFT" percentWidth="20" />
+        <ColumnConstraints halignment="CENTER" percentWidth="40" />
+        <ColumnConstraints halignment="RIGHT" percentWidth="40" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100" /> 
+    </rowConstraints>
+    <FileBrowserPane fx:id="fileBrowserPane" GridPane.columnIndex="0" 
+                     GridPane.rowIndex="0" />
+    <TextAreaPane fx:id="textAreaPane" GridPane.columnIndex="1" 
+                  GridPane.rowIndex="0" />
+    <PreviewPane fx:id="previewPane" GridPane.columnIndex="2" 
+                 GridPane.rowIndex="0" />
+</GridPane>

@@ -26,9 +26,10 @@ package org.publo.filebrowser.utils;
 import org.publo.filebrowser.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import javafx.scene.control.TreeItem;
-import static org.publo.Launcher.PROJECTS_PATH;
+import org.publo.filebrowser.FileBrowserPane;
 
 /**
  * Defines a TreeItem representing a path in the file-system.
@@ -39,7 +40,7 @@ import static org.publo.Launcher.PROJECTS_PATH;
 public class PathTreeItem extends TreeItem {
 
     private static final PathTreeItem DEFAULT_TREE_ITEM
-            = new PathTreeItem("...", PROJECTS_PATH);
+            = new PathTreeItem("...", Paths.get(FileBrowserPane.BROWSER_ROOT));
 
     private Path path;
 
