@@ -26,7 +26,9 @@ package org.publo.filebrowser;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -67,6 +69,9 @@ public final class FileBrowserPane extends BorderPane {
     private final PathTreeItemListener pathTreeItemChangeListener
             = new PathTreeItemListener();
 
+    private final PathTreeItemInvalidationListener pathTreeItemInvalidListener
+            = new PathTreeItemInvalidationListener();
+
     public FileBrowserPane() {
         this((BROWSER_ROOT == null) ? USER_HOME : BROWSER_ROOT);
     }
@@ -85,6 +90,8 @@ public final class FileBrowserPane extends BorderPane {
         );
         this.treeView.getSelectionModel()
                 .selectedItemProperty().addListener(pathTreeItemChangeListener);
+        this.treeView.getSelectionModel()
+                .selectedItemProperty().addListener(pathTreeItemInvalidListener);
         this.setCenter(this.treeView);
     }
 
@@ -99,13 +106,12 @@ public final class FileBrowserPane extends BorderPane {
 
     public final void addTreeItemInvalidationListener(
             final InvalidationListener listener) {
-        this.treeView.getSelectionModel()
-                .selectedItemProperty()
+        this.pathTreeItemInvalidListener.getPathInvalidatedProperty()
                 .addListener(listener);
     }
 
     /**
-     * Listener aimed at encapsulating the {@code PathTreeItem} API to the
+     * Listeners aimed at encapsulating the {@code PathTreeItem} API to the
      * navigator package and exposing a dry {@code Path}.
      *
      */
@@ -128,5 +134,24 @@ public final class FileBrowserPane extends BorderPane {
             pathProperty.setValue(pathTreeItem.getPath());
         }
 
+    }
+
+    private final class PathTreeItemInvalidationListener
+            implements InvalidationListener {
+
+        private final ObjectProperty<Path> pathInvalidatedProperty
+                = new SimpleObjectProperty<>();
+
+        private ObjectProperty<Path> getPathInvalidatedProperty() {
+            return this.pathInvalidatedProperty;
+        }
+
+        @Override
+        public void invalidated(Observable observable) {
+            final ReadOnlyObjectProperty property
+                    = (ReadOnlyObjectProperty) observable;
+            final PathTreeItem pathTreeItem = (PathTreeItem) property.getValue();
+            this.pathInvalidatedProperty.setValue(pathTreeItem.getPath());
+        }
     }
 }

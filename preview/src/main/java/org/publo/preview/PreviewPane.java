@@ -34,7 +34,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.publo.controller.utils.TemplateRenderer;
-import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * A {@code BorderPane} {@code WebView}.
@@ -96,7 +95,7 @@ public final class PreviewPane
         LOGGER.info("Updating the base path for preview.");
         final ReadOnlyObjectProperty property
                 = (ReadOnlyObjectProperty) observable;
-        final PathTreeItem pathTreeItem = (PathTreeItem) property.getValue();
-        this.basePath = pathTreeItem.getPath();
+        final Path path = (Path) property.getValue();
+        this.basePath = path;
     }
 }
