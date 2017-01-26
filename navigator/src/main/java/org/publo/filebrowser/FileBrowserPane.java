@@ -128,10 +128,6 @@ public final class FileBrowserPane extends BorderPane {
         this.setCenter(this.treeView);
     }
 
-    public void setRoot(final Path newRoot) {
-        this.treeView.setRoot(new PathTreeItem(newRoot));
-    }
-
     public final void addTreeItemSelectionListener(
             final ChangeListener<Path> listener) {
         this.pathTreeItemChangeListener.getPathProperty().addListener(listener);
