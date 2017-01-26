@@ -26,7 +26,11 @@ package org.publo.filebrowser;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import org.publo.filebrowser.listener.EditableTreeCell;
@@ -56,6 +60,13 @@ public final class FileBrowserPane extends BorderPane {
 
     private final TreeView<String> treeView;
 
+    /**
+     * The ChangeListener converting a private API to a standard {@link Path}
+     * based listener.
+     */
+    private final PathTreeItemListener pathTreeItemChangeListener
+            = new PathTreeItemListener();
+
     public FileBrowserPane() {
         this((BROWSER_ROOT == null) ? USER_HOME : BROWSER_ROOT);
     }
@@ -72,6 +83,8 @@ public final class FileBrowserPane extends BorderPane {
                 (TreeView<String> tree)
                 -> new EditableTreeCell((FileTreeView<String>) tree)
         );
+        this.treeView.getSelectionModel()
+                .selectedItemProperty().addListener(pathTreeItemChangeListener);
         this.setCenter(this.treeView);
     }
 
@@ -79,10 +92,9 @@ public final class FileBrowserPane extends BorderPane {
         this.treeView.setRoot(new PathTreeItem(newRoot));
     }
 
-    public final void addTreeItemSelectionListener(ChangeListener listener) {
-        this.treeView.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(listener);
+    public final void addTreeItemSelectionListener(
+            final ChangeListener<Path> listener) {
+        this.pathTreeItemChangeListener.getPathProperty().addListener(listener);
     }
 
     public final void addTreeItemInvalidationListener(
@@ -90,5 +102,31 @@ public final class FileBrowserPane extends BorderPane {
         this.treeView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(listener);
+    }
+
+    /**
+     * Listener aimed at encapsulating the {@code PathTreeItem} API to the
+     * navigator package and exposing a dry {@code Path}.
+     *
+     */
+    private final class PathTreeItemListener
+            implements ChangeListener<TreeItem> {
+
+        private final ObjectProperty<Path> pathProperty
+                = new SimpleObjectProperty<>();
+
+        private ObjectProperty<Path> getPathProperty() {
+            return this.pathProperty;
+        }
+
+        @Override
+        public final void changed(
+                final ObservableValue<? extends TreeItem> observable,
+                final TreeItem oldValue,
+                final TreeItem newValue) {
+            final PathTreeItem pathTreeItem = (PathTreeItem) newValue;
+            pathProperty.setValue(pathTreeItem.getPath());
+        }
+
     }
 }

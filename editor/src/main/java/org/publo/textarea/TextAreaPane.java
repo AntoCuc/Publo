@@ -46,7 +46,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.publo.controller.utils.FileUtils;
-import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
  * A {@code BorderPane} {@code TextArea}.
@@ -55,7 +54,7 @@ import org.publo.filebrowser.utils.PathTreeItem;
  * @since 0.3
  */
 public class TextAreaPane extends BorderPane
-        implements ChangeListener<PathTreeItem> {
+        implements ChangeListener<Path> {
 
     private static final Logger LOGGER
             = Logger.getLogger(TextAreaPane.class.getName());
@@ -124,15 +123,15 @@ public class TextAreaPane extends BorderPane
     @Override
     public void changed(
             final ObservableValue observable,
-            final PathTreeItem oldValue,
-            final PathTreeItem newValue) {
+            final Path oldValue,
+            final Path newValue) {
         if (oldValue == null || !oldValue.equals(newValue)) {
             LOGGER.info("Updating the TextArea.");
             try {
                 final String fileContent
-                        = FileUtils.readFileContent(newValue.getPath());
+                        = FileUtils.readFileContent(newValue);
                 textArea.textProperty().setValue(fileContent);
-                autoSave.start(textArea.textProperty(), newValue.getPath());
+                autoSave.start(textArea.textProperty(), newValue);
             } catch (IOException ex) {
                 final Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error prompt");
