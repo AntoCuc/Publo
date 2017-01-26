@@ -55,10 +55,22 @@ import org.publo.filebrowser.utils.PathTreeItem;
  */
 public final class FileBrowserPane extends BorderPane {
 
+    /**
+     * The current user home directory.
+     */
     private static final String USER_HOME = System.getProperty("user.home");
+
+    /**
+     * The custom browser root system property key.
+     */
     public static final String BROWSER_ROOT_KEY = "browser.root.path";
+
+    /**
+     * The browser root. If a root is defined in system properties use that one
+     * else user the user home directory.
+     */
     public static final String BROWSER_ROOT
-            = System.getProperty(BROWSER_ROOT_KEY);
+            = System.getProperty(BROWSER_ROOT_KEY, USER_HOME);
 
     private final TreeView<String> treeView;
 
@@ -72,15 +84,36 @@ public final class FileBrowserPane extends BorderPane {
     private final PathTreeItemInvalidationListener pathTreeItemInvalidListener
             = new PathTreeItemInvalidationListener();
 
+    /**
+     * Creates a default {@link FileBrowserPane}.
+     */
     public FileBrowserPane() {
-        this((BROWSER_ROOT == null) ? USER_HOME : BROWSER_ROOT);
+        this(BROWSER_ROOT);
     }
 
-    public FileBrowserPane(final String rootPathString) {
+    /**
+     * Allows the definition of the root path. There is no validation of whether
+     * the path is valid. Using this constructor without appropriate checking
+     * may break things.
+     *
+     * Hence private.
+     *
+     * @param rootPathString string representing the root path
+     */
+    private FileBrowserPane(final String rootPathString) {
         this(Paths.get(rootPathString));
     }
 
-    public FileBrowserPane(final Path rootPath) {
+    /**
+     * Allows the definition of the root {@link Path}. There is no validation of
+     * whether the path is valid. Using this constructor without appropriate
+     * checking may break things.
+     *
+     * Hence private.
+     *
+     * @param rootPath the root path
+     */
+    private FileBrowserPane(final Path rootPath) {
         this.treeView = new FileTreeView<>(new PathTreeItem(rootPath));
         this.treeView.setEditable(true);
         this.treeView.setShowRoot(false);
