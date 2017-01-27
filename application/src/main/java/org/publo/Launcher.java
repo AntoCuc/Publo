@@ -23,28 +23,23 @@
  */
 package org.publo;
 
-import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import org.publo.controller.utils.Dialogs;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.filebrowser.FileBrowserPane;
 
@@ -58,8 +53,12 @@ public class Launcher extends Application {
 
     private static final Logger LOGGER
             = Logger.getLogger(Launcher.class.getName());
-
-    private static final String APP_NAME = "Publo";
+    
+    /**
+     * Resource bundle
+     */
+    public static final ResourceBundle BUNDLE = ResourceBundle
+            .getBundle("language");
 
     /**
      * Directories
@@ -74,8 +73,6 @@ public class Launcher extends Application {
     public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
     public static final Path TEMPLATES_PATH = Paths.get(
             USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
-    private static final String ABOUT_LINK
-            = "https://github.com/AntoCuc/Publo/blob/master/README.md";
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
@@ -95,7 +92,7 @@ public class Launcher extends Application {
             }
         }
 
-        primaryStage.setTitle(APP_NAME);
+        primaryStage.setTitle(BUNDLE.getString("publo.appname"));
         InputStream imgStream = Launcher.class.getResourceAsStream("/media/page_white.png");
         primaryStage.getIcons().add(new Image(imgStream));
         final URL mainViewFxml = getClass().getResource("/fxml/mainView.fxml");
@@ -104,26 +101,7 @@ public class Launcher extends Application {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (evt) -> {
             switch (evt.getCode()) {
                 case F1:
-                    final Alert confirmDialog = new Alert(AlertType.CONFIRMATION);
-                    confirmDialog.setTitle("Confirmation prompt");
-                    confirmDialog.setHeaderText("Help and Support");
-                    confirmDialog.setContentText("We are going to open the browser"
-                            + " and navigate to the online help."
-                            + " Is that ok?");
-                    Optional<ButtonType> result = confirmDialog.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        Desktop desktop = Desktop.getDesktop();
-                        if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                            try {
-                                URI uri = new URI(ABOUT_LINK);
-                                desktop.browse(uri);
-                            } catch (URISyntaxException | IOException e) {
-                                LOGGER.log(Level.SEVERE, "Failed to reach website.", e);
-                            }
-                        } else {
-                            LOGGER.log(Level.SEVERE, "Browser not supported.");
-                        }
-                    }
+                    Dialogs.showHelp();
                     break;
                 case F7:
                     SiteExporter.export();
