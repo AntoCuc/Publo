@@ -37,6 +37,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.publo.controller.utils.Dialogs;
@@ -53,7 +56,7 @@ public class Launcher extends Application {
 
     private static final Logger LOGGER
             = Logger.getLogger(Launcher.class.getName());
-    
+
     /**
      * Resource bundle
      */
@@ -63,7 +66,7 @@ public class Launcher extends Application {
     /**
      * Directories
      */
-    private static final String USER_DIR = System.getProperty("user.home");
+    public static final String USER_DIR = System.getProperty("user.home");
     public static final String PROJ_DIR_NAME = ".publo";
     public static final String TEMPLATES_DIR_NAME = "templates";
 
@@ -73,6 +76,15 @@ public class Launcher extends Application {
     public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
     public static final Path TEMPLATES_PATH = Paths.get(
             USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
+
+    /**
+     * The create project key combination.
+     */
+    private static final KeyCombination CTRL_SHIFT_N
+            = new KeyCodeCombination(
+                    KeyCode.N,
+                    KeyCombination.SHIFT_DOWN,
+                    KeyCombination.CONTROL_DOWN);
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
@@ -109,6 +121,11 @@ public class Launcher extends Application {
                 case F11:
                     primaryStage.setFullScreen(true);
                     break;
+            }
+        });
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, (evt) -> {
+            if (CTRL_SHIFT_N.match(evt)) {
+                Dialogs.createNewProject();
             }
         });
         primaryStage.setScene(scene);
