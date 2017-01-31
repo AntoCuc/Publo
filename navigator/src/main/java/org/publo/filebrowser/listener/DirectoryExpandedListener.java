@@ -26,15 +26,12 @@ package org.publo.filebrowser.listener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.publo.filebrowser.utils.FileSystemWatcher;
 import org.publo.filebrowser.utils.PathTreeItem;
 
 /**
@@ -48,12 +45,6 @@ import org.publo.filebrowser.utils.PathTreeItem;
  * @since 0.2
  */
 public class DirectoryExpandedListener implements ChangeListener<Boolean> {
-    
-    private static final FileSystemWatcher WATCHER = new FileSystemWatcher();
-    
-    static {
-        WATCHER.start();
-    }
 
     /**
      * The {@code DirectoryExpendedListener} logger.
@@ -78,7 +69,6 @@ public class DirectoryExpandedListener implements ChangeListener<Boolean> {
                 children.add(treeItem);
                 if (Files.isDirectory(path)) {
                     treeItem.expandedProperty().addListener(DirectoryExpandedListener.this);
-                    WATCHER.register(treeItem, ENTRY_CREATE, ENTRY_DELETE);
                 }
             });
         } catch (IOException ex) {

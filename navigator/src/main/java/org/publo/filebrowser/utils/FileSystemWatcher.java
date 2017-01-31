@@ -46,10 +46,16 @@ import javafx.application.Platform;
  * @author Antonio Cucchiara
  * @since 0.2
  */
-public class FileSystemWatcher extends Thread {
+public final class FileSystemWatcher extends Thread {
 
     private static final Logger LOGGER
             = Logger.getLogger(FileSystemWatcher.class.getName());
+
+    private static final FileSystemWatcher WATCHER = new FileSystemWatcher();
+
+    static {
+        WATCHER.start();
+    }
 
     private static final Map<Watchable, PathTreeItem> CACHE = new HashMap<>();
 
@@ -59,7 +65,7 @@ public class FileSystemWatcher extends Thread {
      * Constructs the {@code FileSystemWatcher} by initialising the
      * {@code WatchService} and configuring it as a daemon.
      */
-    public FileSystemWatcher() {
+    private FileSystemWatcher() {
         try {
             watchService = FileSystems.getDefault().newWatchService();
             setDaemon(true);
@@ -130,5 +136,15 @@ public class FileSystemWatcher extends Thread {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Retrieves a unique instance of a
+     * {@link PathTreeItem} {@link FileSystemWatcher}
+     *
+     * @return the application wide instance
+     */
+    static FileSystemWatcher getInstance() {
+        return WATCHER;
     }
 }

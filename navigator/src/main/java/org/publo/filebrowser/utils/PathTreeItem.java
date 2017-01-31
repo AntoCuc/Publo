@@ -27,6 +27,8 @@ import org.publo.filebrowser.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import java.util.Objects;
 import javafx.scene.control.TreeItem;
 import org.publo.filebrowser.FileBrowserPane;
@@ -60,6 +62,8 @@ public class PathTreeItem extends TreeItem {
         } else {
             setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
         }
+        FileSystemWatcher.getInstance()
+                .register(this, ENTRY_CREATE, ENTRY_DELETE);
     }
 
     public Path getPath() {
