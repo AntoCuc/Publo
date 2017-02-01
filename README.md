@@ -1,19 +1,40 @@
-Publo <small>- meaning: small, humble</small>
-=============================================
+Publo - meaning: small, humble
+==============================
 
-*Publo enables web writers create great [markdown][markdownspec] content.*
+*Create great web content using [markdown][markdownspec].*
 
-The preview and export facility are the primary features of the editor that when combined with
-the ability to easily create templates allow you to design a unique user experience.
+The preview and export facility are the primary features of the editor that, when combined with
+the ability to easily create templates, allow you to design a unique user experience.
+
+Publo allows you to write freely anywhere you might be.
+Write, preview and export with no need for an internet connection.
 
 Usage
 -----
 
-Publo can be operated via the function keys.
+Publo's main editing function can be accessed via the central deck TextArea.
 
-F1  - Load this page  
-F7  - Export the site  
-F11 - Enter full screen mode (Escape to exit it)
+The markdown written is automatically saved to maintain the ideas flowing
+and previewed in the right deck so you can keep an eye on how the information 
+flows on the site template.
+
+The exported content is fully operational in offline mode so that you can also
+view it with your favourite browser (Chrome, Firefox, etc.).
+
+Some of Publo's utilities are operated via the function keys:  
+
+F1  - Load the about, credits and help system. Also links to this page  
+F2 (File browser only) - Rename files  
+F7  - Export the site (Find the resulting html in the target folder)  
+F11 - Enter full screen mode (Escape to exit full screen)  
+
+Via key combination:  
+
+Ctrl+Shift+N - Create a new project  
+
+Via mouse:  
+
+Right-click (file browser only) - Create new file or directory  
 
 History
 -------
@@ -30,7 +51,7 @@ Features
 * Editing markdown documents - Allows the creation of great content
 * Preview HTML - To view how your content looks before publishing it
 * Apply custom templates - to design your very own web UI
-* Export - To generate a site ready for upload
+* Export - To generate a site ready for upload to your favourite hosting or local browsing
 * Run on Windows, OSX and Linux - Because every platform has something special <3
 
 Templates 
@@ -85,7 +106,7 @@ Running Publo only requires a Java JRE 1.8 or greater.
 You can download the version for your favourite operating system from the release tab.
 
 * On Windows -> double-click the executable.
-* On Mac -> Move the app to the Applications folder and run using finder
+* On Mac -> Move the app to the Applications folder and run using finder or double-click the .app file
 * On Linux -> `java -jar publo.jar`
 
 Software Builds
