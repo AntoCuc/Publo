@@ -56,9 +56,12 @@ public final class TemplateRenderer {
     private static final Logger LOGGER
             = Logger.getLogger(TemplateRenderer.class.getName());
 
+    private static final String WINDOW_SCROLL_FUNCTION
+            = "<script>function scrollWin(value){ window.scrollTo(0, (document.body.scrollHeight - window.innerHeight) * value); }</script>";
+
     private static final String DEFAULT_TEMPLATE_NAME = "default-template";
     private static final String TEMPLATE_SUFFIX = ".html";
-    
+
     /**
      * TODO?
      */
@@ -118,12 +121,34 @@ public final class TemplateRenderer {
         Document htmlDoc = Jsoup.parse(html);
         if (basePath != null) {
             Element headElement = htmlDoc.head();
-            headElement.append("<script>function scrollWin(value){ window.scrollTo(0, (document.body.scrollHeight - window.innerHeight) * value); }</script>");
-            headElement.append("<base href=\"" + basePath.getParent().toUri() + "\" />");
+            Element firstElement = headElement.children().first();
+            if (firstElement != null) {
+                firstElement.before(getBaseTag(basePath));
+                firstElement.before(WINDOW_SCROLL_FUNCTION);
+            } else {
+                headElement.append(getBaseTag(basePath));
+                headElement.append(WINDOW_SCROLL_FUNCTION);
+            }
         }
         return htmlDoc.toString();
     }
 
+    /**
+     * Retrieves the base tag extracting the {@link URI} from the {@link Path}.
+     *
+     * @param basePath from which to extract the URI
+     * @return the base tag for the preview markup
+     */
+    private static String getBaseTag(final Path basePath) {
+        return "<base href=\"" + basePath.getParent().toUri() + "\" />";
+    }
+
+    /**
+     * Renders the markup to the template provided a Thymeleaf context.
+     *
+     * @param context to process against
+     * @return the compiled markup.
+     */
     private static String render(final Context context) {
         String output;
         try {
