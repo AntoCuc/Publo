@@ -23,6 +23,11 @@
  */
 package org.publo.filebrowser.utils;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import org.publo.filebrowser.listener.DirectoryExpandedListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +35,13 @@ import java.nio.file.Paths;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.TreeItem;
+import org.apache.tika.detect.DefaultDetector;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
 import org.publo.filebrowser.FileBrowserPane;
 
 /**
@@ -40,6 +51,12 @@ import org.publo.filebrowser.FileBrowserPane;
  * @since 0.2
  */
 public class PathTreeItem extends TreeItem {
+
+    /**
+     * The {@code PathTreeItem} logger.
+     */
+    private static final Logger LOGGER
+            = Logger.getLogger(PathTreeItem.class.getName());
 
     private static final PathTreeItem DEFAULT_TREE_ITEM
             = new PathTreeItem("...", Paths.get(FileBrowserPane.BROWSER_ROOT));
@@ -59,11 +76,37 @@ public class PathTreeItem extends TreeItem {
             final DirectoryExpandedListener listener
                     = new DirectoryExpandedListener();
             expandedProperty().addListener(listener);
+            FileSystemWatcher.getInstance()
+                    .register(this, ENTRY_CREATE, ENTRY_DELETE);
         } else {
-            setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
+            final File f = path.toFile();
+            try (InputStream inputStream
+                    = new BufferedInputStream(new FileInputStream(f))) {
+                final Metadata metadata = new Metadata();
+                metadata.set(Metadata.RESOURCE_NAME_KEY, f.getName());
+                final Detector detector = new DefaultDetector();
+                final MediaType mime = detector.detect(inputStream, metadata);
+                switch (mime.toString()) {
+                    case "text/x-web-markdown":
+                        setGraphic(ResourceFactory.buildImageView("/media/markdown.png"));
+                        break;
+                    case "text/plain":
+                        setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
+                        break;
+                    case "text/html":
+                        setGraphic(ResourceFactory.buildImageView("/media/xhtml.png"));
+                        break;
+                    case "image/jpeg":
+                        setGraphic(ResourceFactory.buildImageView("/media/image.png"));
+                        break;
+                    default:
+                        setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
+                        break;
+                }
+            } catch (final IOException ex) {
+                LOGGER.log(Level.SEVERE, "Could not detect mediatype", ex);
+            }
         }
-        FileSystemWatcher.getInstance()
-                .register(this, ENTRY_CREATE, ENTRY_DELETE);
     }
 
     public Path getPath() {
