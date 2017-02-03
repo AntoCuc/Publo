@@ -24,6 +24,8 @@
 package org.publo.controller.utils;
 
 import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -66,8 +69,32 @@ public class Dialogs {
     private static final Logger LOGGER
             = Logger.getLogger(Dialogs.class.getName());
 
+    /**
+     * The class delineating CSS errors.
+     */
+    private static final String ERROR_STYLE_CLASS = "error";
+
+    /**
+     * The properties file name.
+     */
+    private static final String CONFIG_PROP_FILE = "/config.properties";
+
+    /**
+     * Project name compliance RegEx.
+     */
+    private static final String PROJECT_NAME_REGEX = "^[a-zA-Z0-9\\-_]{3,20}$";
+
+    /**
+     * FTP server compliance RegEx.
+     */
+    private static final String FTP_SERVER_REGEX
+            = "^ftp(s?):\\/\\/[a-zA-z0-9.:\\/]{5,100}$";
+
+    /**
+     * Create new project dialog.
+     */
     public static void createNewProject() {
-        final Dialog<String> dialog = new Dialog<>();
+        final Dialog<ProjectDetail> dialog = new Dialog<>();
         dialog.setTitle(BUNDLE.getString("publo.appname"));
         dialog.setHeaderText(BUNDLE.getString("publo.newproject"));
 
@@ -79,9 +106,10 @@ public class Dialogs {
                 .addAll(buttonType, ButtonType.CANCEL);
 
         final GridPane grid = new GridPane();
+        grid.getStylesheets().add("validation.css");
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setPadding(new Insets(20, 20, 20, 10));
 
         final TextField projectNameField = new TextField();
         projectNameField.setPromptText(
@@ -90,32 +118,69 @@ public class Dialogs {
         grid.add(new Label(BUNDLE.getString("publo.projectname.label")), 0, 0);
         grid.add(projectNameField, 1, 0);
 
+        final TextField ftpUrlField = new TextField();
+        ftpUrlField.setPromptText(BUNDLE.getString("publo.ftpurl.prompt"));
+
+        grid.add(new Label(BUNDLE.getString("publo.ftpurl.label")), 0, 1);
+        grid.add(ftpUrlField, 1, 1);
+        grid.add(new Label(BUNDLE.getString("publo.ftpurl.example")), 2, 1);
+
         final Node createProjectButton
                 = dialog.getDialogPane().lookupButton(buttonType);
         createProjectButton.setDisable(true);
 
-        projectNameField.textProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    createProjectButton.setDisable(newValue.trim().isEmpty());
-                });
+        projectNameField.textProperty().addListener((evt) -> {
+            final String projectNameFileText = projectNameField.getText();
+            if (projectNameFileText.matches(PROJECT_NAME_REGEX)) {
+                projectNameField.getStyleClass().remove(ERROR_STYLE_CLASS);
+                createProjectButton.setDisable(false);
+            } else if (!projectNameField.getStyleClass()
+                    .contains(ERROR_STYLE_CLASS)) {
+                projectNameField.getStyleClass().add(ERROR_STYLE_CLASS);
+            }
+        });
+
+        ftpUrlField.textProperty().addListener((evt) -> {
+            final String ftpUrlFieldText = ftpUrlField.getText();
+            if (ftpUrlFieldText.matches(FTP_SERVER_REGEX)) {
+                ftpUrlField.getStyleClass().remove(ERROR_STYLE_CLASS);
+
+            } else if (!ftpUrlField.getStyleClass()
+                    .contains(ERROR_STYLE_CLASS)) {
+                ftpUrlField.getStyleClass().add(ERROR_STYLE_CLASS);
+            }
+        });
+
         dialog.getDialogPane().setContent(grid);
 
         Platform.runLater(() -> projectNameField.requestFocus());
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == buttonType) {
-                return projectNameField.getText();
+                return new ProjectDetail(
+                        projectNameField.getText(),
+                        ftpUrlField.getText());
             }
             return null;
         });
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(projectName -> {
+        Optional<ProjectDetail> result = dialog.showAndWait();
+        result.ifPresent(projectDetail -> {
             try {
+                final String projectName = projectDetail.getProjectName();
                 final Path projectPath
                         = Paths.get(USER_DIR, PROJ_DIR_NAME, projectName);
                 Files.createDirectory(projectPath);
-                LOGGER.log(Level.INFO, "Project {0} created.", projectName);
+                LOGGER.log(Level.INFO, "Project {0} directory created.",
+                        projectDetail);
+                if (projectDetail.getProjectFtpUrl() != null) {
+                    Properties p = new Properties();
+                    p.setProperty("ftp.url", projectDetail.getProjectFtpUrl());
+                    final File propFile
+                            = new File(projectPath + CONFIG_PROP_FILE);
+                    p.store(new FileOutputStream(propFile), USER_DIR);
+                    LOGGER.log(Level.INFO, "Prop file {0} created.", propFile);
+                }
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, "Failed to create project.", ex);
             }
@@ -164,5 +229,37 @@ public class Dialogs {
 
         alert.getDialogPane().setExpandableContent(expContent);
         alert.showAndWait();
+    }
+
+    /**
+     * Wraps the project details.
+     *
+     * @since 0.4
+     */
+    private static final class ProjectDetail {
+
+        private final String projectName;
+        private final String projectFtpUrl;
+
+        public ProjectDetail(
+                final String projectName,
+                final String projectFtpUrl) {
+            this.projectName = projectName;
+            this.projectFtpUrl = projectFtpUrl;
+        }
+
+        public String getProjectName() {
+            return projectName;
+        }
+
+        public String getProjectFtpUrl() {
+            return projectFtpUrl;
+        }
+
+        @Override
+        public String toString() {
+            return "Project Name: " + projectName + ", FTP: " + projectFtpUrl;
+        }
+
     }
 }
