@@ -47,6 +47,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -187,6 +188,67 @@ public class Dialogs {
         });
     }
 
+    static Credentials showLoginDialog() {
+        final Dialog<Credentials> dialog = new Dialog<>();
+        dialog.setTitle(BUNDLE.getString("publo.appname"));
+        dialog.setHeaderText(BUNDLE.getString("publo.login"));
+
+        final GridPane grid = new GridPane();
+        grid.getStylesheets().add("validation.css");
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 20, 20, 10));
+
+        final TextField usernameField = new TextField();
+        usernameField.setPromptText(
+                BUNDLE.getString("publo.username.prompt"));
+
+        grid.add(new Label(BUNDLE.getString("publo.username.label")), 0, 0);
+        grid.add(usernameField, 1, 0);
+
+        final PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText(BUNDLE.getString("publo.password.prompt"));
+
+        grid.add(new Label(BUNDLE.getString("publo.password.label")), 0, 1);
+        grid.add(passwordField, 1, 1);
+
+        final ButtonType buttonType
+                = new ButtonType(
+                        BUNDLE.getString("publo.login.button"),
+                        ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes()
+                .addAll(buttonType, ButtonType.CANCEL);
+
+        final Node createProjectButton
+                = dialog.getDialogPane().lookupButton(buttonType);
+        createProjectButton.setDisable(true);
+
+        usernameField.textProperty().addListener((evt) -> {
+            final String projectNameFileText = usernameField.getText();
+            if (projectNameFileText.matches(PROJECT_NAME_REGEX)) {
+                usernameField.getStyleClass().remove(ERROR_STYLE_CLASS);
+                createProjectButton.setDisable(false);
+            } else if (!usernameField.getStyleClass()
+                    .contains(ERROR_STYLE_CLASS)) {
+                usernameField.getStyleClass().add(ERROR_STYLE_CLASS);
+            }
+        });
+
+        dialog.getDialogPane().setContent(grid);
+
+        Platform.runLater(() -> usernameField.requestFocus());
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == buttonType) {
+                return new Credentials(
+                        usernameField.getText(),
+                        passwordField.getText());
+            }
+            return null;
+        });
+        return dialog.showAndWait().orElse(new Credentials("", ""));
+    }
+
     public static void showHelp() {
         final Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(BUNDLE.getString("publo.about"));
@@ -260,6 +322,29 @@ public class Dialogs {
         public String toString() {
             return "Project Name: " + projectName + ", FTP: " + projectFtpUrl;
         }
+    }
 
+    /**
+     * Credentials allowing access to privileged information/systems.
+     *
+     * @since 0.4
+     */
+    static final class Credentials {
+
+        private final String username;
+        private final String password;
+
+        public Credentials(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
     }
 }

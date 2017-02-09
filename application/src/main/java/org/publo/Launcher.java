@@ -43,6 +43,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.publo.controller.utils.Dialogs;
+import org.publo.controller.utils.FileUploader;
 import org.publo.controller.utils.SiteExporter;
 import org.publo.filebrowser.FileBrowserPane;
 
@@ -54,8 +55,17 @@ import org.publo.filebrowser.FileBrowserPane;
  */
 public class Launcher extends Application {
 
+    /**
+     * Logger
+     */
     private static final Logger LOGGER
             = Logger.getLogger(Launcher.class.getName());
+
+    /**
+     * Cross-platform Line separator
+     */
+    public static final String LINE_SEPARATOR
+            = System.getProperty("file.separator");
 
     /**
      * Resource bundle
@@ -114,6 +124,9 @@ public class Launcher extends Application {
             switch (evt.getCode()) {
                 case F1:
                     Dialogs.showHelp();
+                    break;
+                case F6:
+                    FileUploader.upload();
                     break;
                 case F7:
                     SiteExporter.export();

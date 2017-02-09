@@ -48,7 +48,7 @@ public class SiteExporter {
     private static final Logger LOGGER
             = Logger.getLogger(SiteExporter.class.getName());
 
-    private static final Path TARGET_PATH = PROJECTS_PATH.resolve("target");
+    public static final Path TARGET_PATH = PROJECTS_PATH.resolve("target");
     public static final Path TEMPLATES_PATH = PROJECTS_PATH.resolve("templates");
     private static final String MARKDOWN_EXT = ".md";
     private static final String MARKUP_EXT = ".html";
