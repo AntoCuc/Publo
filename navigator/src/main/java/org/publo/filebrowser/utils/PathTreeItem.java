@@ -96,10 +96,16 @@ public class PathTreeItem extends TreeItem {
                     case "text/html":
                         setGraphic(ResourceFactory.buildImageView("/media/xhtml.png"));
                         break;
+                    case "text/css":
+                        setGraphic(ResourceFactory.buildImageView("/media/css.png"));
+                        break;
+                    case "image/png":
+                    case "image/gif":
                     case "image/jpeg":
                         setGraphic(ResourceFactory.buildImageView("/media/image.png"));
                         break;
                     default:
+                        LOGGER.log(Level.INFO, "Default icon for {0}", mime);
                         setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
                         break;
                 }
