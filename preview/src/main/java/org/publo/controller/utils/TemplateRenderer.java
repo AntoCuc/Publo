@@ -24,7 +24,6 @@
 package org.publo.controller.utils;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -66,22 +65,11 @@ public final class TemplateRenderer {
     public static final String TEMPLATES_DIR_NAME = "templates";
 
     /**
-     * Renders the content for export. No preview scrolling is available when
-     * using this method.
-     *
-     * @param markdown of the main
-     * @return the page markup
-     */
-    public static String render(final String markdown) {
-        return render(markdown, null);
-    }
-
-    /**
      * Renders the content. Provides the option to the preview facility by
      * injecting a window scrolling java-script function in the markup and a
      * base path for the retrieval of media assets.
      *
-     * If the basepath is not defined it will assume the markup generated is not
+     * If the isPreview is false it will assume the markup generated is not
      * going to be used in a {@code WebView} preview.
      *
      * @param markdown of the main
@@ -90,7 +78,8 @@ public final class TemplateRenderer {
      */
     public static String render(
             final String markdown,
-            final Path basePath) {
+            final Path basePath,
+            final boolean isPreview) {
         final List<Extension> extensions
                 = Arrays.asList(YamlFrontMatterExtension.create());
         final Parser parser = Parser.builder().extensions(extensions).build();
@@ -111,9 +100,10 @@ public final class TemplateRenderer {
             final String value = valueBuilder.toString();
             context.setVariable(key, value);
         });
-        final String html = render(context);
+        final String html = render(context, basePath.getParent());
         Document htmlDoc = Jsoup.parse(html);
-        if (basePath != null) {
+        if (isPreview) {
+            LOGGER.info("Project base path: " + basePath);
             Element headElement = htmlDoc.head();
             Element firstElement = headElement.children().first();
             if (firstElement != null) {
@@ -143,17 +133,20 @@ public final class TemplateRenderer {
      * @param context to process against
      * @return the compiled markup.
      */
-    private static String render(final Context context) {
+    private static String render(
+            final Context context,
+            final Path basePath) {
         String output;
         try {
             final FileTemplateResolver fileTemplateResover
                     = new FileTemplateResolver();
-            fileTemplateResover.setPrefix(TEMPLATES_DIR_NAME + "/");
+            final Path templatesPath = basePath.resolve(TEMPLATES_DIR_NAME);
+            fileTemplateResover.setPrefix(templatesPath + "/");
             fileTemplateResover.setTemplateMode(TemplateMode.HTML);
             fileTemplateResover.setSuffix(TEMPLATE_SUFFIX);
             final TemplateEngine templateEngine = new TemplateEngine();
             templateEngine.setTemplateResolver(fileTemplateResover);
-            String template = "" + context.getVariable("template");
+            final String template = "" + context.getVariable("template");
             LOGGER.log(Level.INFO, "Rendering {0}", template);
             output = templateEngine.process(template, context);
         } catch (Exception ex) {

@@ -86,7 +86,7 @@ public final class PreviewPane
             final String newValue) {
         LOGGER.info("Updating the Preview Pane.");
         final String renderedMarkup
-                = TemplateRenderer.render(newValue, this.basePath);
+                = TemplateRenderer.render(newValue, this.basePath, true);
         webEngine.loadContent(renderedMarkup);
     }
 
