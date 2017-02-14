@@ -54,6 +54,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import static org.publo.Launcher.BUNDLE;
 import static org.publo.Launcher.PROJ_DIR_NAME;
+import static org.publo.Launcher.TEMPLATES_DIR_NAME;
 import static org.publo.Launcher.USER_DIR;
 
 /**
@@ -174,6 +175,9 @@ public class Dialogs {
                 Files.createDirectory(projectPath);
                 LOGGER.log(Level.INFO, "Project {0} directory created.",
                         projectDetail);
+                final Path projectTemplatePath
+                        = Paths.get(projectName, TEMPLATES_DIR_NAME);
+                Files.createDirectory(projectTemplatePath);
                 if (projectDetail.getProjectFtpUrl() != null) {
                     Properties p = new Properties();
                     p.setProperty("ftp.url", projectDetail.getProjectFtpUrl());

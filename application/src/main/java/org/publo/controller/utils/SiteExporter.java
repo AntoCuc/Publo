@@ -36,6 +36,8 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import static org.publo.Launcher.PROJECTS_PATH;
+import static org.publo.Launcher.TARGET_DIR_NAME;
+import static org.publo.Launcher.TEMPLATES_DIR_NAME;
 
 /**
  * Exports the markdown to a site.
@@ -48,8 +50,6 @@ public class SiteExporter {
     private static final Logger LOGGER
             = Logger.getLogger(SiteExporter.class.getName());
 
-    public static final Path TARGET_PATH = PROJECTS_PATH.resolve("target");
-    public static final Path TEMPLATES_PATH = PROJECTS_PATH.resolve("templates");
     private static final String MARKDOWN_EXT = ".md";
     private static final String MARKUP_EXT = ".html";
 
@@ -72,16 +72,11 @@ public class SiteExporter {
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
                     throws IOException {
                 LOGGER.log(Level.INFO, "Visiting directory {0}", dir);
-                final Path basePath = PROJECTS_PATH.relativize(dir);
-                final Path dirPath = TARGET_PATH.resolve(basePath);
-                LOGGER.log(Level.INFO, "Target directory {0}", dirPath);
-                if (TARGET_PATH.equals(dir) || TEMPLATES_PATH.equals(dir)) {
+                final String directoryName = dir.toFile().getName();
+                if (TARGET_DIR_NAME.equals(directoryName)
+                        || TEMPLATES_DIR_NAME.equals(directoryName)) {
                     LOGGER.log(Level.INFO, "Skipping {0} directory.", dir);
                     return FileVisitResult.SKIP_SUBTREE;
-                }
-                if (!Files.exists(dirPath)) {
-                    LOGGER.log(Level.INFO, "{0} does not exist. Creating it.", dirPath);
-                    Files.createDirectory(dirPath);
                 }
                 return FileVisitResult.CONTINUE;
             }
@@ -89,23 +84,37 @@ public class SiteExporter {
             @Override
             public final FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException {
-                final Path basePath = PROJECTS_PATH.relativize(file);
-                final Path targetPath = TARGET_PATH.resolve(basePath);
-                final String fileName = targetPath.getFileName().toString();
+                final Path basePath = PROJECTS_PATH.resolve(file);
+                final Path targetPath
+                        = basePath.resolveSibling(TARGET_DIR_NAME);
+                if (Files.exists(targetPath)) {
+                    LOGGER.log(Level.INFO, "Target path {0} found.",
+                            targetPath);
+                } else {
+                    LOGGER.log(Level.INFO,
+                            "The path {0} does not exist. Creating it.",
+                            targetPath);
+                    Files.createDirectory(targetPath);
+                }
+                final String fileName = file.getFileName().toString();
+                final Path targetFilePath = targetPath.resolve(fileName);
                 final String extension = FileUtils.getExtension(fileName);
                 if (MARKDOWN_EXT.equals(extension)) {
                     LOGGER.info("Processing markdown resource.");
                     final String baseName = FileUtils.getBaseName(fileName);
                     final String pageName = baseName + MARKUP_EXT;
-                    final Path filePath = targetPath.resolveSibling(pageName);
+                    final Path htmlFilePath
+                            = targetFilePath.resolveSibling(pageName);
                     final String markdown = new String(Files.readAllBytes(file));
                     final String page = TemplateRenderer.render(markdown);
-                    Files.write(filePath, page.getBytes());
+                    Files.write(htmlFilePath, page.getBytes());
                 } else {
-                    final Path absFilePath = PROJECTS_PATH.resolve(file);
+                    final Path sourceFilePath = PROJECTS_PATH.resolve(file);
+                    LOGGER.log(Level.INFO, "Copying resource {0} to {1}",
+                            new Object[]{sourceFilePath, targetFilePath});
                     Files.copy(
-                            absFilePath,
-                            targetPath,
+                            sourceFilePath,
+                            targetFilePath,
                             StandardCopyOption.REPLACE_EXISTING
                     );
                 }
@@ -125,7 +134,7 @@ public class SiteExporter {
             alert.setTitle("Success");
             alert.setHeaderText("Export completed");
             alert.setContentText("Your site has been successfully exported. "
-                    + "Find the output in " + TARGET_PATH);
+                    + "Find the output in the project target directory");
             alert.showAndWait();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "An error has occured", ex);

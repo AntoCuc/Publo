@@ -62,14 +62,8 @@ public final class TemplateRenderer {
     private static final String DEFAULT_TEMPLATE_NAME = "default-template";
     private static final String TEMPLATE_SUFFIX = ".html";
 
-    /**
-     * TODO?
-     */
-    private static final String USER_DIR = System.getProperty("user.home");
     public static final String PROJ_DIR_NAME = ".publo";
     public static final String TEMPLATES_DIR_NAME = "templates";
-    private static final Path TEMPLATES_DIR
-            = Paths.get(USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
 
     /**
      * Renders the content for export. No preview scrolling is available when
@@ -154,7 +148,7 @@ public final class TemplateRenderer {
         try {
             final FileTemplateResolver fileTemplateResover
                     = new FileTemplateResolver();
-            fileTemplateResover.setPrefix(TEMPLATES_DIR + "/");
+            fileTemplateResover.setPrefix(TEMPLATES_DIR_NAME + "/");
             fileTemplateResover.setTemplateMode(TemplateMode.HTML);
             fileTemplateResover.setSuffix(TEMPLATE_SUFFIX);
             final TemplateEngine templateEngine = new TemplateEngine();

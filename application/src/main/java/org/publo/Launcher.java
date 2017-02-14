@@ -78,14 +78,17 @@ public class Launcher extends Application {
      */
     public static final String USER_DIR = System.getProperty("user.home");
     public static final String PROJ_DIR_NAME = ".publo";
+
+    /**
+     * Directory names
+     */
     public static final String TEMPLATES_DIR_NAME = "templates";
+    public static final String TARGET_DIR_NAME = "target";
 
     /**
      * Paths
      */
     public static final Path PROJECTS_PATH = Paths.get(USER_DIR, PROJ_DIR_NAME);
-    public static final Path TEMPLATES_PATH = Paths.get(
-            USER_DIR, PROJ_DIR_NAME, TEMPLATES_DIR_NAME);
 
     /**
      * The create project key combination.
@@ -108,7 +111,6 @@ public class Launcher extends Application {
         if (!Files.exists(PROJECTS_PATH, LinkOption.NOFOLLOW_LINKS)) {
             try {
                 Files.createDirectories(PROJECTS_PATH);
-                Files.createDirectories(TEMPLATES_PATH);
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }

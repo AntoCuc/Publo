@@ -30,6 +30,7 @@ import java.net.ConnectException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.Level;
@@ -37,8 +38,8 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import static org.publo.Launcher.TARGET_DIR_NAME;
 import org.publo.controller.utils.Dialogs.Credentials;
-import static org.publo.controller.utils.SiteExporter.TARGET_PATH;
 
 /**
  * Uploads the compiled site to a remote host.
@@ -86,7 +87,8 @@ public class FileUploader {
             client.enterLocalPassiveMode();
             client.setFileType(FTP.BINARY_FILE_TYPE);
 
-            Files.walkFileTree(TARGET_PATH, new SimpleFileVisitor<Path>() {
+            final Path projectTarget = Paths.get(TARGET_DIR_NAME);
+            Files.walkFileTree(projectTarget, new SimpleFileVisitor<Path>() {
 
                 /**
                  * Before visiting a directory attempt to change the ftp client
@@ -104,7 +106,7 @@ public class FileUploader {
                         final Path directory,
                         final BasicFileAttributes attrs)
                         throws IOException {
-                    final Path remotePath = TARGET_PATH.relativize(directory);
+                    final Path remotePath = projectTarget.relativize(directory);
                     LOGGER.log(Level.INFO, "Moving to directory {0}",
                             remotePath);
                     final String remotePathString = remotePath.toString();
