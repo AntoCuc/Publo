@@ -25,7 +25,8 @@ Some of Publo's utilities are operated via the function keys:
 
 F1  - Load the about, credits and help system. Also links to this page  
 F2 (File browser only) - Rename files  
-F7  - Export the site (Find the resulting html in the target folder)  
+F6  - Upload the site  
+F7  - Export the site (Find the resulting html in the project target folder)  
 F11 - Enter full screen mode (Escape to exit full screen)  
 
 Via key combination:  
