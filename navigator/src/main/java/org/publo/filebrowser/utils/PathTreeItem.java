@@ -104,6 +104,9 @@ public class PathTreeItem extends TreeItem {
                     case "image/jpeg":
                         setGraphic(ResourceFactory.buildImageView("/media/image.png"));
                         break;
+                    case "text/x-java-properties":
+                        setGraphic(ResourceFactory.buildImageView("/media/page_white_wrench.png"));
+                        break;
                     default:
                         LOGGER.log(Level.INFO, "Default icon for {0}", mime);
                         setGraphic(ResourceFactory.buildImageView("/media/page_white.png"));
