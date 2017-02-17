@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -206,6 +207,12 @@ public class FileUploader {
                     + "from your machine.");
             alert.showAndWait();
             LOGGER.log(Level.SEVERE, "No internet connection.", ex);
+        } catch (final NoSuchFileException ex) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Unable to upload the site");
+            alert.setHeaderText("The target directory could not be found");
+            alert.setContentText("Please export the project before uploading.");
+            alert.showAndWait();
         } catch (final IOException ex) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Unable to upload the site");
