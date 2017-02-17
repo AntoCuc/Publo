@@ -42,8 +42,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.publo.controller.MainViewController;
-import org.publo.controller.listener.ActiveProjectListener;
 import org.publo.controller.utils.Dialogs;
 import org.publo.controller.utils.FileUploader;
 import org.publo.controller.utils.SiteExporter;
@@ -124,16 +122,13 @@ public class Launcher extends Application {
         final URL mainViewFxml = getClass().getResource("/fxml/mainView.fxml");
         final FXMLLoader mainView = new FXMLLoader(mainViewFxml);
         final Scene scene = new Scene(mainView.load());
-        final MainViewController mainController = mainView.getController();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (evt) -> {
-            final ActiveProjectListener projSelectedListener
-                    = mainController.getActiveProjectListener();
             switch (evt.getCode()) {
                 case F1:
                     Dialogs.showHelp();
                     break;
                 case F6:
-                    FileUploader.upload(projSelectedListener.getProjectPath());
+                    FileUploader.upload();
                     break;
                 case F7:
                     SiteExporter.export();

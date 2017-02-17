@@ -48,26 +48,19 @@ public class ActiveProjectListener implements ChangeListener<Path> {
             = Logger.getLogger(ActiveProjectListener.class.getName());
 
     /**
-     * The relative project root {@link Path}
+     * The active project system property key.
      */
-    private Path projectPath;
+    public static final String PROJECT_KEY = "publo.active.project";
 
     @Override
     public void changed(
             final ObservableValue<? extends Path> observable,
             final Path oldValue,
             final Path newValue) {
-        final Path relativeProjectRootPath
-                = Launcher.PROJECTS_PATH.relativize(newValue);
-        final Path projectRoot = relativeProjectRootPath.subpath(0, 1);
-        LOGGER.log(Level.INFO, "Active project {0}", projectRoot);
-        projectPath = projectRoot;
-    }
-
-    /**
-     * @return The project {@link Path} or null
-     */
-    public Path getProjectPath() {
-        return projectPath;
+        final int projPathNameCount = Launcher.PROJECTS_PATH.getNameCount();
+        final Path projectPath = newValue.subpath(0, projPathNameCount + 1);
+        final Path projectRootPath = newValue.getRoot().resolve(projectPath);
+        LOGGER.log(Level.INFO, "Setting active project {0}", projectRootPath);
+        System.setProperty(PROJECT_KEY, projectRootPath.toString());
     }
 }

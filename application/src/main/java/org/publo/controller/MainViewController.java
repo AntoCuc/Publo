@@ -78,8 +78,4 @@ public final class MainViewController {
             previewPane.scrollTo(percentageScrolled);
         });
     }
-
-    public ActiveProjectListener getActiveProjectListener() {
-        return activeProjectListener;
-    }
 }

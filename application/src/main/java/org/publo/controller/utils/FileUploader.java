@@ -40,8 +40,8 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.publo.Launcher;
 import static org.publo.Launcher.TARGET_DIR_NAME;
+import org.publo.controller.listener.ActiveProjectListener;
 import org.publo.controller.utils.Dialogs.Credentials;
 
 /**
@@ -62,6 +62,10 @@ public class FileUploader {
      * Creates an FTP Client, walks the compiled file tree for the site and
      * uploads it to the remote host.
      *
+     * This facility relies on a {@link String} representation of the active
+     * project root at the system property defined in the
+     * {@link ActiveProjectListener}.
+     *
      * The FTP Client will be initialised with the host name entered on creation
      * of the project. Details are gathered from the site property file
      * {@link config.properties}. The required entry for this functionality to
@@ -75,11 +79,11 @@ public class FileUploader {
      *
      * A dialog for the FTP server username and password will be presented to
      * the user before client initialisation.
-     *
-     * @param projectPath the relative project root {@link Path}
      */
-    public static void upload(final Path projectPath) {
-        if (projectPath == null) {
+    public static void upload() {
+        final String activeProject
+                = System.getProperty(ActiveProjectListener.PROJECT_KEY);
+        if (activeProject == null) {
             final Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Unable to upload the site");
             alert.setHeaderText("It appears no project is selected.");
@@ -91,14 +95,11 @@ public class FileUploader {
         }
         final FTPClient client = new FTPClient();
         try {
-            final Path projectAbsPath
-                    = Launcher.PROJECTS_PATH.resolve(
-                            projectPath);
+            final Path projectAbsPath = Paths.get(activeProject);
             final Path projTargetPath
                     = projectAbsPath.resolve(TARGET_DIR_NAME);
             final Path projectPropPath = Paths.get(
-                    projectAbsPath.toString(),
-                    Dialogs.CONFIG_PROP_FILE);
+                    projectAbsPath.toString(), Dialogs.CONFIG_PROP_FILE);
             final InputStream propsFileInputStream
                     = new FileInputStream(projectPropPath.toFile());
             final Properties projectProps = new Properties();

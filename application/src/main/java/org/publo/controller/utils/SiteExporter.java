@@ -28,6 +28,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -38,6 +39,7 @@ import javafx.scene.control.Alert.AlertType;
 import static org.publo.Launcher.PROJECTS_PATH;
 import static org.publo.Launcher.TARGET_DIR_NAME;
 import static org.publo.Launcher.TEMPLATES_DIR_NAME;
+import org.publo.controller.listener.ActiveProjectListener;
 
 /**
  * Exports the markdown to a site.
@@ -129,8 +131,20 @@ public class SiteExporter {
                 return FileVisitResult.CONTINUE;
             }
         };
+        final String activeProject
+                = System.getProperty(ActiveProjectListener.PROJECT_KEY);
+        if (activeProject == null) {
+            final Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Unable to upload the site");
+            alert.setHeaderText("It appears no project is selected.");
+            alert.setContentText("Please select a project and retry "
+                    + "exporting.");
+            alert.showAndWait();
+            LOGGER.severe("No project selected.");
+            return;
+        }
         try {
-            Files.walkFileTree(PROJECTS_PATH, projectFileVisitor);
+            Files.walkFileTree(Paths.get(activeProject), projectFileVisitor);
             final Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Export completed");
