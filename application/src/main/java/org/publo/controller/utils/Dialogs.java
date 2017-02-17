@@ -79,7 +79,12 @@ public class Dialogs {
     /**
      * The properties file name.
      */
-    private static final String CONFIG_PROP_FILE = "/config.properties";
+    public static final String CONFIG_PROP_FILE = "/config.properties";
+
+    /**
+     * The FTP Url Property
+     */
+    public static final String FTP_URL_PROP = "ftp.url";
 
     /**
      * Project name compliance RegEx.
@@ -180,7 +185,7 @@ public class Dialogs {
                 Files.createDirectory(projectTemplatePath);
                 if (projectDetail.getProjectFtpUrl() != null) {
                     Properties p = new Properties();
-                    p.setProperty("ftp.url", projectDetail.getProjectFtpUrl());
+                    p.setProperty(FTP_URL_PROP, projectDetail.getProjectFtpUrl());
                     final File propFile
                             = new File(projectPath + CONFIG_PROP_FILE);
                     p.store(new FileOutputStream(propFile), USER_DIR);

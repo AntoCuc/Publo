@@ -26,6 +26,7 @@ package org.publo.controller;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
+import org.publo.controller.listener.ActiveProjectListener;
 import org.publo.filebrowser.FileBrowserPane;
 import org.publo.preview.PreviewPane;
 import org.publo.textarea.TextAreaPane;
@@ -54,6 +55,12 @@ public final class MainViewController {
     private FileBrowserPane fileBrowserPane;
 
     /**
+     * The {@link ChangeListener} keeping track of the project being worked on.
+     */
+    private final ActiveProjectListener activeProjectListener
+            = new ActiveProjectListener();
+
+    /**
      * Initialises the controller class.
      *
      * Bootstraps the <code>ChangeListener</code> chain.
@@ -63,11 +70,16 @@ public final class MainViewController {
     public final void initialize() {
         LOGGER.info("Initialising the Main View");
         fileBrowserPane.addTreeItemSelectionListener(textAreaPane);
+        fileBrowserPane.addTreeItemSelectionListener(activeProjectListener);
         fileBrowserPane.addTreeItemInvalidationListener(previewPane);
         textAreaPane.addTextChangeListener(previewPane);
         textAreaPane.scrollPercentageProperty().addListener((evt) -> {
             double percentageScrolled = ((DoubleProperty) evt).getValue();
             previewPane.scrollTo(percentageScrolled);
         });
+    }
+
+    public ActiveProjectListener getActiveProjectListener() {
+        return activeProjectListener;
     }
 }

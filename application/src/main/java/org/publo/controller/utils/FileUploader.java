@@ -26,6 +26,7 @@ package org.publo.controller.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ConnectException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -33,11 +34,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.publo.Launcher;
 import static org.publo.Launcher.TARGET_DIR_NAME;
 import org.publo.controller.utils.Dialogs.Credentials;
 
@@ -73,22 +76,35 @@ public class FileUploader {
      * A dialog for the FTP server username and password will be presented to
      * the user before client initialisation.
      *
+     * @param projectPath the relative project root {@link Path}
      */
-    public static void upload() {
-        // TODO upload on a per-project basis.
-        // From the pref file
-        String hostname = "127.0.0.1";
-        final Credentials cred = Dialogs.showLoginDialog();
-
+    public static void upload(final Path projectPath) {
+        if (projectPath == null) {
+            LOGGER.severe("No project selected.");
+            return;
+        }
         final FTPClient client = new FTPClient();
         try {
-            client.connect(hostname);
+            final Path projectAbsPath
+                    = Launcher.PROJECTS_PATH.resolve(
+                            projectPath);
+            final Path projTargetPath
+                    = projectAbsPath.resolve(TARGET_DIR_NAME);
+            final Path projectPropPath = Paths.get(
+                    projectAbsPath.toString(),
+                    Dialogs.CONFIG_PROP_FILE);
+            final InputStream propsFileInputStream
+                    = new FileInputStream(projectPropPath.toFile());
+            final Properties projectProps = new Properties();
+            projectProps.load(propsFileInputStream);
+            final Credentials cred = Dialogs.showLoginDialog();
+
+            client.connect(projectProps.getProperty(Dialogs.FTP_URL_PROP));
             client.login(cred.getUsername(), cred.getPassword());
             client.enterLocalPassiveMode();
             client.setFileType(FTP.BINARY_FILE_TYPE);
 
-            final Path projectTarget = Paths.get(TARGET_DIR_NAME);
-            Files.walkFileTree(projectTarget, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(projTargetPath, new SimpleFileVisitor<Path>() {
 
                 /**
                  * Before visiting a directory attempt to change the ftp client
@@ -106,7 +122,8 @@ public class FileUploader {
                         final Path directory,
                         final BasicFileAttributes attrs)
                         throws IOException {
-                    final Path remotePath = projectTarget.relativize(directory);
+                    final Path remotePath
+                            = projTargetPath.relativize(directory);
                     LOGGER.log(Level.INFO, "Moving to directory {0}",
                             remotePath);
                     final String remotePathString = remotePath.toString();
@@ -168,6 +185,11 @@ public class FileUploader {
                     return FileVisitResult.CONTINUE;
                 }
             });
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Upload completed");
+            alert.setContentText("Your site has been successfully uploaded.");
+            alert.showAndWait();
         } catch (final ConnectException ex) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Unable to upload the site");
@@ -178,6 +200,12 @@ public class FileUploader {
             alert.showAndWait();
             LOGGER.log(Level.SEVERE, "No internet connection.", ex);
         } catch (final IOException ex) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Unable to upload the site");
+            alert.setHeaderText("Error whilst uploading your site");
+            alert.setContentText("Please check project properties file is "
+                    + "present and that you can read it.");
+            alert.showAndWait();
             LOGGER.log(Level.SEVERE, "Could not upload site.", ex);
         } finally {
             try {
@@ -185,11 +213,6 @@ public class FileUploader {
                     client.logout();
                     client.disconnect();
                 }
-                final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Upload completed");
-                alert.setContentText("Your site has been successfully uploaded.");
-                alert.showAndWait();
             } catch (final IOException ex) {
                 LOGGER.log(Level.SEVERE, "Error initialising the FTP Client",
                         ex);
