@@ -80,6 +80,12 @@ public class FileUploader {
      */
     public static void upload(final Path projectPath) {
         if (projectPath == null) {
+            final Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Unable to upload the site");
+            alert.setHeaderText("It appears no project is selected.");
+            alert.setContentText("Please select a project and retry "
+                    + "uploading.");
+            alert.showAndWait();
             LOGGER.severe("No project selected.");
             return;
         }
