@@ -3,30 +3,31 @@ Publo - meaning: small, humble
 
 *Create great web content using [markdown][markdownspec].*
 
-The preview and export facility are the primary features of the editor that, when combined with
-the ability to easily create templates, allow you to design a unique user experience.
+Publo allows you to generate content freely anywhere you might be.
 
-Publo allows you to write freely anywhere you might be.
-Write, preview and export with no need for an internet connection.
+Write and preview content for your website with no need for an internet connection.
 
-Usage
------
+Customise the Look and Feel with an advanced templating system and when you are ready upload it to your hosting.
 
-Publo's main editing function can be accessed via the central deck TextArea.
+![Publo](https://raw.githubusercontent.com/AntoCuc/Publo/master/publo.png)
 
-The markdown written is automatically saved to maintain the ideas flowing
-and previewed in the right deck so you can keep an eye on how the information 
-flows on the site template.
+Getting Started
+--------------
 
-The exported content is fully operational in offline mode so that you can also
-view it with your favourite browser (Chrome, Firefox, etc.).
+Publo's main editing function can be accessed via the central Editor.
 
-Some of Publo's utilities are operated via the function keys:  
+The markdown written is automatically saved and previewed in the preview area so
+you can keep an eye on how the information flows on the site template.
 
-F1  - Load the about, credits and help system. Also links to this page  
-F2 (File browser only) - Rename files  
+The exported content is fully operational in offline mode so that after exporting
+you can also view changes offline with your favourite browser (Chrome, Firefox, etc.).
+
+Publo's utilities are operated via the function keys:  
+
+F1  - Load the about, credits and help system. Also links to this page.  
+F2 (When operating the File browser) - Rename files  
 F6  - Upload the site  
-F7  - Export the site (Find the resulting html in the project target folder)  
+F7  - Export the site (Find the resulting markup in the project "target" folder)  
 F11 - Enter full screen mode (Escape to exit full screen)  
 
 Via key combination:  
@@ -35,7 +36,7 @@ Ctrl+Shift+N - Create a new project
 
 Via mouse:  
 
-Right-click (file browser only) - Create new file or directory  
+Right-click (When operating the file browser) - Create new file or directory  
 
 History
 -------
@@ -49,32 +50,46 @@ Since then Publo was ported to JavaFX 2.0.
 Features
 --------
 
-* Editing markdown documents - Allows the creation of great content
+* Editing markdown documents - Allows you to create great content
 * Preview HTML - To view how your content looks before publishing it
-* Apply custom templates - to design your very own web UI
+* Apply custom templates - Design your very own web UI
 * Export - To generate a site ready for upload to your favourite hosting or local browsing
 * Run on Windows, OSX and Linux - Because every platform has something special <3
 
-Templates 
+Templates
 ---------
 
 Publo supports the creation of custom templates via the [thymeleaf template engine][thymeleaf].
 
-To create a basic template:
+Creating a custom template is easy:
 
-1. Create an html file - for example: `my-template.html`
-2. Place the attribute `th:utext="${main}"` in the tag containing your content
-3. Place the newly created template in the `.publo/templates` directory
-4. Select it from the drop-down to use it for preview and export
+1. Create a blank html file - for example: `my-template.html`
+2. Place the attribute `th:utext="${main}"` in the tag wrapping your content
+3. Save the newly created template file in `~/.publo/<project directory>/templates`
+4. To start using the template create a new page metadata item with the "template" key and template file name value.  
 
-Full documentation can be found on the [thymeleaf official documentation][thymeleafdocs].
+Example template reference:
 
-### A note on page metadata ###
+```
+---
 
-Markdown is a syntax that focuses primarily on the main content of the page.
-Hence, the use of the `main` attribute for template rendering.
-However, webpages, for a range of reasons, may contain useful metadata (titles, descriptions, author tags ...).
+template: my-template
+
+---
+```
+
+Page-level template definitions allow the most flexible user experience customisation.
+
+The templating engine's full documentation can be found on the [thymeleaf official documentation][thymeleafdocs].
+
+### A note on page metadata when using Publo ###
+
+Markdown is a syntax that focuses primarily on webpages main content.
+Hence, the use of the `main` attribute for template rendering in Publo.  
+However, webpages may contain useful metadata (titles, descriptions, author tags ...).
+
 Publo uses YAML front matter for the definition of such metadata.
+
 Below an example of the syntax for front matter:
 
 ```
@@ -87,17 +102,12 @@ description: Description of the page
 ---
 ```
 
-Populating the template with custom data  can be achieved with `th:utext="${<key>}"`. 
-
-Screenshot
-----------
-
-![Publo](https://raw.githubusercontent.com/AntoCuc/Publo/master/publo.png)
+Populating the template with custom data  can be achieved with `th:utext="${<key>}"`.
 
 Download Publo
 --------------
 
-Downloads of Publo are available on [GitHub releases](https://github.com/AntoCuc/Publo/releases).
+Preview downloads of Publo are available on [GitHub releases](https://github.com/AntoCuc/Publo/releases).
 
 Run Publo
 -----------
@@ -120,6 +130,17 @@ Updates
 
 If no features are developed a monthly review of dependencies and plugins is 
 performed.
+
+Roadmap
+-------
+
+First milestone for Publo will be version 1.0 with the following features:
+
+[*] Editing
+[*] Custom templates
+[ ] Asset management
+[*] Exporting
+[*] Uploading
 
 Issues
 ------
