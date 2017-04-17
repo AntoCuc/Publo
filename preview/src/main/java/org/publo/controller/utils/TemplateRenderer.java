@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.commonmark.Extension;
 import org.commonmark.ext.front.matter.YamlFrontMatterExtension;
 import org.commonmark.ext.front.matter.YamlFrontMatterVisitor;
+import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -74,6 +75,7 @@ public final class TemplateRenderer {
      *
      * @param markdown of the main
      * @param basePath for preview media loading
+     * @param isPreview determines whether we are previewing or compiling
      * @return the page markup
      */
     public static String render(
@@ -81,13 +83,16 @@ public final class TemplateRenderer {
             final Path basePath,
             final boolean isPreview) {
         final List<Extension> extensions
-                = Arrays.asList(YamlFrontMatterExtension.create());
+                = Arrays.asList(
+                        TablesExtension.create(),
+                        YamlFrontMatterExtension.create());
         final Parser parser = Parser.builder().extensions(extensions).build();
         final Node document = parser.parse(markdown);
         final YamlFrontMatterVisitor frontMatterVisitor
                 = new YamlFrontMatterVisitor();
         document.accept(frontMatterVisitor);
-        final HtmlRenderer renderer = HtmlRenderer.builder().build();
+        final HtmlRenderer renderer = HtmlRenderer.builder()
+                .extensions(extensions).build();
         final String markup = renderer.render(document);
         final Context context = new Context();
         context.setVariable("main", markup);
@@ -103,7 +108,7 @@ public final class TemplateRenderer {
         final String html = render(context, basePath.getParent());
         Document htmlDoc = Jsoup.parse(html);
         if (isPreview) {
-            LOGGER.info("Project base path: " + basePath);
+            LOGGER.log(Level.INFO, "Project base path: {0}", basePath);
             Element headElement = htmlDoc.head();
             Element firstElement = headElement.children().first();
             if (firstElement != null) {

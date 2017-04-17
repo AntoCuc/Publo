@@ -23,6 +23,11 @@
             <version>${commonmark.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark-ext-gfm-tables</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
             <version>3.0.3.RELEASE</version>
