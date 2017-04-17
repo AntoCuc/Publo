@@ -16,17 +16,17 @@
         <dependency>
             <groupId>org.publo</groupId>
             <artifactId>navigator</artifactId>
-            <version>0.3</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.publo</groupId>
             <artifactId>editor</artifactId>
-            <version>0.3</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.publo</groupId>
             <artifactId>preview</artifactId>
-            <version>0.3</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-net</groupId>
