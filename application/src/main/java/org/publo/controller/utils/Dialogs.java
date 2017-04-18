@@ -79,7 +79,7 @@ public class Dialogs {
     /**
      * The properties file name.
      */
-    public static final String CONFIG_PROP_FILE = "/config.properties";
+    public static final String CONFIG_PROP_FILE = "config.properties";
 
     /**
      * The FTP Url Property
@@ -172,7 +172,7 @@ public class Dialogs {
         });
 
         Optional<ProjectDetail> result = dialog.showAndWait();
-        result.ifPresent(projectDetail -> {
+        result.ifPresent((ProjectDetail projectDetail) -> {
             try {
                 final String projectName = projectDetail.getProjectName();
                 final Path projectPath
@@ -187,7 +187,7 @@ public class Dialogs {
                     Properties p = new Properties();
                     p.setProperty(FTP_URL_PROP, projectDetail.getProjectFtpUrl());
                     final File propFile
-                            = new File(projectPath + CONFIG_PROP_FILE);
+                            = new File(projectPath + "/" + CONFIG_PROP_FILE);
                     p.store(new FileOutputStream(propFile), USER_DIR);
                     LOGGER.log(Level.INFO, "Prop file {0} created.", propFile);
                 }

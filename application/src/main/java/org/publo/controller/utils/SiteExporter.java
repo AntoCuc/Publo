@@ -32,6 +32,8 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
@@ -54,6 +56,11 @@ public class SiteExporter {
 
     private static final String MARKDOWN_EXT = ".md";
     private static final String MARKUP_EXT = ".html";
+    private static final Set<String> RESOURCES_TO_SKIP = new HashSet<String>() {
+        {
+            add(Dialogs.CONFIG_PROP_FILE);
+        }
+    };
 
     /**
      * Compiles the content of a project markdown to markup and bundles in a
@@ -61,8 +68,9 @@ public class SiteExporter {
      *
      * Navigating the file-system the exporter will create a counterpart
      * directory structure in a root "target" sub-folder. When encountering a
-     * file it will attempt to parse its content as markdown, wrap it in an
-     * template and write a markup file.
+     * file it will check whether it is in a known skip resources list, it will
+     * attempt to parse its content as markdown, wrap it in an template and
+     * write a markup file.
      *
      */
     public static void export() {
@@ -86,6 +94,9 @@ public class SiteExporter {
             @Override
             public final FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException {
+                if (RESOURCES_TO_SKIP.contains(file.getFileName().toString())) {
+                    return FileVisitResult.CONTINUE;
+                }
                 final Path basePath = PROJECTS_PATH.resolve(file);
                 final Path targetPath
                         = basePath.resolveSibling(TARGET_DIR_NAME);
