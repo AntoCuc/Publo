@@ -126,7 +126,7 @@ Software Builds
 Updates
 -------
 
-[![Dependency Status](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5808c4f0d65a77002f5eab5c)
+[![Known Vulnerabilities](https://snyk.io/test/github/antocuc/publo/badge.svg?targetFile=application%2Fpom.xml)](https://snyk.io/test/github/antocuc/publo?targetFile=application%2Fpom.xml)
 
 If no features are developed a monthly review of dependencies and plugins is 
 performed.
