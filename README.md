@@ -136,11 +136,11 @@ Roadmap
 
 First milestone for Publo will be version 1.0 with the following features:
 
-[*] Editing
-[*] Custom templates
-[ ] Asset management
-[*] Exporting
-[*] Uploading
+- [x] Editing
+- [x] Custom templates
+- [ ] Asset management
+- [x] Exporting
+- [x] Uploading
 
 Issues
 ------
