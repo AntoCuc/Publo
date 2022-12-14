@@ -29,7 +29,7 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.5</version>
+            <version>3.9.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -86,7 +86,7 @@
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
                                 <mainClass>org.publo.Launcher</mainClass>
-                                <preCp></preCp>
+                                <preCp/>
                             </classPath>
                             <jre>
                                 <minVersion>1.8.0</minVersion>
@@ -100,7 +100,7 @@
                                 <productVersion>1.0.0.0</productVersion>
                                 <txtProductVersion>1.0.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
-                                <companyName></companyName>
+                                <companyName/>
                                 <internalName>Publo</internalName>
                                 <originalFilename>${project.name}.exe</originalFilename>
                             </versionInfo>
